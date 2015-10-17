@@ -73,14 +73,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/CMakeFiles" "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/CMakeFiles/progress.marks"
-	$(MAKE) -f CMakeFiles/Makefile2 all
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(CMAKE_COMMAND) -E cmake_progress_start "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/CMakeFiles" "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/process/dummy/CMakeFiles/progress.marks"
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f CMakeFiles/Makefile2 src/process/dummy/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) -f CMakeFiles/Makefile2 clean
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f CMakeFiles/Makefile2 src/process/dummy/clean
 .PHONY : clean
 
 # The main clean target
@@ -89,57 +89,47 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f CMakeFiles/Makefile2 src/process/dummy/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f CMakeFiles/Makefile2 src/process/dummy/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named lib
+# Convenience name for target.
+src/process/dummy/CMakeFiles/dummy.dir/rule:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f CMakeFiles/Makefile2 src/process/dummy/CMakeFiles/dummy.dir/rule
+.PHONY : src/process/dummy/CMakeFiles/dummy.dir/rule
 
-# Build rule for target.
-lib: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 lib
-.PHONY : lib
-
-# fast build rule for target.
-lib/fast:
-	$(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/build
-.PHONY : lib/fast
-
-#=============================================================================
-# Target rules for targets named dummy
-
-# Build rule for target.
-dummy: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 dummy
+# Convenience name for target.
+dummy: src/process/dummy/CMakeFiles/dummy.dir/rule
 .PHONY : dummy
 
 # fast build rule for target.
 dummy/fast:
-	$(MAKE) -f src/process/dummy/CMakeFiles/dummy.dir/build.make src/process/dummy/CMakeFiles/dummy.dir/build
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/process/dummy/CMakeFiles/dummy.dir/build.make src/process/dummy/CMakeFiles/dummy.dir/build
 .PHONY : dummy/fast
 
-#=============================================================================
-# Target rules for targets named dummy2
+# target to build an object file
+dummy.o:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/process/dummy/CMakeFiles/dummy.dir/build.make src/process/dummy/CMakeFiles/dummy.dir/dummy.o
+.PHONY : dummy.o
 
-# Build rule for target.
-dummy2: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 dummy2
-.PHONY : dummy2
+# target to preprocess a source file
+dummy.i:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/process/dummy/CMakeFiles/dummy.dir/build.make src/process/dummy/CMakeFiles/dummy.dir/dummy.i
+.PHONY : dummy.i
 
-# fast build rule for target.
-dummy2/fast:
-	$(MAKE) -f src/process/dummy2/CMakeFiles/dummy2.dir/build.make src/process/dummy2/CMakeFiles/dummy2.dir/build
-.PHONY : dummy2/fast
+# target to generate assembly for a file
+dummy.s:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/process/dummy/CMakeFiles/dummy.dir/build.make src/process/dummy/CMakeFiles/dummy.dir/dummy.s
+.PHONY : dummy.s
 
 # Help Target
 help:
@@ -147,11 +137,12 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... dummy"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... lib"
-	@echo "... dummy"
-	@echo "... dummy2"
+	@echo "... dummy.o"
+	@echo "... dummy.i"
+	@echo "... dummy.s"
 .PHONY : help
 
 
@@ -163,6 +154,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

@@ -1,0 +1,3 @@
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/process/dummy/CMakeFiles/dummy.dir
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/process/dummy2/CMakeFiles/dummy2.dir
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib/CMakeFiles/lib.dir

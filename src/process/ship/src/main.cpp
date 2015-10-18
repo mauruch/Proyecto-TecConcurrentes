@@ -1,8 +1,17 @@
+#include <Logger/Logger.h>
+#include <iostream>
+
 #include "domain/Ship.h"
 
 using namespace std;
 
 int main() {
+
+	std::cout << "holaaa" << endl;
+
+	Logger log;
+
+	log.info("INFOOO");
 
 	Ship ship("TEST");
 

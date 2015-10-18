@@ -5,10 +5,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/Fifo.cpp" "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib/CMakeFiles/lib.dir/Fifos/Fifo.o"
-  "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoEscritura.cpp" "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o"
-  "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoLectura.cpp" "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o"
+  "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoReader.cpp" "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o"
+  "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoWriter.cpp" "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o"
   "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/LockFile/LockFile.cpp" "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib/CMakeFiles/lib.dir/LockFile/LockFile.o"
   "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Pipes/Pipe.cpp" "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib/CMakeFiles/lib.dir/Pipes/Pipe.o"
+  "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Semaphore/Semaphore.cpp" "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o"
   "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Signals/SignalHandler.cpp" "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib/CMakeFiles/lib.dir/Signals/SignalHandler.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

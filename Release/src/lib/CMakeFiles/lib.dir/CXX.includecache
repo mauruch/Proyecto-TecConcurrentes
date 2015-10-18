@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/Fifo.cpp
-Fifo.h
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/Fifo.h
-
 /home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/Fifo.h
 string
 -
@@ -22,57 +18,33 @@ fcntl.h
 unistd.h
 -
 
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoEscritura.cpp
-FifoEscritura.h
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoEscritura.h
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoReader.cpp
+FifoReader.h
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoReader.h
 
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoEscritura.h
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoReader.h
 Fifo.h
 /home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/Fifo.h
 
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoLectura.cpp
-FifoLectura.h
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoLectura.h
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoWriter.cpp
+FifoWriter.h
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoWriter.h
 
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoLectura.h
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoWriter.h
 Fifo.h
 /home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/Fifo.h
 
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/LockFile/LockFile.cpp
-LockFile.h
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/LockFile/LockFile.h
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Semaphore/Semaphore.cpp
+../Semaphore/Semaphore.h
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Semaphore/Semaphore.h
 
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/LockFile/LockFile.h
-unistd.h
+/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Semaphore/Semaphore.h
+sys/ipc.h
 -
-fcntl.h
+sys/sem.h
+-
+sys/types.h
 -
 string
 -
-
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Pipes/Pipe.cpp
-Pipe.h
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Pipes/Pipe.h
-
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Pipes/Pipe.h
-unistd.h
--
-fcntl.h
--
-
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Signals/EventHandler.h
-
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Signals/SignalHandler.cpp
-SignalHandler.h
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Signals/SignalHandler.h
-
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Signals/SignalHandler.h
-signal.h
--
-stdio.h
--
-memory.h
--
-EventHandler.h
-/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Signals/EventHandler.h
 

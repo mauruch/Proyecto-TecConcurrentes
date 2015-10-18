@@ -4,19 +4,22 @@
 src/lib/CMakeFiles/lib.dir/Fifos/Fifo.o: ../src/lib/Fifos/Fifo.cpp
 src/lib/CMakeFiles/lib.dir/Fifos/Fifo.o: ../src/lib/Fifos/Fifo.h
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o: ../src/lib/Fifos/Fifo.h
-src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o: ../src/lib/Fifos/FifoEscritura.cpp
-src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o: ../src/lib/Fifos/FifoEscritura.h
+src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o: ../src/lib/Fifos/Fifo.h
+src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o: ../src/lib/Fifos/FifoReader.cpp
+src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o: ../src/lib/Fifos/FifoReader.h
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o: ../src/lib/Fifos/Fifo.h
-src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o: ../src/lib/Fifos/FifoLectura.cpp
-src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o: ../src/lib/Fifos/FifoLectura.h
+src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o: ../src/lib/Fifos/Fifo.h
+src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o: ../src/lib/Fifos/FifoWriter.cpp
+src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o: ../src/lib/Fifos/FifoWriter.h
 
 src/lib/CMakeFiles/lib.dir/LockFile/LockFile.o: ../src/lib/LockFile/LockFile.cpp
 src/lib/CMakeFiles/lib.dir/LockFile/LockFile.o: ../src/lib/LockFile/LockFile.h
 
 src/lib/CMakeFiles/lib.dir/Pipes/Pipe.o: ../src/lib/Pipes/Pipe.cpp
 src/lib/CMakeFiles/lib.dir/Pipes/Pipe.o: ../src/lib/Pipes/Pipe.h
+
+src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o: ../src/lib/Semaphore/Semaphore.cpp
+src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o: ../src/lib/Semaphore/Semaphore.h
 
 src/lib/CMakeFiles/lib.dir/Signals/SignalHandler.o: ../src/lib/Signals/EventHandler.h
 src/lib/CMakeFiles/lib.dir/Signals/SignalHandler.o: ../src/lib/Signals/SignalHandler.cpp

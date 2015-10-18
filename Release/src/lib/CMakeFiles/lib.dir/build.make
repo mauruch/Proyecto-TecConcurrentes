@@ -72,51 +72,51 @@ src/lib/CMakeFiles/lib.dir/Fifos/Fifo.o.provides: src/lib/CMakeFiles/lib.dir/Fif
 
 src/lib/CMakeFiles/lib.dir/Fifos/Fifo.o.provides.build: src/lib/CMakeFiles/lib.dir/Fifos/Fifo.o
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o: src/lib/CMakeFiles/lib.dir/flags.make
-src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o: ../src/lib/Fifos/FifoEscritura.cpp
+src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o: src/lib/CMakeFiles/lib.dir/flags.make
+src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o: ../src/lib/Fifos/FifoWriter.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/CMakeFiles" $(CMAKE_PROGRESS_2)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o"
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/lib.dir/Fifos/FifoEscritura.o -c "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoEscritura.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o"
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/lib.dir/Fifos/FifoWriter.o -c "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoWriter.cpp"
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lib.dir/Fifos/FifoEscritura.i"
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoEscritura.cpp" > CMakeFiles/lib.dir/Fifos/FifoEscritura.i
+src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lib.dir/Fifos/FifoWriter.i"
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoWriter.cpp" > CMakeFiles/lib.dir/Fifos/FifoWriter.i
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lib.dir/Fifos/FifoEscritura.s"
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoEscritura.cpp" -o CMakeFiles/lib.dir/Fifos/FifoEscritura.s
+src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lib.dir/Fifos/FifoWriter.s"
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoWriter.cpp" -o CMakeFiles/lib.dir/Fifos/FifoWriter.s
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o.requires:
-.PHONY : src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o.requires
+src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o.requires:
+.PHONY : src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o.requires
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o.provides: src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o.requires
-	$(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o.provides.build
-.PHONY : src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o.provides
+src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o.provides: src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o.requires
+	$(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o.provides.build
+.PHONY : src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o.provides
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o.provides.build: src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o
+src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o.provides.build: src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o: src/lib/CMakeFiles/lib.dir/flags.make
-src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o: ../src/lib/Fifos/FifoLectura.cpp
+src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o: src/lib/CMakeFiles/lib.dir/flags.make
+src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o: ../src/lib/Fifos/FifoReader.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/CMakeFiles" $(CMAKE_PROGRESS_3)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o"
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/lib.dir/Fifos/FifoLectura.o -c "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoLectura.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o"
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/lib.dir/Fifos/FifoReader.o -c "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoReader.cpp"
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lib.dir/Fifos/FifoLectura.i"
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoLectura.cpp" > CMakeFiles/lib.dir/Fifos/FifoLectura.i
+src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lib.dir/Fifos/FifoReader.i"
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoReader.cpp" > CMakeFiles/lib.dir/Fifos/FifoReader.i
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lib.dir/Fifos/FifoLectura.s"
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoLectura.cpp" -o CMakeFiles/lib.dir/Fifos/FifoLectura.s
+src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lib.dir/Fifos/FifoReader.s"
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Fifos/FifoReader.cpp" -o CMakeFiles/lib.dir/Fifos/FifoReader.s
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o.requires:
-.PHONY : src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o.requires
+src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o.requires:
+.PHONY : src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o.requires
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o.provides: src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o.requires
-	$(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o.provides.build
-.PHONY : src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o.provides
+src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o.provides: src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o.requires
+	$(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o.provides.build
+.PHONY : src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o.provides
 
-src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o.provides.build: src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o
+src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o.provides.build: src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o
 
 src/lib/CMakeFiles/lib.dir/LockFile/LockFile.o: src/lib/CMakeFiles/lib.dir/flags.make
 src/lib/CMakeFiles/lib.dir/LockFile/LockFile.o: ../src/lib/LockFile/LockFile.cpp
@@ -187,24 +187,49 @@ src/lib/CMakeFiles/lib.dir/Signals/SignalHandler.o.provides: src/lib/CMakeFiles/
 
 src/lib/CMakeFiles/lib.dir/Signals/SignalHandler.o.provides.build: src/lib/CMakeFiles/lib.dir/Signals/SignalHandler.o
 
+src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o: src/lib/CMakeFiles/lib.dir/flags.make
+src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o: ../src/lib/Semaphore/Semaphore.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/CMakeFiles" $(CMAKE_PROGRESS_7)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o"
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/lib.dir/Semaphore/Semaphore.o -c "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Semaphore/Semaphore.cpp"
+
+src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lib.dir/Semaphore/Semaphore.i"
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Semaphore/Semaphore.cpp" > CMakeFiles/lib.dir/Semaphore/Semaphore.i
+
+src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lib.dir/Semaphore/Semaphore.s"
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release/src/lib" && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/src/lib/Semaphore/Semaphore.cpp" -o CMakeFiles/lib.dir/Semaphore/Semaphore.s
+
+src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o.requires:
+.PHONY : src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o.requires
+
+src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o.provides: src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o.requires
+	$(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o.provides.build
+.PHONY : src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o.provides
+
+src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o.provides.build: src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o
+
 # Object files for target lib
 lib_OBJECTS = \
 "CMakeFiles/lib.dir/Fifos/Fifo.o" \
-"CMakeFiles/lib.dir/Fifos/FifoEscritura.o" \
-"CMakeFiles/lib.dir/Fifos/FifoLectura.o" \
+"CMakeFiles/lib.dir/Fifos/FifoWriter.o" \
+"CMakeFiles/lib.dir/Fifos/FifoReader.o" \
 "CMakeFiles/lib.dir/LockFile/LockFile.o" \
 "CMakeFiles/lib.dir/Pipes/Pipe.o" \
-"CMakeFiles/lib.dir/Signals/SignalHandler.o"
+"CMakeFiles/lib.dir/Signals/SignalHandler.o" \
+"CMakeFiles/lib.dir/Semaphore/Semaphore.o"
 
 # External object files for target lib
 lib_EXTERNAL_OBJECTS =
 
 src/lib/liblib.a: src/lib/CMakeFiles/lib.dir/Fifos/Fifo.o
-src/lib/liblib.a: src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o
-src/lib/liblib.a: src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o
+src/lib/liblib.a: src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o
+src/lib/liblib.a: src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o
 src/lib/liblib.a: src/lib/CMakeFiles/lib.dir/LockFile/LockFile.o
 src/lib/liblib.a: src/lib/CMakeFiles/lib.dir/Pipes/Pipe.o
 src/lib/liblib.a: src/lib/CMakeFiles/lib.dir/Signals/SignalHandler.o
+src/lib/liblib.a: src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o
 src/lib/liblib.a: src/lib/CMakeFiles/lib.dir/build.make
 src/lib/liblib.a: src/lib/CMakeFiles/lib.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX static library liblib.a"
@@ -216,11 +241,12 @@ src/lib/CMakeFiles/lib.dir/build: src/lib/liblib.a
 .PHONY : src/lib/CMakeFiles/lib.dir/build
 
 src/lib/CMakeFiles/lib.dir/requires: src/lib/CMakeFiles/lib.dir/Fifos/Fifo.o.requires
-src/lib/CMakeFiles/lib.dir/requires: src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o.requires
-src/lib/CMakeFiles/lib.dir/requires: src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o.requires
+src/lib/CMakeFiles/lib.dir/requires: src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o.requires
+src/lib/CMakeFiles/lib.dir/requires: src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o.requires
 src/lib/CMakeFiles/lib.dir/requires: src/lib/CMakeFiles/lib.dir/LockFile/LockFile.o.requires
 src/lib/CMakeFiles/lib.dir/requires: src/lib/CMakeFiles/lib.dir/Pipes/Pipe.o.requires
 src/lib/CMakeFiles/lib.dir/requires: src/lib/CMakeFiles/lib.dir/Signals/SignalHandler.o.requires
+src/lib/CMakeFiles/lib.dir/requires: src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o.requires
 .PHONY : src/lib/CMakeFiles/lib.dir/requires
 
 src/lib/CMakeFiles/lib.dir/clean:

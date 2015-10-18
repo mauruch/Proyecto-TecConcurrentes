@@ -132,34 +132,34 @@ Fifos/Fifo.s:
 .PHONY : Fifos/Fifo.s
 
 # target to build an object file
-Fifos/FifoEscritura.o:
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.o
-.PHONY : Fifos/FifoEscritura.o
+Fifos/FifoReader.o:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.o
+.PHONY : Fifos/FifoReader.o
 
 # target to preprocess a source file
-Fifos/FifoEscritura.i:
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.i
-.PHONY : Fifos/FifoEscritura.i
+Fifos/FifoReader.i:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.i
+.PHONY : Fifos/FifoReader.i
 
 # target to generate assembly for a file
-Fifos/FifoEscritura.s:
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoEscritura.s
-.PHONY : Fifos/FifoEscritura.s
+Fifos/FifoReader.s:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoReader.s
+.PHONY : Fifos/FifoReader.s
 
 # target to build an object file
-Fifos/FifoLectura.o:
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.o
-.PHONY : Fifos/FifoLectura.o
+Fifos/FifoWriter.o:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.o
+.PHONY : Fifos/FifoWriter.o
 
 # target to preprocess a source file
-Fifos/FifoLectura.i:
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.i
-.PHONY : Fifos/FifoLectura.i
+Fifos/FifoWriter.i:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.i
+.PHONY : Fifos/FifoWriter.i
 
 # target to generate assembly for a file
-Fifos/FifoLectura.s:
-	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoLectura.s
-.PHONY : Fifos/FifoLectura.s
+Fifos/FifoWriter.s:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Fifos/FifoWriter.s
+.PHONY : Fifos/FifoWriter.s
 
 # target to build an object file
 LockFile/LockFile.o:
@@ -192,6 +192,21 @@ Pipes/Pipe.s:
 .PHONY : Pipes/Pipe.s
 
 # target to build an object file
+Semaphore/Semaphore.o:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.o
+.PHONY : Semaphore/Semaphore.o
+
+# target to preprocess a source file
+Semaphore/Semaphore.i:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.i
+.PHONY : Semaphore/Semaphore.i
+
+# target to generate assembly for a file
+Semaphore/Semaphore.s:
+	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Semaphore/Semaphore.s
+.PHONY : Semaphore/Semaphore.s
+
+# target to build an object file
 Signals/SignalHandler.o:
 	cd "/home/german/Escritorio/Facultad/75.59-Programacion Concurrente/Proyecto-TecConcurrentes/Release" && $(MAKE) -f src/lib/CMakeFiles/lib.dir/build.make src/lib/CMakeFiles/lib.dir/Signals/SignalHandler.o
 .PHONY : Signals/SignalHandler.o
@@ -218,18 +233,21 @@ help:
 	@echo "... Fifos/Fifo.o"
 	@echo "... Fifos/Fifo.i"
 	@echo "... Fifos/Fifo.s"
-	@echo "... Fifos/FifoEscritura.o"
-	@echo "... Fifos/FifoEscritura.i"
-	@echo "... Fifos/FifoEscritura.s"
-	@echo "... Fifos/FifoLectura.o"
-	@echo "... Fifos/FifoLectura.i"
-	@echo "... Fifos/FifoLectura.s"
+	@echo "... Fifos/FifoReader.o"
+	@echo "... Fifos/FifoReader.i"
+	@echo "... Fifos/FifoReader.s"
+	@echo "... Fifos/FifoWriter.o"
+	@echo "... Fifos/FifoWriter.i"
+	@echo "... Fifos/FifoWriter.s"
 	@echo "... LockFile/LockFile.o"
 	@echo "... LockFile/LockFile.i"
 	@echo "... LockFile/LockFile.s"
 	@echo "... Pipes/Pipe.o"
 	@echo "... Pipes/Pipe.i"
 	@echo "... Pipes/Pipe.s"
+	@echo "... Semaphore/Semaphore.o"
+	@echo "... Semaphore/Semaphore.i"
+	@echo "... Semaphore/Semaphore.s"
 	@echo "... Signals/SignalHandler.o"
 	@echo "... Signals/SignalHandler.i"
 	@echo "... Signals/SignalHandler.s"

@@ -8,8 +8,6 @@ namespace utils {
 static const std::string LOG_DELIMITER = " - ";
 static const std::string LOG_FILE = "/tmp/TPConcurrentes.log";
 
-
-enum testEnum {uno, dos};
 enum class unloadOrigin { SHIP, TRUCK };
 
 struct trucksShm{

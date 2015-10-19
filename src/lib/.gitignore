@@ -1,5 +1,7 @@
+/Release/
 /Debug/
+.cproyect
+.project
 *.[oa]
 .settings/
 *.swp
-/Release/

@@ -1,5 +1,7 @@
 #include "Logger.h"
 
+#include <ctime>
+
 Logger::Logger() :
 		lockFile(utils::LOG_FILE.c_str()) {
 	this->log_level = LogLevel::INFO;
@@ -15,14 +17,14 @@ Logger::Logger(LogLevel logLevel) :
 Logger::~Logger() {
 }
 
-void Logger::initializeEnumMapValues(){
+void Logger::initializeEnumMapValues() {
 	this->logLevelMap[LogLevel::DEBUG] = std::string("[DEBUG]");
 	this->logLevelMap[LogLevel::INFO] = std::string("[INFO]");
 	this->logLevelMap[LogLevel::WARN] = std::string("[WARN]");
 	this->logLevelMap[LogLevel::ERROR] = std::string("[ERROR]");
 }
 
-void Logger::setLogLevel(Logger::LogLevel logLevel){
+void Logger::setLogLevel(Logger::LogLevel logLevel) {
 	this->log_level = logLevel;
 }
 
@@ -58,6 +60,8 @@ std::string Logger::createLogLine(const std::string data) {
 	std::string logLine;
 	logLine.append(getFormattedDateTime());
 	logLine.append(utils::LOG_DELIMITER);
+	logLine.append(getProcessInfo());
+	logLine.append(utils::LOG_DELIMITER);
 	logLine.append(getLogLevelFormatted());
 	logLine.append(utils::LOG_DELIMITER);
 	logLine.append(data);
@@ -65,8 +69,14 @@ std::string Logger::createLogLine(const std::string data) {
 	return logLine;
 }
 
-std::string Logger::getLogLevelFormatted(){
+std::string Logger::getLogLevelFormatted() {
 	return this->logLevelMap[this->log_level];
+}
+
+std::string Logger::getProcessInfo() {
+	char *pid = "PID: ";
+	pid += sprintf(pid, "%ld", (long)getpid());
+	return std::string(pid);
 }
 
 std::string Logger::getFormattedDateTime() {

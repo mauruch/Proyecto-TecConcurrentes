@@ -31,6 +31,7 @@ private:
 	void logLocking(const std::string data);
 	void initializeEnumMapValues();
 	std::string createLogLine(const std::string data);
+	std::string getProcessInfo();
 	std::string getFormattedDateTime();
 	std::string getLogLevelFormatted();
 

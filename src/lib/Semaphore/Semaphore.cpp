@@ -1,7 +1,7 @@
 #include "../Semaphore/Semaphore.h"
 
-Semaphore::Semaphore(const std::string & name,const int initValue ): initValue(initValue) {
-	key_t key = ftok ( name.c_str(),'a' );
+Semaphore::Semaphore(const std::string & name, int id, const int initValue ): initValue(initValue) {
+	key_t key = ftok ( name.c_str(), id );
 	this->id = semget ( key,1,0666 | IPC_CREAT );
 
 	this->init ();
@@ -50,4 +50,8 @@ int Semaphore :: signal () const {
 
 void Semaphore :: destroy () const {
 	semctl ( this->id,0,IPC_RMID );
+}
+
+int Semaphore::getId(){
+	return this->id;
 }

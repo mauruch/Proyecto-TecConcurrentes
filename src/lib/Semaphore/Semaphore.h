@@ -15,12 +15,13 @@ private:
 	int init () const;
 
 public:
-	Semaphore ( const std::string& name,const int initValue = 0 );
+	Semaphore ( const std::string& name, int id, const int initValue = 0 );
 	~Semaphore();
 
 	int wait () const; // decrementa
 	int signal () const; // incrementa
 	void destroy () const;
+	int getId();
 };
 
 #endif /* SEMAFORO_H_ */

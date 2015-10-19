@@ -1,12 +1,7 @@
-<<<<<<< ad2c163ef44a5e2ffd1c4ee9d99a02f2f4531c12
 /Release/
+/Debug/
 .cproyect
 .project
-
-=======
-/Debug/
 *.[oa]
 .settings/
 *.swp
-/Release/
->>>>>>> 7bb316301feb1ad8c3a4e9beafb404817f207335

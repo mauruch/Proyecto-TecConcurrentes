@@ -5,19 +5,25 @@
  *      Author: mauruch
  */
 
-#include <iostream>
+
 #include <Logger/Logger.h>
 #include <SharedMemory/SharedMemory.h>
-#include <vector>
 #include <Semaphore/Semaphore.h>
 #include <stdlib.h>
+#include <iostream>
+#include <sstream>
 #include <SharedData.h>
 #include <string>
+#include <vector>
 
 using namespace std;
 
 
 int main(int argc,  char** argv) {
+
+	Logger log;
+
+	log.info("Initializing simulation..");
 
 	//TODO validate input
 	int craneConfig = atoi(argv[1]);
@@ -36,9 +42,13 @@ int main(int argc,  char** argv) {
 	SharedMemory<utils::sharedData> sharedMemory(file,'A');
 
 	//create a semaphore for each ship
+	log.info("Creating a semaphore for each ship...");
 	vector<int> semShipsIds;
 	for(int i=0; i < shipConfig; i++) {
 		Semaphore semaphore(file, i, 1);
+		stringstream convert;
+		convert << semaphore.getId();
+		log.info("Semaphore with id " + convert.str() + " was created");
 		cout << "semaforo: " << semaphore.getId() << endl;
 		semShipsIds.push_back(semaphore.getId());
 	}

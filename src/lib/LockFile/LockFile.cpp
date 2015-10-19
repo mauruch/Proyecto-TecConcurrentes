@@ -1,7 +1,6 @@
 #include "LockFile.h"
 
 LockFile :: LockFile ( const std::string nombre ) {
-
 	this->nombre = nombre;
 	this->fl.l_type = F_WRLCK;
 	this->fl.l_whence = SEEK_SET;

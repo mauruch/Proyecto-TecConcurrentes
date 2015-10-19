@@ -2,15 +2,20 @@
 #define LOGGER_LOGGER_H_
 
 #include <string>
+#include <map>
+
 #include "../LockFile/LockFile.h"
+#include "../utils/utils.h"
 
 class Logger {
+
 public:
 
-	enum class level {
-		DEBUG = 0 , WARN = 1, INFO = 2, ERROR = 3
+	enum class LogLevel : int {
+		DEBUG = 0, INFO = 1, WARN = 2, ERROR = 3
 	};
 
+	Logger(LogLevel logLevel);
 	Logger();
 	virtual ~Logger();
 
@@ -19,12 +24,19 @@ public:
 	void warn(const std::string data);
 	void error(const std::string data);
 
-private:
-	void logLocking(const std::string data);
+	void setLogLevel(LogLevel logLevel);
 
-	const std::string logFile="/tmp/TPConcurrentes.log";
+private:
+	void logLocking(const std::string data, LogLevel);
+	void logLocking(const std::string data);
+	void initializeEnumMapValues();
+	std::string createLogLine(const std::string data);
+	std::string getFormattedDateTime();
+	std::string getLogLevelFormatted();
+
+	std::map<LogLevel, std::string> logLevelMap;
 	LockFile lockFile;
-	level log_level;
+	LogLevel log_level;
 
 };
 

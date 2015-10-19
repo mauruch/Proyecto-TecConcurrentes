@@ -1,18 +1,17 @@
 #include "Ship.h"
 
-#include <unistd.h>
-#include <utils/utils.h>
-
-namespace {
-	 const std::string SEM_NAME = "test" + getpid();
-};
-
+//namespace {
+//	 const std::string SEM_NAME = "test" + getpid();
+//};
+//
 Ship::Ship(const std::string name) :
-		fifo(name), semaphore(::SEM_NAME, 0) {
+		fifo(name), semaphore("TEST", 0){
 	this->pid = getpid();
+	log.info("Creating new Ship");
 }
 
 Ship::~Ship() {
+	log.info("Deleting Ship");
 }
 
 void Ship::sendEntryRequest() {

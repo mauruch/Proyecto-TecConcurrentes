@@ -2,6 +2,7 @@
 #define DOMAIN_SHIP_H_
 
 #include <Fifos/FifoWriter.h>
+#include <Logger/Logger.h>
 #include <sys/types.h>
 #include <Semaphore/Semaphore.h>
 #include <string>
@@ -16,6 +17,7 @@ public:
 	void board();
 
 private:
+	Logger log;
 	FifoWriter fifo;
 	Semaphore semaphore;
 	pid_t pid;

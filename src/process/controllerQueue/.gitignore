@@ -1,1 +1,5 @@
 /Debug/
+*.[oa]
+.settings/
+*.swp
+/Release/

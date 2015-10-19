@@ -1,7 +1,7 @@
 #include "Fifo.h"
 
 Fifo::Fifo(const std::string name) :
-		nombre(name), fd(-1) {
+		name(name), fd(-1) {
 	if(mknod(static_cast<const char*>(name.c_str()), S_IFIFO | 0666, 0)<0)
 		;//signal alert
 }
@@ -15,5 +15,5 @@ void Fifo::closeFifo() {
 }
 
 void Fifo::deleteFifo() const {
-	unlink(nombre.c_str());
+	unlink(name.c_str());
 }

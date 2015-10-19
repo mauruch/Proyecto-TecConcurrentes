@@ -1,8 +1,8 @@
 #include "Fifo.h"
 
-Fifo::Fifo(const std::string nombre) :
-		nombre(nombre), fd(-1) {
-	if(mknod(static_cast<const char*>(nombre.c_str()), S_IFIFO | 0666, 0)<0)
+Fifo::Fifo(const std::string name) :
+		nombre(name), fd(-1) {
+	if(mknod(static_cast<const char*>(name.c_str()), S_IFIFO | 0666, 0)<0)
 		;//signal alert
 }
 

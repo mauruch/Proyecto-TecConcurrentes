@@ -9,14 +9,14 @@
 
 class Fifo {
 public:
-	Fifo(const std::string nombre);
+	Fifo(const std::string name);
 	virtual ~Fifo();
 	virtual void openFifo() = 0;
 	void closeFifo();
 	void deleteFifo() const;
 
 protected:
-	std::string nombre;
+	std::string name;
 	int fd;
 };
 

@@ -1,1 +1,0 @@
-/usr/bin/c++   -O3 -DNDEBUG    CMakeFiles/dummy2.dir/dummy2.o  -o dummy2 -rdynamic ../../lib/liblib.a 

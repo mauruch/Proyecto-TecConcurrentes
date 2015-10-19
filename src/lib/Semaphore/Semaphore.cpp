@@ -1,16 +1,16 @@
 #include "../Semaphore/Semaphore.h"
 
-Semaphore::Semaphore(const std::string & nombre,const int valorInicial ): valorInicial(valorInicial) {
-	key_t clave = ftok ( nombre.c_str(),'a' );
-	this->id = semget ( clave,1,0666 | IPC_CREAT );
+Semaphore::Semaphore(const std::string & name,const int initValue ): initValue(initValue) {
+	key_t key = ftok ( name.c_str(),'a' );
+	this->id = semget ( key,1,0666 | IPC_CREAT );
 
-	this->inicializar ();
+	this->init ();
 }
 
 Semaphore::~Semaphore() {
 }
 
-int Semaphore :: inicializar () const {
+int Semaphore :: init () const {
 
 	union semnum {
 		int val;
@@ -19,35 +19,35 @@ int Semaphore :: inicializar () const {
 	};
 
 	semnum init;
-	init.val = this->valorInicial;
-	int resultado = semctl ( this->id,0,SETVAL,init );
-	return resultado;
+	init.val = this->initValue;
+	int result = semctl ( this->id,0,SETVAL,init );
+	return result;
 }
 
 int Semaphore :: wait () const {
 
-	struct sembuf operacion;
+	struct sembuf operaation;
 
-	operacion.sem_num = 0;	// numero de semaforo
-	operacion.sem_op  = -1;	// restar 1 al semaforo
-	operacion.sem_flg = SEM_UNDO;
+	operaation.sem_num = 0;	// numero de semaforo
+	operaation.sem_op  = -1;	// restar 1 al semaforo
+	operaation.sem_flg = SEM_UNDO;
 
-	int resultado = semop ( this->id,&operacion,1 );
-	return resultado;
+	int result = semop ( this->id,&operaation,1 );
+	return result;
 }
 
 int Semaphore :: signal () const {
 
-	struct sembuf operacion;
+	struct sembuf operation;
 
-	operacion.sem_num = 0;	// numero de semaforo
-	operacion.sem_op  = 1;	// sumar 1 al semaforo
-	operacion.sem_flg = SEM_UNDO;
+	operation.sem_num = 0;	// numero de semaforo
+	operation.sem_op  = 1;	// sumar 1 al semaforo
+	operation.sem_flg = SEM_UNDO;
 
-	int resultado = semop ( this->id,&operacion,1 );
-	return resultado;
+	int result = semop ( this->id,&operation,1 );
+	return result;
 }
 
-void Semaphore :: eliminar () const {
+void Semaphore :: destroy () const {
 	semctl ( this->id,0,IPC_RMID );
 }

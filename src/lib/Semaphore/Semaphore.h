@@ -10,17 +10,17 @@ class Semaphore {
 
 private:
 	int id;
-	int valorInicial;
+	int initValue;
 
-	int inicializar () const;
+	int init () const;
 
 public:
-	Semaphore ( const std::string& nombre,const int valorInicial = 0 );
+	Semaphore ( const std::string& name,const int initValue = 0 );
 	~Semaphore();
 
 	int wait () const; // decrementa
 	int signal () const; // incrementa
-	void eliminar () const;
+	void destroy () const;
 };
 
 #endif /* SEMAFORO_H_ */

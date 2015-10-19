@@ -2,6 +2,8 @@
 
 #include <ctime>
 
+using namespace std;
+
 Logger::Logger() :
 		lockFile(utils::LOG_FILE.c_str()) {
 	this->log_level = LogLevel::INFO;
@@ -18,46 +20,46 @@ Logger::~Logger() {
 }
 
 void Logger::initializeEnumMapValues() {
-	this->logLevelMap[LogLevel::DEBUG] = std::string("[DEBUG]");
-	this->logLevelMap[LogLevel::INFO] = std::string("[INFO]");
-	this->logLevelMap[LogLevel::WARN] = std::string("[WARN]");
-	this->logLevelMap[LogLevel::ERROR] = std::string("[ERROR]");
+	this->logLevelMap[LogLevel::DEBUG] = string("[DEBUG]");
+	this->logLevelMap[LogLevel::INFO] = string("[INFO]");
+	this->logLevelMap[LogLevel::WARN] = string("[WARN]");
+	this->logLevelMap[LogLevel::ERROR] = string("[ERROR]");
 }
 
 void Logger::setLogLevel(Logger::LogLevel logLevel) {
 	this->log_level = logLevel;
 }
 
-void Logger::info(const std::string data) {
+void Logger::info(const string data) {
 	this->logLocking(data, LogLevel::INFO);
 }
 
-void Logger::error(const std::string data) {
+void Logger::error(const string data) {
 	this->logLocking(data, LogLevel::ERROR);
 }
 
-void Logger::warn(const std::string data) {
+void Logger::warn(const string data) {
 	this->logLocking(data, LogLevel::WARN);
 }
 
-void Logger::debug(const std::string data) {
+void Logger::debug(const string data) {
 	this->logLocking(data, LogLevel::DEBUG);
 }
 
-void Logger::logLocking(const std::string data, LogLevel level) {
+void Logger::logLocking(const string data, LogLevel level) {
 	if (log_level <= level)
 		logLocking(data);
 }
 
-void Logger::logLocking(const std::string data) {
-	std::string logLine = createLogLine(data);
+void Logger::logLocking(const string data) {
+	string logLine = createLogLine(data);
 	lockFile.tomarLock();
 	lockFile.escribir(logLine.c_str(), logLine.length());
 	lockFile.liberarLock();
 }
 
-std::string Logger::createLogLine(const std::string data) {
-	std::string logLine;
+string Logger::createLogLine(const string data) {
+	string logLine;
 	logLine.append(getFormattedDateTime());
 	logLine.append(utils::LOG_DELIMITER);
 	logLine.append(getProcessInfo());
@@ -69,17 +71,15 @@ std::string Logger::createLogLine(const std::string data) {
 	return logLine;
 }
 
-std::string Logger::getLogLevelFormatted() {
+string Logger::getLogLevelFormatted() {
 	return this->logLevelMap[this->log_level];
 }
 
-std::string Logger::getProcessInfo() {
-	char *pid = "PID: ";
-	pid += sprintf(pid, "%ld", (long)getpid());
-	return std::string(pid);
+string Logger::getProcessInfo() {
+	return string("PID: ").append(utils::convertToString(getpid()));
 }
 
-std::string Logger::getFormattedDateTime() {
+string Logger::getFormattedDateTime() {
 	time_t rawtime;
 	struct tm * timeinfo;
 	char buffer[80];
@@ -88,6 +88,6 @@ std::string Logger::getFormattedDateTime() {
 	timeinfo = localtime(&rawtime);
 
 	strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
-	return std::string(buffer);
+	return string(buffer);
 }
 

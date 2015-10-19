@@ -31,6 +31,14 @@ struct entryRequest {
 	pid_t ship_id;
 
 };
+
+template<typename T>
+std::string convertToString(T t){
+	std::stringstream convert;
+	convert << t;
+	return std::string(convert.str());
+}
+
 }
 
 #endif

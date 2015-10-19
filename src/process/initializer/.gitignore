@@ -1,3 +1,7 @@
+/Release/
 /Debug/
-.cproyect
+.cproject
 .project
+*.[oa]
+.settings/
+*.swp

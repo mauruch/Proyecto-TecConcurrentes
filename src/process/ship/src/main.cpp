@@ -1,29 +1,24 @@
 #include <Logger/Logger.h>
-#include <utils/utils.h>
 #include <iostream>
-#include <list>
+#include <utils/utils.h>
 
 #include "domain/Ship.h"
 
 using namespace std;
 
+bool running = true;
+
 int main() {
 
-	Logger log(Logger::LogLevel::WARN);
-	std::cout << "holaaa" << endl;
+	Logger log;
 
-	log.debug("test debug");
-	log.info("test info ");
-	log.warn("test warn");
-	log.error("test error ");
+	log.info("New ship process created. Launching ship");
+	Ship ship(utils::CONTROLLER_QUEUE_FIFO);
 
+	while(running){
+		cout << "launching ship" << endl;
+		ship.enterPort();
+//		ship.board();
+	}
 
-	Ship ship("TEST");
-//
-//	//Try to enter in port
-//	ship.sendEntryRequest();
-//	ship.waitOnSemaphore();
-//
-//	//Searching for a place to board
-//	ship.board();
 }

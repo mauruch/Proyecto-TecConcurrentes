@@ -2,42 +2,26 @@
 #define UTILS_H_
 
 #include <sched.h>
+#include <cstring>
+#include <sstream>
+#include <string.h>
 
 namespace utils {
 
+static const std::string SEM_EXTENSION = "-sem";
 static const std::string LOG_DELIMITER = " - ";
 static const std::string LOG_FILE = "/tmp/TPConcurrentes.log";
+static const std::string CONTROLLER_QUEUE_FIFO = "/tmp/ControllerQueue.fifo";
 
-enum class unloadOrigin { SHIP, TRUCK };
+struct entryPortRequest {
 
-struct trucksShm{
-
-};
-
-struct ShipsShm{
-
-};
-
-struct craneShm{
-
-};
-
-struct entryRequest {
-
-	entryRequest(unsigned long id){
-		ship_id = id;
+	entryPortRequest(pid_t id = 0){
+		shipPid = id;
 	}
 
-	pid_t ship_id;
+	pid_t shipPid;
 
 };
-
-template<typename T>
-std::string convertToString(T t){
-	std::stringstream convert;
-	convert << t;
-	return std::string(convert.str());
-}
 
 }
 

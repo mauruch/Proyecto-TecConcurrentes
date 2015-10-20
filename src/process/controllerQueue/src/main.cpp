@@ -17,10 +17,7 @@ int main() {
 	ControllerQueue controllerQueue(utils::CONTROLLER_QUEUE_FIFO);
 
 	while(running){
-		cout << "Receiving request in 5 sec" << endl;
-		sleep(1);
-
-		controllerQueue.controlNewEnterRequest();
+		controllerQueue.attendRequest();
 
 
 

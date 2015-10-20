@@ -5,10 +5,10 @@
  *      Author: mauruch
  */
 
-
 #include <Logger/Logger.h>
 #include <SharedMemory/SharedMemory.h>
 #include <Semaphore/Semaphore.h>
+#include <Fifos/Fifo.h>
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
@@ -19,6 +19,7 @@
 #include <vector>
 #include <unistd.h>
 #include <sys/types.h>
+#include <utils/utils.h>
 #include <sys/ipc.h>
 #include <tclap/CmdLine.h>
 
@@ -28,7 +29,7 @@ using namespace std;
 
 int main(int argc,  char** argv) {
 
-	Logger log;
+	Logger log(Logger::LogLevel::DEBUG);
 
 	log.info("Initializing simulation..");
 
@@ -40,6 +41,7 @@ int main(int argc,  char** argv) {
 
 	const string file = "src/main.cpp";
 
+	log.debug("creating shared data with given args");
 	utils::sharedData sharedData;
 	sharedData.craneConfig = craneConfig;
 	sharedData.shipConfig = shipConfig;
@@ -48,11 +50,19 @@ int main(int argc,  char** argv) {
 
 	SharedMemory<utils::sharedData> sharedMemory(file,'A');
 
+	log.debug("writing struct 'sharedData' in shared memory");
 	sharedMemory.write(sharedData);
 
+
+	//create CONTROLLER_QUEUE_FIFO
+	log.debug("creating fifo for ControllerQueue");
+	Fifo controllerQFifo(utils::CONTROLLER_QUEUE_FIFO);
+
 	vector<int> ftoksShip;
+	log.debug("creating a semaphore for each ship");
 	for(int i=0; i < shipConfig; i++){
 		key_t key = ftok(file.c_str(), i);
+
 		Semaphore semaphore(key);
 		ftoksShip.push_back(key);
 	}
@@ -61,6 +71,7 @@ int main(int argc,  char** argv) {
 	for(int i=0; i < shipConfig; i++){
 		key_t ftok = ftoksShip.at(i);
 		ArgsResolver args("../ship/Debug/Ship", "-f", ftok);
+		log.debug("launching Ship process...");
 		utils::Process ship("../ship/Debug/Ship", args);
 	}
 

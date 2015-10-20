@@ -6,16 +6,12 @@
 #include <iostream>
 #include <string>
 
-FifoWriter::FifoWriter(const std::string name) :
-		Fifo(name) {
+FifoWriter::FifoWriter(const std::string name) : Fifo() {
+	//TODO call a syscall and log error
+	fd = open(name.c_str(), O_WRONLY);
 }
 
 FifoWriter::~FifoWriter() {
-}
-
-void FifoWriter::openFifo() {
-	fd = open(name.c_str(), O_WRONLY);
-	log.logErrOn(fd < 0);
 }
 
 ssize_t FifoWriter::writeF(const void* buffer,const ssize_t buffsize) const {

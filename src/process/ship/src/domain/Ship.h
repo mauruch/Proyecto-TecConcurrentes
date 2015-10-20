@@ -12,7 +12,7 @@ using namespace std;
 
 class Ship {
 public:
-	Ship(const string name);
+	Ship(const string name, key_t ftok);
 	virtual ~Ship();
 
 	void enterPort();

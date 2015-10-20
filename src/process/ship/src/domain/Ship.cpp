@@ -4,11 +4,11 @@
 #include <utils/Helper.h>
 #include <iostream>
 
-Ship::Ship(const std::string name) :
-		fifo(name), semaphore(Helper::getSemaphoreName(), 0) {
+Ship::Ship(const std::string name, key_t ftok) :
+		fifo(name), semaphore(ftok, 0) {
 	log.debug("Creating new ship");
 	log.debug("Writing on fifo " + name);
-	fifo.openFifo();
+//	fifo.openFifo();
 }
 
 Ship::~Ship() {

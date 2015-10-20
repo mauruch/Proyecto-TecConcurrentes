@@ -7,8 +7,10 @@ class FifoWriter : public Fifo {
 public:
 	FifoWriter (const std::string name);
 	~FifoWriter();
-	void openFifo();
 	ssize_t writeF(const void* buffer,const ssize_t buffsize) const;
+private:
+  int fd;
+
 };
 
 #endif /* FIFOESCRITURA_H_ */

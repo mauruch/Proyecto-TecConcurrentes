@@ -1,14 +1,10 @@
-/*
- * SharedData.cpp
- *
- *  Created on: Oct 18, 2015
- *      Author: mauruch
- */
-
 #include <vector>
+#include <unistd.h>
+
 using namespace std;
 
 namespace utils {
+
 struct sharedData {
 
 	unsigned int craneConfig;
@@ -19,5 +15,6 @@ struct sharedData {
 	vector<int> shipSemaphores;
 
 };
+
 }
 

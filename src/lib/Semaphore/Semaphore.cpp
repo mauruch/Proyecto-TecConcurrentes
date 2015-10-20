@@ -2,9 +2,12 @@
 
 Semaphore::Semaphore(const std::string & name, int id, const int initValue ): initValue(initValue) {
 	key_t key = ftok ( name.c_str(), id );
-	this->id = semget ( key,1,0666 | IPC_CREAT );
+	log.logErrOn(key < 0);
 
-	this->init ();
+	this->id = semget ( key,1,0666 | IPC_CREAT );
+	log.logErrOn(this->id < 0);
+
+	log.logErrOn(this->init() < 0);
 }
 
 Semaphore::Semaphore(key_t key, const int initValue ): initValue(initValue) {
@@ -25,8 +28,7 @@ int Semaphore :: init () const {
 
 	semnum init;
 	init.val = this->initValue;
-	int result = semctl ( this->id,0,SETVAL,init );
-	return result;
+	return semctl ( this->id,0,SETVAL,init );
 }
 
 int Semaphore :: wait () const {

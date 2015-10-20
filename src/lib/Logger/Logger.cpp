@@ -48,35 +48,41 @@ void Logger::debug(const string data) {
 
 void Logger::logLocking(const string data, LogLevel level) {
 	if (log_level <= level)
-		logLocking(data);
+		log(data, level);
 }
 
-void Logger::logLocking(const string data) {
-	string logLine = createLogLine(data);
+void Logger::log(const string data, LogLevel level) {
+	string logLine = createLogLine(data, level);
 	lockFile.tomarLock();
 	lockFile.escribir(logLine.c_str(), logLine.length());
 	lockFile.liberarLock();
 }
 
-string Logger::createLogLine(const string data) {
+//Evaluates a precondition, or logs an error
+void Logger::logErrOn(bool cond){
+	if(cond)
+		this->error(Helper::errStr());
+}
+
+string Logger::createLogLine(const string data, LogLevel level) {
 	string logLine;
 	logLine.append(getFormattedDateTime());
 	logLine.append(utils::LOG_DELIMITER);
 	logLine.append(getProcessInfo());
 	logLine.append(utils::LOG_DELIMITER);
-	logLine.append(getLogLevelFormatted());
+	logLine.append(getLogLevelFormatted(level));
 	logLine.append(utils::LOG_DELIMITER);
 	logLine.append(data);
 	logLine.append("\n");
 	return logLine;
 }
 
-string Logger::getLogLevelFormatted() {
-	return this->logLevelMap[this->log_level];
+string Logger::getLogLevelFormatted(LogLevel level) {
+	return this->logLevelMap[level];
 }
 
 string Logger::getProcessInfo() {
-	return string("PID: ").append(utils::convertToString(getpid()));
+	return string("PID: ").append(Helper::convertToString(getpid()));
 }
 
 string Logger::getFormattedDateTime() {

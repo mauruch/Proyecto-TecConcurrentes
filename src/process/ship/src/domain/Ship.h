@@ -7,20 +7,27 @@
 #include <Semaphore/Semaphore.h>
 #include <string>
 
+using namespace std;
+
+
 class Ship {
 public:
-	Ship(const std::string name);
+	Ship(const string name);
 	virtual ~Ship();
 
-	void sendEntryRequest();
-	void waitOnSemaphore();
+	void enterPort();
 	void board();
 
 private:
+
+	string getSemaphoreName();
+
+	void sendEntryRequest();
+	void waitOnSemaphore();
+
 	Logger log;
 	FifoWriter fifo;
 	Semaphore semaphore;
-	pid_t pid;
 };
 
 #endif /* DOMAIN_SHIP_H_ */

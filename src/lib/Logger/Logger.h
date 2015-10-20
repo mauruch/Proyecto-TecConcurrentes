@@ -7,12 +7,13 @@
 #include <list>
 
 #include "../LockFile/LockFile.h"
+#include "../utils/Helper.h"
 #include "../utils/utils.h"
 
 using namespace std;
 
 template<typename T>
-string convertToString(T t){
+string convertToString(T t) {
 	stringstream convert;
 	convert << t;
 	return string(convert.str());
@@ -36,16 +37,18 @@ public:
 	void warn(const string data);
 	void error(const string data);
 
+	void logErrOn(bool cond);
+
 	void setLogLevel(LogLevel logLevel);
 
 private:
 	void logLocking(const string data, LogLevel);
-	void logLocking(const string data);
+	void log(const string data, LogLevel);
 	void initializeEnumMapValues();
-	string createLogLine(const string data);
+	string createLogLine(const string data, LogLevel level);
 	string getProcessInfo();
 	string getFormattedDateTime();
-	string getLogLevelFormatted();
+	string getLogLevelFormatted(LogLevel level);
 
 	map<LogLevel, string> logLevelMap;
 	LockFile lockFile;

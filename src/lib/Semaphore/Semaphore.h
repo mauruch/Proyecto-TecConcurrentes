@@ -5,10 +5,12 @@
 #include <sys/sem.h>
 #include <sys/types.h>
 #include <string>
+#include "../Logger/Logger.h"
 
 class Semaphore {
 
 private:
+	Logger log;
 	int id;
 	int initValue;
 

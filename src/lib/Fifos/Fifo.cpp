@@ -1,9 +1,10 @@
 #include "Fifo.h"
 
+
+#include <string.h>
 Fifo::Fifo(const std::string name) :
 		name(name), fd(-1) {
-	if(mknod(static_cast<const char*>(name.c_str()), S_IFIFO | 0666, 0)<0)
-		;//signal alert
+	log.logErrOn(mknod(static_cast<const char*>(name.c_str()), S_IFIFO | 0666, 0)<0);
 }
 
 Fifo::~Fifo() {

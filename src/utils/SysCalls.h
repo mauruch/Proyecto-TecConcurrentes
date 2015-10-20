@@ -42,6 +42,7 @@ pid_t getpid() {
 void execv(const string &execPath, char *const argv[]) {
 
 	auto status = ::execv(execPath.c_str(), argv);
+	perror("execError");
 
 	if (status < 0) {
 		throw SysCallException("Error tryng to execute a execv()");

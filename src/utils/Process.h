@@ -25,7 +25,7 @@ private:
 		string logLevel = this->convertToString(this->logLevel);
 		string shmemId = this->convertToString(this->shmemId);
 
-		char* parmList[] = {"fa", "-l", "frula"};
+		char* parmList[] = {execPaths, "-l", NULL};
 
 		pid_t id = syscalls::fork();
 

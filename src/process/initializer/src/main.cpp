@@ -17,6 +17,9 @@
 #include <string>
 #include <vector>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+
 
 using namespace std;
 
@@ -51,8 +54,17 @@ int main(int argc,  char** argv) {
 
 	sharedMemory.write(sharedData);
 
+	vector<int> ftoksShip;
+	for(int i=0; i < shipConfig; i++){
+		int key = ftok(file.c_str(), i);
+		ftoksShip.push_back(key);
+	}
+
 	//launching process
-	utils::Process ship("../ship/Debug/Ship", 1, sharedMemory.getShmId());
+	for(int i=0; i < shipConfig; i++){
+		utils::Process ship("../ship/Debug/Ship", 1, sharedMemory.getShmId());
+	}
+
 
 	return 1;
 

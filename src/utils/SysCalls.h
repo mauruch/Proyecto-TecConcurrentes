@@ -39,9 +39,16 @@ pid_t getpid() {
 	return result;
 }
 
-void execv(const string &execPath, char *const argv[]) {
+void execv(const string &execPath, vector<string> params) {
 
-	auto status = ::execv(execPath.c_str(), argv);
+	vector<const char *> argsVector;
+	for (string arg : params) {
+		argsVector.push_back(arg.c_str());
+	}
+	argsVector.push_back(NULL);
+	auto args = const_cast<char * const *>(argsVector.data());
+
+	auto status = ::execv(execPath.c_str(), args);
 	perror("execError");
 
 	if (status < 0) {

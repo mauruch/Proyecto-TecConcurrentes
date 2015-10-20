@@ -9,6 +9,7 @@
 #define SRC_UTILS_PROCESS_H_
 #include "../lib/Logger/Logger.h"
 #include "SysCalls.h"
+#include "ArgsResolver.h"
 
 namespace utils{
 
@@ -16,41 +17,23 @@ class Process {
 
 private:
 
-	char* execPaths;
-	int logLevel;
-	key_t ftok;
-
-	void initProcess(){
-
-		char *ftok = const_cast<char*>(this->convertToString(this->ftok).c_str());
-		char* parmList[] = {execPaths, ftok, NULL};
-
-		pid_t id = syscalls::fork();
-
-		if (id == 0){
-			syscalls::execv(execPaths, parmList);
-		}
-
-	}
+	char* execPath;
 
 public:
 
 	Process();
 
-	Process(char* execPaths, int logLevel, key_t ftok){
-		this->execPaths = execPaths;
-		this->logLevel = logLevel;
-		this->ftok = ftok;
+	Process(char* execPaths, ArgsResolver& argResolver){
 
-		this->initProcess();
+		this->execPath = execPaths;
+
+		pid_t id = syscalls::fork();
+
+		if (id == 0) {
+			syscalls::execv(execPath, argResolver.getParams());
+		}
 	}
 
-	//TODO use a helper
-	string convertToString(key_t t){
-		stringstream convert;
-		convert << t;
-		return string(convert.str());
-	}
 };
 
 }

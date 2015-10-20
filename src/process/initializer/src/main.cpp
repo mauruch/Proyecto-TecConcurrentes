@@ -13,12 +13,14 @@
 #include <iostream>
 #include <sstream>
 #include <SharedData.h>
+#include <ArgsResolver.h>
 #include <Process.h>
 #include <string>
 #include <vector>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
+#include <tclap/CmdLine.h>
 
 
 using namespace std;
@@ -37,12 +39,6 @@ int main(int argc,  char** argv) {
 	int placesPortConfig = atoi(argv[4]);
 
 	const string file = "src/main.cpp";
-
-	Semaphore semaphore(file, 1, 1);
-	cout << semaphore.getId() << endl;
-
-	Semaphore semaphore2(file, 1, 1);
-	cout << semaphore.getId() << endl;
 
 	utils::sharedData sharedData;
 	sharedData.craneConfig = craneConfig;
@@ -64,7 +60,8 @@ int main(int argc,  char** argv) {
 	//launching process
 	for(int i=0; i < shipConfig; i++){
 		key_t ftok = ftoksShip.at(i);
-		utils::Process ship("../ship/Debug/Ship", 1, ftok);
+		ArgsResolver args("../ship/Debug/Ship", "-f", ftok);
+		utils::Process ship("../ship/Debug/Ship", args);
 	}
 
 

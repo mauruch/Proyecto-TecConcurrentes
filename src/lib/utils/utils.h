@@ -15,11 +15,13 @@ static const std::string CONTROLLER_QUEUE_FIFO = "/tmp/ControllerQueue.fifo";
 
 struct entryPortRequest {
 
-	entryPortRequest(pid_t id = 0){
+	entryPortRequest(pid_t id = 0, key_t ftokSem = 0){
 		shipPid = id;
+		ftok = ftokSem;
 	}
 
 	pid_t shipPid;
+	key_t ftok;
 
 };
 

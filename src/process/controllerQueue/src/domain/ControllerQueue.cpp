@@ -2,11 +2,10 @@
 #include <utils/utils.h>
 #include <utils/Helper.h>
 
-ControllerQueue::ControllerQueue(const string fifoName) :
-		fifo(fifoName), portDocksSem("a",2) {
+ControllerQueue::ControllerQueue(const string fifoName, key_t ftok) :
+		fifo(fifoName), portDocksSem(ftok, 2) {
 	log.debug("Creating new ControllerQueue");
-	log.debug("Reading on fifo " + fifoName);
-	fifo.openFifo();
+	log.info("Reading on fifo " + fifoName);
 }
 
 ControllerQueue::~ControllerQueue() {
@@ -16,7 +15,7 @@ ControllerQueue::~ControllerQueue() {
 
 void ControllerQueue::attendRequest() {
 	utils::entryPortRequest request = getRequest();
-	Semaphore shipSemaphore = searchSemaphore(request.shipPid);
+	Semaphore shipSemaphore(request.ftok, 1);
 
 	//Lock until a dock is available
 	this->portDocksSem.wait();
@@ -24,17 +23,11 @@ void ControllerQueue::attendRequest() {
 }
 
 utils::entryPortRequest ControllerQueue::getRequest() {
-	log.debug("Locking on new enterRequest");
+	log.info("Locking on new enterRequest");
 	utils::entryPortRequest request;
 	fifo.readFifo(&request, sizeof(request));
-	log.info(
-			std::string("New request to enter port from pid ").append(
-					Helper::convertToString(request.shipPid)));
+	log.info(std::string("New request to enter port from pid ").append(
+			Helper::convertToString(request.shipPid).append(" and ftok ").append(
+					Helper::convertToString(request.ftok))));
 	return request;
-}
-
-Semaphore ControllerQueue::searchSemaphore(pid_t pid) {
-
-	Semaphore sem = semaphoreMap[pid];
-
 }

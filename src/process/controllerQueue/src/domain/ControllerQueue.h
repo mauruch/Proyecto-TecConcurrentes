@@ -9,7 +9,7 @@
 
 class ControllerQueue {
 public:
-	ControllerQueue(const string fifoName);
+	ControllerQueue(const string fifoName, key_t ftok);
 	virtual ~ControllerQueue();
 
 	void attendRequest();
@@ -17,7 +17,6 @@ public:
 private:
 
 	utils::entryPortRequest getRequest();
-	Semaphore searchSemaphore(pid_t);
 
 	Logger log;
 	FifoReader fifo;

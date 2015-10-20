@@ -27,6 +27,7 @@ private:
 
 	Logger log;
 	FifoWriter fifo;
+	key_t ftok;
 	Semaphore semaphore;
 };
 

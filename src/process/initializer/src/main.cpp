@@ -58,6 +58,10 @@ int main(int argc,  char** argv) {
 	log.debug("creating fifo for ControllerQueue");
 	Fifo controllerQFifo(utils::CONTROLLER_QUEUE_FIFO);
 
+	//create semaphore portDock
+	key_t portDockSemKey = ftok(file.c_str(), 111);
+	Semaphore portDockSem(portDockSemKey);
+
 	vector<int> ftoksShip;
 	log.debug("creating a semaphore for each ship");
 	for(int i=0; i < shipConfig; i++){
@@ -67,13 +71,18 @@ int main(int argc,  char** argv) {
 		ftoksShip.push_back(key);
 	}
 
-	//launching process
+	//launching ship process
 	for(int i=0; i < shipConfig; i++){
 		key_t ftok = ftoksShip.at(i);
 		ArgsResolver args("../ship/Debug/Ship", "-f", ftok);
 		log.debug("launching Ship process...");
 		utils::Process ship("../ship/Debug/Ship", args);
 	}
+
+	//launching controllerQueue process
+	log.debug("launching ControllerQueue process...");
+	ArgsResolver controllerQArgs("../ship/Debug/Ship", "-f", portDockSemKey);
+	utils::Process controllerQ("../controllerQueue/Debug/ControllerQueue", controllerQArgs);
 
 
 	return 1;

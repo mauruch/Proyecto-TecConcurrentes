@@ -18,14 +18,12 @@ private:
 
 	char* execPaths;
 	int logLevel;
-	int shmemId;
+	key_t ftok;
 
 	void initProcess(){
 
-		string logLevel = this->convertToString(this->logLevel);
-		string shmemId = this->convertToString(this->shmemId);
-
-		char* parmList[] = {execPaths, "-l", NULL};
+		char *ftok = const_cast<char*>(this->convertToString(this->ftok).c_str());
+		char* parmList[] = {execPaths, ftok, NULL};
 
 		pid_t id = syscalls::fork();
 
@@ -39,16 +37,16 @@ public:
 
 	Process();
 
-	Process(char* execPaths, int logLevel, int shmemId){
+	Process(char* execPaths, int logLevel, key_t ftok){
 		this->execPaths = execPaths;
 		this->logLevel = logLevel;
-		this->shmemId = shmemId;
+		this->ftok = ftok;
 
 		this->initProcess();
 	}
 
 	//TODO use a helper
-	string convertToString(int t){
+	string convertToString(key_t t){
 		stringstream convert;
 		convert << t;
 		return string(convert.str());

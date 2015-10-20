@@ -7,6 +7,11 @@ Semaphore::Semaphore(const std::string & name, int id, const int initValue ): in
 	this->init ();
 }
 
+Semaphore::Semaphore(key_t key, const int initValue ): initValue(initValue) {
+	this->id = semget ( key,1,0666 | IPC_CREAT );
+	this->init ();
+}
+
 Semaphore::~Semaphore() {
 }
 

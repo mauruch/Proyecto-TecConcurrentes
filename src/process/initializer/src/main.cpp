@@ -56,13 +56,15 @@ int main(int argc,  char** argv) {
 
 	vector<int> ftoksShip;
 	for(int i=0; i < shipConfig; i++){
-		int key = ftok(file.c_str(), i);
+		key_t key = ftok(file.c_str(), i);
+		Semaphore semaphore(key);
 		ftoksShip.push_back(key);
 	}
 
 	//launching process
 	for(int i=0; i < shipConfig; i++){
-		utils::Process ship("../ship/Debug/Ship", 1, sharedMemory.getShmId());
+		key_t ftok = ftoksShip.at(i);
+		utils::Process ship("../ship/Debug/Ship", 1, ftok);
 	}
 
 

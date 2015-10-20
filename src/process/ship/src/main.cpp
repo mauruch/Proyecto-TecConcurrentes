@@ -7,17 +7,14 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char* argv[]) {
 
 	Logger log(Logger::LogLevel::WARN);
 	std::cout << "holaaa" << endl;
+	for (int c = 0; c < argc; c++) {
+		cout << argv[c] << endl;
+	}
 
-//	Ship ship("TEST");
-//
-//	//Try to enter in port
-//	ship.sendEntryRequest();
-//	ship.waitOnSemaphore();
-//
-//	//Searching for a place to board
-//	ship.board();
+
+
 }

@@ -13,8 +13,10 @@
 #include <iostream>
 #include <sstream>
 #include <SharedData.h>
+#include <Process.h>
 #include <string>
 #include <vector>
+#include <unistd.h>
 
 using namespace std;
 
@@ -25,13 +27,19 @@ int main(int argc,  char** argv) {
 
 	log.info("Initializing simulation..");
 
-	//TODO validate input
+	//TODO validate input and read loglevel
 	int craneConfig = atoi(argv[1]);
 	int shipConfig = atoi(argv[2]);
 	int truckConfig = atoi(argv[3]);
 	int placesPortConfig = atoi(argv[4]);
 
 	const string file = "src/main.cpp";
+
+	Semaphore semaphore(file, 1, 1);
+	cout << semaphore.getId() << endl;
+
+	Semaphore semaphore2(file, 1, 1);
+	cout << semaphore.getId() << endl;
 
 	utils::sharedData sharedData;
 	sharedData.craneConfig = craneConfig;
@@ -41,23 +49,10 @@ int main(int argc,  char** argv) {
 
 	SharedMemory<utils::sharedData> sharedMemory(file,'A');
 
-	//create a semaphore for each ship
-	log.info("Creating a semaphore for each ship...");
-	vector<int> semShipsIds;
-	for(int i=0; i < shipConfig; i++) {
-		Semaphore semaphore(file, i, 1);
-		stringstream convert;
-		convert << semaphore.getId();
-		log.info("Semaphore with id " + convert.str() + " was created");
-		cout << "semaforo: " << semaphore.getId() << endl;
-		semShipsIds.push_back(semaphore.getId());
-	}
-
-	sharedData.shipSemaphores = semShipsIds;
-
 	sharedMemory.write(sharedData);
 
-	sleep(15);
+	//launching process
+	utils::Process ship("../ship/Debug/Ship", 1, sharedMemory.getShmId());
 
 	return 1;
 

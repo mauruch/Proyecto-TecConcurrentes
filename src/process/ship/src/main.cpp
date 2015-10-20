@@ -12,13 +12,7 @@ int main() {
 	Logger log(Logger::LogLevel::WARN);
 	std::cout << "holaaa" << endl;
 
-	log.debug("test debug");
-	log.info("test info ");
-	log.warn("test warn");
-	log.error("test error ");
-
-
-	Ship ship("TEST");
+//	Ship ship("TEST");
 //
 //	//Try to enter in port
 //	ship.sendEntryRequest();

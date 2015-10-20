@@ -4,9 +4,10 @@
 #include <utils/Helper.h>
 #include <iostream>
 
-Ship::Ship(const std::string name, key_t ftok) :
+Ship::Ship(const std::string name, key_t ftok, int shMem) :
 		fifo(name), semaphore(ftok, 0) {
 	this->ftok = ftok;
+	this->shMemId = shMem;
 	log.debug("Creating new ship");
 	log.debug("Writing on fifo " + name);
 //	fifo.openFifo();

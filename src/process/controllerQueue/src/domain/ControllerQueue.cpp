@@ -15,7 +15,7 @@ ControllerQueue::~ControllerQueue() {
 
 void ControllerQueue::attendRequest() {
 	utils::entryPortRequest request = getRequest();
-	Semaphore shipSemaphore(request.ftok, 1);
+	Semaphore shipSemaphore(request.ftok);
 
 	//Lock until a dock is available
 	this->portDocksSem.wait();

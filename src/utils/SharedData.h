@@ -5,14 +5,23 @@ using namespace std;
 
 namespace utils {
 
-struct sharedData {
+struct sharedDataConfig {
 
 	unsigned int craneConfig;
 	unsigned int shipConfig;
 	unsigned int truckConfig;
 	unsigned int placesPortConfig;
 
-	vector<int> shipSemaphores;
+};
+
+struct sharedDockPort {
+
+	sharedDockPort(int places){
+		capacity = places;
+		}
+
+	vector<int> docksPort;
+	int capacity;
 
 };
 

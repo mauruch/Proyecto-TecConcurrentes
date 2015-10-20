@@ -12,7 +12,7 @@ using namespace std;
 
 class Ship {
 public:
-	Ship(const string name, key_t ftok);
+	Ship(const string name, key_t ftok, int shMemId);
 	virtual ~Ship();
 
 	void enterPort();
@@ -28,6 +28,7 @@ private:
 	Logger log;
 	FifoWriter fifo;
 	key_t ftok;
+	int shMemId;
 	Semaphore semaphore;
 };
 

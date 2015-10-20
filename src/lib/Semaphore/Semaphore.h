@@ -17,8 +17,9 @@ private:
 	int init () const;
 
 public:
-	Semaphore ( const std::string& name, int id, const int initValue = 0 );
-	Semaphore ( key_t key, const int initValue = 0 );
+	Semaphore ( const std::string& name, int id, const int initValue);
+	Semaphore ( key_t key, const int initValue);
+	Semaphore(key_t key);
 	~Semaphore();
 
 	int wait () const; // decrementa

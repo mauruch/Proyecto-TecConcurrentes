@@ -42,17 +42,21 @@ int main(int argc,  char** argv) {
 	const string file = "src/main.cpp";
 
 	log.debug("creating shared data with given args");
-	utils::sharedData sharedData;
+	utils::sharedDataConfig sharedData;
 	sharedData.craneConfig = craneConfig;
 	sharedData.shipConfig = shipConfig;
 	sharedData.truckConfig = truckConfig;
 	sharedData.placesPortConfig = placesPortConfig;
 
-	SharedMemory<utils::sharedData> sharedMemory(file,'A');
+	SharedMemory<utils::sharedDataConfig> sharedMemory(file,'A');
 
-	log.debug("writing struct 'sharedData' in shared memory");
+	log.debug("writing struct 'sharedDataConfig' in shared memory");
 	sharedMemory.write(sharedData);
 
+	utils::sharedDockPort sharedDockPort(placesPortConfig);
+	SharedMemory<utils::sharedDockPort> sharedMemoryDocksPort(file,'B');
+	log.debug("writing struct 'sharedDockPort' in shared memory");
+	sharedMemoryDocksPort.write(sharedDockPort);
 
 	//create CONTROLLER_QUEUE_FIFO
 	log.debug("creating fifo for ControllerQueue");
@@ -60,21 +64,21 @@ int main(int argc,  char** argv) {
 
 	//create semaphore portDock
 	key_t portDockSemKey = ftok(file.c_str(), 111);
-	Semaphore portDockSem(portDockSemKey);
+	Semaphore portDockSem(portDockSemKey, placesPortConfig);
 
 	vector<int> ftoksShip;
 	log.debug("creating a semaphore for each ship");
 	for(int i=0; i < shipConfig; i++){
 		key_t key = ftok(file.c_str(), i);
 
-		Semaphore semaphore(key);
+		Semaphore semaphore(key, 0);
 		ftoksShip.push_back(key);
 	}
 
 	//launching ship process
 	for(int i=0; i < shipConfig; i++){
 		key_t ftok = ftoksShip.at(i);
-		ArgsResolver args("../ship/Debug/Ship", "-f", ftok);
+		ArgsResolver args("../ship/Debug/Ship", "-f", ftok, "-m", sharedMemoryDocksPort.getShmId());
 		log.debug("launching Ship process...");
 		utils::Process ship("../ship/Debug/Ship", args);
 	}

@@ -16,6 +16,10 @@ Semaphore::Semaphore(key_t key, const int initValue ): initValue(initValue) {
 	this->init ();
 }
 
+Semaphore::Semaphore(key_t key){
+	this->id = semget ( key,1,0666 | IPC_CREAT );
+}
+
 Semaphore::~Semaphore() {
 }
 

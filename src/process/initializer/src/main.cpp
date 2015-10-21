@@ -39,8 +39,6 @@ int main(int argc,  char** argv) {
 	int truckConfig = atoi(argv[3]);
 	int placesPortConfig = atoi(argv[4]);
 
-	const string file = "src/main.cpp";
-
 	log.debug("creating shared data with given args");
 	utils::sharedDataConfig sharedData;
 	sharedData.craneConfig = craneConfig;
@@ -48,13 +46,13 @@ int main(int argc,  char** argv) {
 	sharedData.truckConfig = truckConfig;
 	sharedData.placesPortConfig = placesPortConfig;
 
-	SharedMemory<utils::sharedDataConfig> sharedMemory(file,'A');
+	SharedMemory<utils::sharedDataConfig> sharedMemory(utils::FILE_FTOK, utils::ID_FTOK_SHM_CONF_DATA);
 
 	log.debug("writing struct 'sharedDataConfig' in shared memory");
 	sharedMemory.write(sharedData);
 
 	utils::sharedDockPort sharedDockPort(placesPortConfig);
-	SharedMemory<utils::sharedDockPort> sharedMemoryDocksPort(file,'B');
+	SharedMemory<utils::sharedDockPort> sharedMemoryDocksPort(utils::FILE_FTOK, utils::ID_FTOK_SHM_CONF_DOCK);
 	log.debug("writing struct 'sharedDockPort' in shared memory");
 	sharedMemoryDocksPort.write(sharedDockPort);
 
@@ -63,13 +61,17 @@ int main(int argc,  char** argv) {
 	Fifo controllerQFifo(utils::CONTROLLER_QUEUE_FIFO);
 
 	//create semaphore portDock
-	key_t portDockSemKey = ftok(file.c_str(), 111);
+	key_t portDockSemKey = ftok(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_DOCKS_PORT);
 	Semaphore portDockSem(portDockSemKey, placesPortConfig);
+
+	//create semaphore to lock ShareMemory
+	key_t lockShMemSemKey = ftok(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM);
+	Semaphore lockShMemSem(lockShMemSemKey, 0);
 
 	vector<int> ftoksShip;
 	log.debug("creating a semaphore for each ship");
 	for(int i=0; i < shipConfig; i++){
-		key_t key = ftok(file.c_str(), i);
+		key_t key = ftok(utils::FILE_FTOK.c_str(), i);
 
 		Semaphore semaphore(key, 0);
 		ftoksShip.push_back(key);

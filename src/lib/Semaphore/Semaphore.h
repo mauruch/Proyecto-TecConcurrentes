@@ -14,17 +14,17 @@ private:
 	int id;
 	int initValue;
 
-	int init () const;
+	int init() const;
 
 public:
-	Semaphore ( const std::string& name, int id, const int initValue);
-	Semaphore ( key_t key, const int initValue);
+	Semaphore(const std::string& name, int id, const int initValue);
+	Semaphore(key_t key, const int initValue);
 	Semaphore(key_t key);
 	~Semaphore();
 
-	int wait () const; // decrementa
-	int signal () const; // incrementa
-	void destroy () const;
+	int wait() const; // decrementa
+	int signal() const; // incrementa
+	void destroy() const;
 	int getId();
 };
 

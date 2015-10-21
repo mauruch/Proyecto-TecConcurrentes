@@ -25,11 +25,18 @@ private:
 	void sendEntryRequest();
 	void waitOnSemaphore();
 
+	void lockSharedMemory();
+	void searchDock();
+	void unlockSharedMemory();
+
+	key_t getDockLockerKey();
+
 	Logger log;
 	FifoWriter fifo;
 	key_t ftok;
 	int shMemId;
 	Semaphore semaphore;
+	Semaphore dockLockerSemaphore;
 };
 
 #endif /* DOMAIN_SHIP_H_ */

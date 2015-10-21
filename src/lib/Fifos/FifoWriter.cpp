@@ -14,6 +14,6 @@ FifoWriter::FifoWriter(const std::string name) : Fifo() {
 FifoWriter::~FifoWriter() {
 }
 
-ssize_t FifoWriter::writeF(const void* buffer,const ssize_t buffsize) const {
-	return write(fd,buffer,buffsize );
+ssize_t FifoWriter::write(const void* buffer,const ssize_t buffsize) const {
+	return ::write(fd,buffer,buffsize );
 }

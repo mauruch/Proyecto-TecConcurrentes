@@ -17,13 +17,15 @@ private:
 	int init() const;
 
 public:
+	//Create a new semaphore
 	Semaphore(const std::string& name, int id, const int initValue);
-	Semaphore(key_t key, const int initValue);
-	Semaphore(key_t key);
+
+	//Use an already created semaphore
+	Semaphore(int id);
 	~Semaphore();
 
-	int wait() const; // decrementa
-	int signal() const; // incrementa
+	int wait() const;
+	int signal() const;
 	void destroy() const;
 	int getId();
 };

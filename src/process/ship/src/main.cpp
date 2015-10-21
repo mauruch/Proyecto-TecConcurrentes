@@ -33,7 +33,9 @@ int main(int argc, char** argv) {
 		ship.enterPort();
 
 		ship.board();
-		//		ship.board();
+
+		ship.
+
 	}
 
 }

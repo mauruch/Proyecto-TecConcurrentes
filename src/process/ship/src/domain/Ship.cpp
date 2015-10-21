@@ -7,6 +7,7 @@ Ship::Ship(const std::string name, key_t ftok, int shMem) :
 		fifo(name), semaphore(ftok, 0), dockLockerSemaphore(getDockLockerKey()) {
 	this->ftok = ftok;
 	this->shMemId = shMem;
+	this->
 	log.debug("Creating new ship");
 	log.debug("Writing on fifo " + name);
 
@@ -18,8 +19,8 @@ Ship::~Ship() {
 	fifo.deleteFifo();
 }
 
-key_t Ship::getDockLockerKey(){
-	key_t key = ::ftok (utils::FILE_FTOK.c_str() , utils::ID_FTOK_LOCK_SHMEM_SEM );
+key_t Ship::getDockLockerKey() {
+	key_t key = ::ftok(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM);
 	log.logErrOn(key < 0);
 	return key;
 }
@@ -37,9 +38,11 @@ void Ship::board() {
 void Ship::lockSharedMemory() {
 	this->dockLockerSemaphore.wait();
 }
+
 void Ship::searchDock() {
 
 }
+
 void Ship::unlockSharedMemory() {
 	this->dockLockerSemaphore.signal();
 }

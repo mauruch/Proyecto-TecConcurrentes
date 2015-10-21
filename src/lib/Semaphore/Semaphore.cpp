@@ -10,14 +10,8 @@ Semaphore::Semaphore(const std::string & name, int id, const int initValue ): in
 	log.logErrOn(this->init() < 0);
 }
 
-//TODO uncouple init method from constructor
-Semaphore::Semaphore(key_t key, const int initValue ): initValue(initValue) {
-	this->id = semget ( key,1,0666 | IPC_CREAT );
-	this->init ();
-}
-
-Semaphore::Semaphore(key_t key){
-	this->id = semget ( key,1,0666 | IPC_CREAT );
+Semaphore::Semaphore(int id) : initValue(0){
+	this->id = id;
 }
 
 Semaphore::~Semaphore() {

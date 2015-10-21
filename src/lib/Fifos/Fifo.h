@@ -11,7 +11,6 @@
 class Fifo {
 public:
 	Fifo(const std::string name);
-	Fifo(){};
 	virtual ~Fifo();
 	void closeFifo();
 	void deleteFifo() const;

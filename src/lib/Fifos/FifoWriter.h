@@ -5,7 +5,7 @@
 
 class FifoWriter : public Fifo {
 public:
-	FifoWriter (const std::string name);
+	FifoWriter(const std::string name);
 	~FifoWriter();
 	ssize_t write(const void* buffer,const ssize_t buffsize) const;
 private:

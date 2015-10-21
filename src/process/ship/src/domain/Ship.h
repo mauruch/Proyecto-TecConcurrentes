@@ -2,6 +2,7 @@
 #define DOMAIN_SHIP_H_
 
 #include <Fifos/FifoWriter.h>
+#include <Fifos/FifoReader.h>
 #include <Logger/Logger.h>
 #include <sys/types.h>
 #include <Semaphore/Semaphore.h>
@@ -12,7 +13,7 @@ using namespace std;
 
 class Ship {
 public:
-	Ship(const string name, key_t ftok, int shMemId);
+	Ship(const string fifoName, int semId);
 	virtual ~Ship();
 
 	void enterPort();
@@ -29,14 +30,10 @@ private:
 	void searchDock();
 	void unlockSharedMemory();
 
-	key_t getDockLockerKey();
-
+	Semaphore ownSem;
+	FifoReader ownFifo;
+	FifoWriter controllerQueueFifo;
 	Logger log;
-	FifoWriter fifo;
-	key_t ftok;
-	int shMemId;
-	Semaphore semaphore;
-	Semaphore dockLockerSemaphore;
 };
 
 #endif /* DOMAIN_SHIP_H_ */

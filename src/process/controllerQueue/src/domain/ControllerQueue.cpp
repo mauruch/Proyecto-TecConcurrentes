@@ -1,33 +1,41 @@
 #include "ControllerQueue.h"
-#include <utils/utils.h>
-#include <utils/Helper.h>
 
-ControllerQueue::ControllerQueue(const string fifoName, key_t ftok) :
-		fifo(fifoName), portDocksSem(ftok, 2) {
+#include <utils/Helper.h>
+#include <utils/utils.h>
+
+ControllerQueue::ControllerQueue(int dockSem) : ownFifo(utils::CONTROLLER_QUEUE_FIFO), dockSem(dockSem){
 	log.debug("Creating new ControllerQueue");
-	log.info("Reading on fifo " + fifoName);
+	log.info("Reading on fifo " + utils::CONTROLLER_QUEUE_FIFO);
 }
 
 ControllerQueue::~ControllerQueue() {
 	log.debug("Deleting ControllerQueue");
-	fifo.deleteFifo();
+	ownFifo.deleteFifo();
 }
 
 void ControllerQueue::attendRequest() {
 	utils::entryPortRequest request = getRequest();
-	Semaphore shipSemaphore(request.ftok);
+	this->checkAvailability();
+	this->signalShipToEnter(request);
+}
 
-	//Lock until a dock is available
-	this->portDocksSem.wait();
+void ControllerQueue::signalShipToEnter(utils::entryPortRequest request){
+	log.debug("Dock available for ship. Sending signal.");
+	Semaphore shipSemaphore(request.shipPid);
 	shipSemaphore.signal();
 }
 
+void ControllerQueue::checkAvailability(){
+	log.debug("Blocking until there is a place available");
+	this->dockSem.wait();
+}
+
 utils::entryPortRequest ControllerQueue::getRequest() {
-	log.info("Locking on new enterRequest");
+	log.debug("Locking on new enterRequest");
 	utils::entryPortRequest request;
-	fifo.readFifo(&request, sizeof(request));
-	log.info(std::string("New request to enter port from pid ").append(
-			Helper::convertToString(request.shipPid).append(" and ftok ").append(
-					Helper::convertToString(request.ftok))));
+	ownFifo.readFifo(&request, sizeof(request));
+
+	log.info(std::string("New request has arrived for shipId: ").append(
+			Helper::convertToString(request.shipPid)));
 	return request;
 }

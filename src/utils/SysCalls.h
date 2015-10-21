@@ -10,6 +10,9 @@
 
 #include <fcntl.h>
 #include <stddef.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+#include <sys/shm.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <cstdio>

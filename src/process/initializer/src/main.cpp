@@ -43,64 +43,72 @@ int main(int argc, char** argv) {
 	Semaphore avCranesSem(utils::FILE_FTOK, sharedDataConfig.craneConfig, 0);
 
 	sharedData.config = sharedDataConfig;
-	sharedData.availableDocks;
-	sharedData.availableShips;
-	sharedData.availableTrucks;
-	sharedData.availableCranes;
+	sharedData.availableDocks = availableDocks;
+	sharedData.availableShips = availableShips;
+	sharedData.availableTrucks = availableTrucks;
+	sharedData.availableCranes = availableCranes;
 	sharedData.idSemAvailableDocks = avDocksSem.getId();
 	sharedData.idSemAvailableShips = avShipsSem.getId();
 	sharedData.idSemAvailableTrucks = avTrucksSem.getId();
 	sharedData.idSemAvailableCranes = avCranesSem.getId();
 
-
-	SharedMemory<utils::sharedData> sharedMemory(utils::FILE_FTOK, utils::ID_FTOK_SHM_CONF_DATA);
+//	SharedMemory<utils::sharedData> sharedMemory(utils::FILE_FTOK, utils::ID_FTOK_SHM_CONF_DATA);
 
 	log.debug("Writing data in shared memory");
-	sharedMemory.write(sharedData);
+//	sharedMemory.write(sharedData);
 
-	utils::sharedDockPort sharedDockPort(dockConfig);
-	SharedMemory<utils::sharedDockPort> sharedMemoryDocksPort(utils::FILE_FTOK,
-			utils::ID_FTOK_SHM_CONF_DOCK);
-	log.debug("writing struct 'sharedDockPort' in shared memory");
-	sharedMemoryDocksPort.write(sharedDockPort);
+	log.debug("Creating sharedData semaphore");
+	Semaphore sharedDataSemaphore();
 
-	//create CONTROLLER_QUEUE_FIFO
-	log.debug("creating fifo for ControllerQueue");
-	Fifo controllerQFifo(utils::CONTROLLER_QUEUE_FIFO);
-
-	//create semaphore portDock
-	key_t portDockSemKey = ftok(utils::FILE_FTOK.c_str(),
-			utils::ID_FTOK_SEM_DOCKS_PORT);
-	Semaphore portDockSem(portDockSemKey, dockConfig);
-
-	//create semaphore to lock ShareMemory
-	key_t lockShMemSemKey = ftok(utils::FILE_FTOK.c_str(),
-			utils::ID_FTOK_LOCK_SHMEM_SEM);
-	Semaphore lockShMemSem(lockShMemSemKey, 0);
-
-	vector<int> ftoksShip;
-	log.debug("creating a semaphore for each ship");
-	for (int i = 0; i < shipConfig; i++) {
-		key_t key = ftok(utils::FILE_FTOK.c_str(), i);
-
-		Semaphore semaphore(key, 0);
-		ftoksShip.push_back(key);
+	log.debug("Creating semaphores for ships");
+	vector<int> shipsSemaphoresIds;
+	for (unsigned int i = 0; i < sharedDataConfig.shipConfig; i++) {
+		Semaphore shipSem(utils::FILE_FTOK_SHIPS, sharedDataConfig.dockConfig, 0);
+		shipsSemaphoresIds.push_back(shipSem.getId());
 	}
 
-	//launching ship process
-	for (int i = 0; i < shipConfig; i++) {
-		key_t ftok = ftoksShip.at(i);
-		ArgsResolver args("../ship/Debug/Ship", "-f", ftok, "-m",
-				sharedMemoryDocksPort.getShmId());
-		log.debug("launching Ship process...");
+	log.debug("Launching ships:");
+	for (unsigned int i = 0; i < sharedDataConfig.shipConfig; i++) {
+		ArgsResolver args("../ship/Debug/Ship", "-fifoName", availableShips[i].shipFifo, "-sem", shipsSemaphoresIds[i]);
+		log.debug("Launching Ship process...");
 		utils::Process ship("../ship/Debug/Ship", args);
 	}
 
-	//launching controllerQueue process
-	log.debug("launching ControllerQueue process...");
-	ArgsResolver controllerQArgs("../ship/Debug/Ship", "-f", portDockSemKey);
-	utils::Process controllerQ("../controllerQueue/Debug/ControllerQueue",
-			controllerQArgs);
+	//create semaphore portDock
+	Semaphore portDockSem(utils::FILE_FTOK, sharedDataConfig.dockConfig, 0);
+	log.debug("Launching ControllerQueue process...");
+	ArgsResolver controllerQArgs("../ship/Debug/Ship", "-portSem", portDockSem.getId());
+	utils::Process controllerQ("../controllerQueue/Debug/ControllerQueue",controllerQArgs);
+
+
+
+
+
+
+
+
+
+//	utils::sharedDockPort sharedDockPort(dockConfig);
+//	SharedMemory<utils::sharedDockPort> sharedMemoryDocksPort(utils::FILE_FTOK,
+//			utils::ID_FTOK_SHM_CONF_DOCK);
+//	log.debug("writing struct 'sharedDockPort' in shared memory");
+//	sharedMemoryDocksPort.write(sharedDockPort);
+//
+//	//create CONTROLLER_QUEUE_FIFO
+//	log.debug("creating fifo for ControllerQueue");
+//	Fifo controllerQFifo(utils::CONTROLLER_QUEUE_FIFO);
+//
+//	//create semaphore portDock
+//	key_t portDockSemKey = ftok(utils::FILE_FTOK.c_str(),
+//			utils::ID_FTOK_SEM_DOCKS_PORT);
+//	Semaphore portDockSem(portDockSemKey, dockConfig);
+//
+//	//create semaphore to lock ShareMemory
+//	key_t lockShMemSemKey = ftok(utils::FILE_FTOK.c_str(),
+//			utils::ID_FTOK_LOCK_SHMEM_SEM);
+//	Semaphore lockShMemSem(lockShMemSemKey, 0);
+
+	cin.ignore();
 
 	return 1;
 

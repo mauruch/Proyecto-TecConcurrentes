@@ -9,7 +9,7 @@
 
 class ControllerQueue {
 public:
-	ControllerQueue(const string fifoName, key_t ftok);
+	ControllerQueue(int dockSem);
 	virtual ~ControllerQueue();
 
 	void attendRequest();
@@ -17,11 +17,12 @@ public:
 private:
 
 	utils::entryPortRequest getRequest();
+	void checkAvailability();
+	void signalShipToEnter(utils::entryPortRequest request);
 
 	Logger log;
-	FifoReader fifo;
-	Semaphore portDocksSem;
-	std::map<pid_t, Semaphore> semaphoreMap;
+	FifoReader ownFifo;
+	Semaphore dockSem;
 };
 
 #endif /* DOMAIN_CONTROLLERQUEUE_H_ */

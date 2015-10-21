@@ -20,7 +20,7 @@ typedef struct sharedDataConfig {
  */
 struct availableShip {
 	bool available;
-	std::string shipName;
+	std::string shipFifo;
 };
 
 /**

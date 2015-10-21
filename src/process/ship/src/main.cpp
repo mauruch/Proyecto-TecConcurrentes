@@ -1,40 +1,42 @@
 #include <Logger/Logger.h>
-#include <iostream>
-#include <list>
 #include <tclap/CmdLine.h>
-#include <utils/utils.h>
+#include <tclap/ValueArg.h>
+#include <string>
+
 #include "domain/Ship.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
 
+	Logger log;
+
+	log.info("Processing arguments");
+
 	//TODO refactor
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
 	// such as "-f 9892".
-	TCLAP::ValueArg<int> ftokArg("f", "ftok", "ftok to get sem", true, 5, "int");
-	cmd.add(ftokArg);
-	TCLAP::ValueArg<int> shMemArg("m", "shmId", "shmId to get sharedMemory", true, 5, "int");
-	cmd.add(shMemArg);
+	TCLAP::ValueArg<std::string> fifoArg("fifoName", "fifoName", "fifoName to get fifo", true,"", "std::string");
+	cmd.add(fifoArg);
+	TCLAP::ValueArg<int> semArg("sem", "sem", "sem to get semaphore", true, 5, "int");
+	cmd.add(semArg);
 	cmd.parse(argc, argv);
 
-	int ftok = ftokArg.getValue();
-	int shMem = ftokArg.getValue();
+	std::string fifoName = fifoArg.getValue();
+	int semId = semArg.getValue();
 
-	Logger log;
+	log.info("FifoName: " + fifoName);
+	log.info("Semaphore: " + semId);
 
-	log.info("New ship process created. Launching ship");
+	log.info("Launching ship simualation");
 
-	Ship ship(utils::CONTROLLER_QUEUE_FIFO, ftok, shMem);
+	Ship ship(fifoName, semId);
 
 	bool running = true;
 	while (running) {
-		cout << "launching ship" << endl;
+
 		ship.enterPort();
-
 		ship.board();
-
-		ship.
 
 	}
 

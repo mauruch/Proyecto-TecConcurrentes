@@ -1,5 +1,5 @@
 #include "FifoReader.h"
-FifoReader::FifoReader(const std::string name) : Fifo(name){
+FifoReader::FifoReader(const std::string name) : Fifo(){
 	//TODO call to sysCall open and log error
 	fd = open ( name.c_str(),O_RDONLY );
 }

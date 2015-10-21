@@ -20,14 +20,24 @@ static int ID_FTOK_SEM_DOCKS_PORT = 123;
 static int ID_FTOK_LOCK_SHMEM_SEM = 111;
 
 const std::string CONTROLLER_QUEUE_FIFO = "/tmp/ControllerQueue.fifo";
+const std::string CONTROLLER_FIFO = "/tmp/Controller.fifo";
 
 struct entryPortRequest {
 
 	entryPortRequest(int id = 0){
-		shipPid = id;
+		shipSemId = id;
 	}
 
-	int shipPid;
+	int shipSemId;
+};
+
+struct askForCraneRequest {
+
+	askForCraneRequest(int id = 0){
+		shipSemId = id;
+	}
+
+	int shipSemId;
 };
 
 }

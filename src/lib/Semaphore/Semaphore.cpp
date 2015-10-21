@@ -1,4 +1,5 @@
 #include "../Semaphore/Semaphore.h"
+#include <iostream>
 
 Semaphore::Semaphore(const std::string & name, int id, const int initValue ): initValue(initValue) {
 	key_t key = ftok ( name.c_str(), id );
@@ -8,6 +9,13 @@ Semaphore::Semaphore(const std::string & name, int id, const int initValue ): in
 	log.logErrOn(this->id < 0);
 
 	log.logErrOn(this->init() < 0);
+}
+
+Semaphore::Semaphore(const std::string & name, int id) : initValue(0){
+	key_t key = ftok(name.c_str(), id);
+	log.logErrOn(key < 0);
+
+	this->id = semget(key, 1, 0666 | IPC_CREAT);
 }
 
 Semaphore::Semaphore(int id) : initValue(0){
@@ -39,6 +47,8 @@ int Semaphore :: wait () const {
 	operaation.sem_flg = SEM_UNDO;
 
 	int result = semop ( this->id,&operaation,1 );
+	if (result < 0) perror("wait");
+
 	return result;
 }
 

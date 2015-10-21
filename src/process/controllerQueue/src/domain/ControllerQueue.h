@@ -9,7 +9,7 @@
 
 class ControllerQueue {
 public:
-	ControllerQueue(int dockSem);
+	ControllerQueue(int shmId);
 	virtual ~ControllerQueue();
 
 	void attendRequest();
@@ -18,11 +18,13 @@ private:
 
 	utils::entryPortRequest getRequest();
 	void checkAvailability();
+	int getDockSemIdFromMemory();
 	void signalShipToEnter(utils::entryPortRequest request);
 
+	int shmId;
 	Logger log;
 	FifoReader ownFifo;
-	Semaphore dockSem;
+	Semaphore lockShMemDocksSem;
 };
 
 #endif /* DOMAIN_CONTROLLERQUEUE_H_ */

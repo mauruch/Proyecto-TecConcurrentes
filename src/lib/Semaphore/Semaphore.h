@@ -21,6 +21,7 @@ public:
 	Semaphore(const std::string& name, int id, const int initValue);
 
 	//Use an already created semaphore
+	Semaphore(const std::string& name, int id);
 	Semaphore(int id);
 	~Semaphore();
 

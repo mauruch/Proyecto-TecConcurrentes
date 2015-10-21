@@ -2,9 +2,14 @@
 
 #include <utils/Helper.h>
 #include <utils/utils.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <../utils/SharedData.h>
+#include <iostream>
 
-ControllerQueue::ControllerQueue(int dockSem) : ownFifo(utils::CONTROLLER_QUEUE_FIFO), dockSem(dockSem){
-	log.debug("Creating new ControllerQueue");
+ControllerQueue::ControllerQueue(int shmId) : ownFifo(utils::CONTROLLER_QUEUE_FIFO), lockShMemDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM){
+	this->shmId = shmId;
+	log.info("Creating new ControllerQueue");
 	log.info("Reading on fifo " + utils::CONTROLLER_QUEUE_FIFO);
 }
 
@@ -21,13 +26,27 @@ void ControllerQueue::attendRequest() {
 
 void ControllerQueue::signalShipToEnter(utils::entryPortRequest request){
 	log.debug("Dock available for ship. Sending signal.");
-	Semaphore shipSemaphore(request.shipPid);
+	Semaphore shipSemaphore(request.shipSemId);
 	shipSemaphore.signal();
 }
 
 void ControllerQueue::checkAvailability(){
+	log.info("ControllerQ checking dock availability...");
+	//check availability
+	Semaphore dockSem(this->getDockSemIdFromMemory());
 	log.debug("Blocking until there is a place available");
-	this->dockSem.wait();
+	dockSem.wait();
+}
+
+//TODO refactor
+int ControllerQueue::getDockSemIdFromMemory(){
+
+	void* tmpPtr = shmat ( this->shmId,NULL,0 );
+	if ( tmpPtr != (void*) -1 ) {
+		struct utils::sharedData* sharedData = (struct utils::sharedData*) (tmpPtr);
+		return sharedData->idSemAvailableDocks;
+	}
+	return -1;
 }
 
 utils::entryPortRequest ControllerQueue::getRequest() {
@@ -36,6 +55,6 @@ utils::entryPortRequest ControllerQueue::getRequest() {
 	ownFifo.readFifo(&request, sizeof(request));
 
 	log.info(std::string("New request has arrived for shipId: ").append(
-			Helper::convertToString(request.shipPid)));
+			Helper::convertToString(request.shipSemId)));
 	return request;
 }

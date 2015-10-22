@@ -11,7 +11,7 @@
 
 class Crane {
 public:
-	Crane(int shmId);
+	Crane(int shmId, int craneNumber);
 	virtual ~Crane();
 
 	void readUnloadRequest();
@@ -32,14 +32,12 @@ private:
 	int getTruckSemIdFromMemory();
 
 
-	Logger log;
 	int shmId;
-
 	SharedMemory<utils::readOnlysharedData> shm;
-
 	FifoReader craneFifo;
 	FifoWriter shipFifo;
 	FifoWriter truckFifo;
+	Logger log;
 };
 
 #endif /* DOMAIN_CRANE_H_ */

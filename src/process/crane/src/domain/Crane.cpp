@@ -1,6 +1,6 @@
 #include "Crane.h"
 
-Crane::Crane(int shmid) :
+Crane::Crane(int shmid, int craneNumber) :
 		shmId(shmid),
 		shm(shmId),
 		craneFifo(utils::CRANE_FIFO),

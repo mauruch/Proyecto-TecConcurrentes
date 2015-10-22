@@ -17,6 +17,7 @@ using namespace std;
 utils::sharedDataConfig getSharedDataConfig(char**);
 
 int main(int argc, char** argv) {
+
 	Logger log(Logger::LogLevel::DEBUG);
 
 	log.info("Initializing simulation..");
@@ -99,7 +100,8 @@ int main(int argc, char** argv) {
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
 		log.debug("Launching Ship process...");
-		ArgsResolver shipArgs("../ship/Debug/Ship", "-s", shipsSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId());
+		ArgsResolver shipArgs("../ship/Debug/Ship", "-s", shipsSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId(),
+				"-i", i);
 		utils::Process ship("../ship/Debug/Ship", shipArgs);
 	}
 
@@ -112,15 +114,17 @@ int main(int argc, char** argv) {
 	utils::Process controller("../controller/Debug/Controller", controllerArgs);
 
 
-	ArgsResolver craneArgs("../crane/Debug/Crane", "-m", sharedMemoryReadOnly.getShmId());
+
 	for (unsigned int i = 0; i < readOnlysharedData.config.craneConfig; i++) {
 		log.debug("Launching Cranes process...");
+		ArgsResolver craneArgs("../crane/Debug/Crane", "-m", sharedMemoryReadOnly.getShmId(), "-i", i);
 		utils::Process crane("../crane/Debug/Crane", craneArgs);
 	}
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.truckConfig; i++) {
 		log.debug("Launching Trucks process...");
-		ArgsResolver truckArgs("../truck/Debug/Truck", "-s", trucksSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId());
+		ArgsResolver truckArgs("../truck/Debug/Truck", "-s", trucksSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId(),
+				"-i", i);
 		utils::Process truck("../truck/Debug/Truck", truckArgs);
 	}
 

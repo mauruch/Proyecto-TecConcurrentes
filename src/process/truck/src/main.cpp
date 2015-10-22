@@ -17,13 +17,17 @@ int main(int argc, char** argv) {
 	cmd.add(semArg);
 	TCLAP::ValueArg<int> memArg("m", "mem", "smId to get shared memory", true, 6, "int");
 	cmd.add(memArg);
+	TCLAP::ValueArg<int> truckNumberArg("i", "number", "number of truck", true, 7, "int");
+	cmd.add(truckNumberArg);
+
 	cmd.parse(argc, argv);
 
 	int semId = semArg.getValue();
 	int shMemId = memArg.getValue();
+	int truckNumber = truckNumberArg.getValue();
 
 //	log.info("faf");
-	Truck truck(semId, shMemId);
+	Truck truck(semId, shMemId, truckNumber);
 
 	bool running = true;
 	while (running) {

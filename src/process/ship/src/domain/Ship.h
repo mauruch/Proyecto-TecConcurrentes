@@ -15,7 +15,7 @@ using namespace std;
 
 class Ship {
 public:
-	Ship(const unsigned int load, int semId, int shmId);
+	Ship(const unsigned int load, int semId, int shmId, int numberShip);
 
 	virtual ~Ship();
 

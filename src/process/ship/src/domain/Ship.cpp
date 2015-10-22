@@ -7,7 +7,7 @@
 #include <iostream>
 using namespace std;
 
-Ship::Ship(const unsigned int load, int semId, int shmid) :
+Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
 		shipload(load),
 		ownSem(semId),
 		shmId(shmid),
@@ -16,7 +16,7 @@ Ship::Ship(const unsigned int load, int semId, int shmid) :
 		controllerFifo(utils::CONTROLLER_FIFO),
 		craneFifo(utils::CRANE_FIFO),
 		shipFifo(utils::SHIP_FIFO),
-		log(Logger::LogLevel::DEBUG, string("Ship").append(Helper::convertToString(semId)))
+		log(Logger::LogLevel::DEBUG, string("Ship").append(Helper::convertToString(numberShip)))
 		 {
 	log.info("On constructor of new ship");
 }

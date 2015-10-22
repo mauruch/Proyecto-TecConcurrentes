@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <string>
 
-Truck::Truck(int semId, int shmid) :
+Truck::Truck(int semId, int shmid, int truckNumber) :
 		shmId(shmid),
 		shm(shmId),
 		ownSem(semId),
@@ -14,7 +14,8 @@ Truck::Truck(int semId, int shmid) :
 		shipFifo(utils::SHIP_FIFO),
 		controllerFifo(utils::CONTROLLER_FIFO),
 		craneFifo(utils::CRANE_FIFO),
-		truckLoad(0) {
+		truckLoad(0),
+		log(Logger::LogLevel::DEBUG, string("Truck").append(Helper::convertToString(truckNumber))) {
 }
 
 Truck::~Truck() {

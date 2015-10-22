@@ -19,7 +19,7 @@
 
 class Truck {
 public:
-	Truck(int semId, int shmId);
+	Truck(int semId, int shmId, int truckNumber);
 	virtual ~Truck();
 
 	utils::deliveryRequest attendRequest();
@@ -41,8 +41,8 @@ private:
 	FifoWriter shipFifo;
 	FifoWriter controllerFifo;
 	FifoWriter craneFifo;
-	Logger log;
 	int truckLoad;
+	Logger log;
 
 	void signalMe();
 	void askForCrane();

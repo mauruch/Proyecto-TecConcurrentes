@@ -15,9 +15,11 @@ int main(int argc, char** argv) {
 	// such as "-f 9892".
 	TCLAP::ValueArg<int> shmId("m", "mem", "smId to get shared memory", true, 6, "int");
 	cmd.add(shmId);
+	TCLAP::ValueArg<int> craneNumberArg("i", "number", "number of crane", true, 7, "int");
+	cmd.add(craneNumberArg);
 	cmd.parse(argc, argv);
 
-	Crane crane(shmId.getValue());
+	Crane crane(shmId.getValue(), craneNumberArg.getValue());
 
 
 	bool running = true;

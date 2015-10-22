@@ -23,14 +23,17 @@ int main(int argc, char** argv) {
 	cmd.add(semArg);
 	TCLAP::ValueArg<int> memArg("m", "mem", "smId to get shared memory", true, 6, "int");
 	cmd.add(memArg);
+	TCLAP::ValueArg<int> shipNumberArg("i", "number", "number of ship", true, 7, "int");
+	cmd.add(shipNumberArg);
 	cmd.parse(argc, argv);
 
 	int semId = semArg.getValue();
 	int shMemId = memArg.getValue();
+	int shipNumber = shipNumberArg.getValue();
 
 	log.info("Launching ship simualation");
 
-	Ship ship(generateLoad(), semId, shMemId);
+	Ship ship(generateLoad(), semId, shMemId, shipNumber);
 
 	bool running = true;
 	while (running) {

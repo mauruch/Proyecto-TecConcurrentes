@@ -17,6 +17,8 @@ static const std::string FILE_FTOK_SHIPS = "../ship/src/main.cpp";
 static int ID_FTOK_SHM_READ_ONLY = 14;
 static int ID_FTOK_SEM_DOCKS_PORT = 1;
 static int ID_FTOK_SEM_CRANE = 2;
+static int ID_FTOK_SEM_SHIPS = 3;
+static int ID_FTOK_SEM_TRUCKS = 4;
 
 static int ID_FTOK_LOCK_SHMEM_SEM_TRUCKS = 111;
 static int ID_FTOK_LOCK_SHMEM_SEM_DOCKS = 222;
@@ -30,6 +32,9 @@ static int ID_FTOK_SHM_AVAIL_CRANES = 13;
 
 const std::string CONTROLLER_QUEUE_FIFO = "/tmp/ControllerQueue.fifo";
 const std::string CONTROLLER_FIFO = "/tmp/Controller.fifo";
+const std::string CRANE_FIFO = "/tmp/Crane.fifo";
+const std::string TRUCK_FIFO = "/tmp/Truck.fifo";
+const std::string SHIP_FIFO = "/tmp/Ship.fifo";
 
 struct entryPortRequest {
 

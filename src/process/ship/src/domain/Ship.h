@@ -13,7 +13,7 @@ using namespace std;
 
 class Ship {
 public:
-	Ship(const string fifoName, int semId, int shmId);
+	Ship(int semId, int shmId);
 	virtual ~Ship();
 
 	void enterPort();
@@ -28,14 +28,10 @@ private:
 	void sendCraneRequest();
 	void waitOnSemaphore();
 
-	void lockSharedMemory();
 	int searchDock();
-	void unlockSharedMemory();
 
 	Semaphore ownSem;
-	Semaphore lockShMemDocksSem;
 	int shmId;
-//	FifoReader ownFifo;
 	FifoWriter controllerQueueFifo, controllerFifo;
 	Logger log;
 };

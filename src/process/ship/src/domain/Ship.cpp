@@ -8,8 +8,7 @@
 using namespace std;
 
 
-Ship::Ship(const std::string fifoName, int semId, int shmId) : ownSem(semId),
-		lockShMemDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_DOCKS), controllerQueueFifo(utils::CONTROLLER_QUEUE_FIFO),
+Ship::Ship(int semId, int shmId) : ownSem(semId), controllerQueueFifo(utils::CONTROLLER_QUEUE_FIFO),
 		controllerFifo(utils::CONTROLLER_FIFO){
 	this->shmId = shmId;
 	log.info("On constructor of new ship");
@@ -40,18 +39,10 @@ void Ship::getCrane(){
 }
 
 
-
-void Ship::lockSharedMemory() {
-	this->lockShMemDocksSem.wait();
-}
-
 int Ship::searchDock() {
 	log.info("The ship took place in the port");
 }
 
-void Ship::unlockSharedMemory() {
-	this->lockShMemDocksSem.signal();
-}
 
 void Ship::sendEntryRequest() {
 	log.info("Sending entry request to port");

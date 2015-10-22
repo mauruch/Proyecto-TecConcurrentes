@@ -24,7 +24,6 @@ private:
 	int shmId;
 	Logger log;
 	FifoReader ownFifo;
-	Semaphore lockShMemDocksSem;
 };
 
 #endif /* DOMAIN_CONTROLLERQUEUE_H_ */

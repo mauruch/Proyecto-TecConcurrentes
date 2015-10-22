@@ -61,12 +61,12 @@ int main(int argc, char** argv) {
 
 	Semaphore avDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_DOCKS_PORT, readOnlysharedData.config.dockConfig);
 	Semaphore avCranesSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_CRANE, readOnlysharedData.config.craneConfig);
-//	Semaphore avShipsSem(utils::FILE_FTOK, readOnlysharedData.config.shipConfig, 0);
-//	Semaphore avTrucksSem(utils::FILE_FTOK, readOnlysharedData.config.truckConfig, 0);
+	Semaphore avShipsSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_SHIPS, readOnlysharedData.config.shipConfig);
+	Semaphore avTrucksSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_TRUCKS, readOnlysharedData.config.truckConfig);
 
 	readOnlysharedData.idSemAvailableDocks = avDocksSem.getId();
-//	readOnlysharedData.idSemAvailableShips = avShipsSem.getId();
-//	readOnlysharedData.idSemAvailableTrucks = avTrucksSem.getId();
+	readOnlysharedData.idSemAvailableShips = avShipsSem.getId();
+	readOnlysharedData.idSemAvailableTrucks = avTrucksSem.getId();
 	readOnlysharedData.idSemAvailableCranes = avCranesSem.getId();
 
 	readOnlysharedData.availableDockSharedDataId = shMemAvailableDocks.getShmId();
@@ -88,6 +88,14 @@ int main(int argc, char** argv) {
 		shipsSemaphoresIds.push_back(shipSem.getId());
 	}
 
+	log.debug("Creating semaphores for trucks");
+	vector<int> trucksSemaphoresIds;
+	int offset = readOnlysharedData.config.shipConfig;
+	for (unsigned int i = offset; i < (readOnlysharedData.config.truckConfig+offset); i++) {
+		Semaphore truckSem(utils::FILE_FTOK_SHIPS, i, 0);
+		trucksSemaphoresIds.push_back(truckSem.getId());
+	}
+
 
 	/**
 	 * FIFOS
@@ -95,8 +103,17 @@ int main(int argc, char** argv) {
 	log.debug("creating fifo for ControllerQueue");
 	Fifo controllerQFifo(utils::CONTROLLER_QUEUE_FIFO);
 
-//	log.debug("creating fifo for Controller");
+	log.debug("creating fifo for Controller");
 	Fifo controllerFifo(utils::CONTROLLER_FIFO);
+
+	log.debug("creating fifo for Crane");
+	Fifo craneFifo(utils::CRANE_FIFO);
+
+	log.debug("creating fifo for Truck");
+	Fifo truckFifo(utils::TRUCK_FIFO);
+
+	log.debug("creating fifo for Truck");
+	Fifo shipFifo(utils::SHIP_FIFO);
 
 
 	/**
@@ -112,20 +129,33 @@ int main(int argc, char** argv) {
 	 * Launching PROCESS
 	 */
 	log.debug("Launching ships:");
+
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
-		ArgsResolver args("../ship/Debug/Ship", "-f", availableShips[i].shipFifo, "-s", shipsSemaphoresIds[i],
-				"-m", sharedMemoryReadOnly.getShmId());
 		log.debug("Launching Ship process...");
-		utils::Process ship("../ship/Debug/Ship", args);
+		ArgsResolver shipArgs("../ship/Debug/Ship", "-s", shipsSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId());
+		utils::Process ship("../ship/Debug/Ship", shipArgs);
 	}
 
 	log.debug("Launching ControllerQueue process...");
 	ArgsResolver controllerQArgs("../controllerQueue/Debug/ControllerQueue", "-m", sharedMemoryReadOnly.getShmId());
-	utils::Process controllerQ("../controllerQueue/Debug/ControllerQueue",controllerQArgs);
+	utils::Process controllerQ("../controllerQueue/Debug/ControllerQueue", controllerQArgs);
 
 	log.debug("Launching Controller process...");
 	ArgsResolver controllerArgs("../controller/Debug/Controller", "-m", sharedMemoryReadOnly.getShmId());
-	utils::Process controller("../controller/Debug/Controller",controllerArgs);
+	utils::Process controller("../controller/Debug/Controller", controllerArgs);
+
+
+	ArgsResolver craneArgs("../crane/Debug/Crane", "-m", sharedMemoryReadOnly.getShmId());
+	for (unsigned int i = 0; i < readOnlysharedData.config.craneConfig; i++) {
+		log.debug("Launching Cranes process...");
+		utils::Process crane("../crane/Debug/Crane", craneArgs);
+	}
+
+	for (unsigned int i = 0; i < readOnlysharedData.config.truckConfig; i++) {
+		log.debug("Launching Trucks process...");
+		ArgsResolver truckArgs("../truck/Debug/Truck", "-s", trucksSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId());
+		utils::Process truck("../truck/Debug/Truck", truckArgs);
+	}
 
 
 	cin.ignore();
@@ -153,27 +183,12 @@ utils::sharedDataConfig getSharedDataConfig(char** argv) {
 	return sharedDataConfig;
 }
 
-string getFifoName(const char* name, int id) {
-	string response("/tmp/");
-	response.append(name);
-	response.append("-");
-	response.append(Helper::convertToString(id));
-	response.append("-fifo");
-	return response;
-}
-
 vector<utils::availableShip> getAvailableShip(unsigned int shipConfig) {
 	vector<utils::availableShip> response;
 	for (unsigned int i = 0; i < shipConfig; ++i) {
 
-		string shipFifoName = getFifoName("ship", i);
-
-		Fifo fifo(shipFifoName);
-
 		utils::availableShip ship;
 		ship.available = true;
-		ship.shipFifo = shipFifoName;
-
 		response.push_back(ship);
 	}
 	return response;
@@ -183,14 +198,8 @@ vector<utils::availableTruck> getAvailableTruck(unsigned int truckConfig) {
 	vector<utils::availableTruck> response;
 	for (unsigned int i = 0; i < truckConfig; ++i) {
 
-		string truckFifoName = getFifoName("truck", i);
-
-		Fifo fifo(truckFifoName);
-
 		utils::availableTruck truck;
 		truck.available = true;
-		truck.truckFifo = truckFifoName;
-
 		response.push_back(truck);
 	}
 	return response;
@@ -200,14 +209,8 @@ vector<utils::availableCrane> getAvailableCrane(unsigned int craneConfig) {
 	vector<utils::availableCrane> response;
 	for (unsigned int i = 0; i < craneConfig; ++i) {
 
-		string craneFifoName = getFifoName("crane", i);
-
-		Fifo fifo(craneFifoName);
-
 		utils::availableCrane crane;
 		crane.available = true;
-		crane.craneFifo = craneFifoName;
-
 		response.push_back(crane);
 	}
 	return response;

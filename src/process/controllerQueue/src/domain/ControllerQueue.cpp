@@ -7,7 +7,7 @@
 #include <../utils/SharedData.h>
 #include <iostream>
 
-ControllerQueue::ControllerQueue(int shmId) : ownFifo(utils::CONTROLLER_QUEUE_FIFO), lockShMemDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_DOCKS){
+ControllerQueue::ControllerQueue(int shmId) : ownFifo(utils::CONTROLLER_QUEUE_FIFO){
 	this->shmId = shmId;
 	log.info("Creating new ControllerQueue");
 	log.info("Reading on fifo " + utils::CONTROLLER_QUEUE_FIFO);

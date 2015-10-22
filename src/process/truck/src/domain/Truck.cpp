@@ -6,10 +6,10 @@
  */
 
 #include "Truck.h"
+#include <utils/utils.h>
 
-Truck::Truck() {
-	// TODO Auto-generated constructor stub
-
+Truck::Truck(int semId, int shmId) {
+	this->shmId = shmId;
 }
 
 Truck::~Truck() {

@@ -15,10 +15,6 @@
 using namespace std;
 
 utils::sharedDataConfig getSharedDataConfig(char**);
-vector<utils::availableShip> getAvailableShip(unsigned int);
-vector<utils::availableTruck> getAvailableTruck(unsigned int);
-vector<utils::availableCrane> getAvailableCrane(unsigned int);
-vector<utils::availableDock> getAvailableDock(unsigned int);
 
 int main(int argc, char** argv) {
 	Logger log(Logger::LogLevel::DEBUG);
@@ -34,26 +30,6 @@ int main(int argc, char** argv) {
 
 	readOnlysharedData.config = getSharedDataConfig(argv);
 
-	utils::availableDockSharedData availableDocksSharedData;
-	availableDocksSharedData.availableDocks = getAvailableDock(readOnlysharedData.config.dockConfig);
-	SharedMemory<utils::availableDockSharedData> shMemAvailableDocks(utils::FILE_FTOK, utils::ID_FTOK_SHM_AVAIL_DOCKS);
-	shMemAvailableDocks.write(availableDocksSharedData);
-
-	utils::availableShipsSharedData availableShipsSharedData;
-	vector<utils::availableShip> availableShips = getAvailableShip(readOnlysharedData.config.shipConfig);
-	availableShipsSharedData.availableShips = availableShips;
-	SharedMemory<utils::availableShipsSharedData> shMemAvailableShips(utils::FILE_FTOK, utils::ID_FTOK_SHM_AVAIL_SHIPS);
-	shMemAvailableShips.write(availableShipsSharedData);
-
-	utils::availableTrucksSharedData availableTrucksSharedData;
-	availableTrucksSharedData.availableTrucks = getAvailableTruck(readOnlysharedData.config.truckConfig);
-	SharedMemory<utils::availableTrucksSharedData> shMemAvailableTrucks(utils::FILE_FTOK, utils::ID_FTOK_SHM_AVAIL_TRUCKS);
-	shMemAvailableTrucks.write(availableTrucksSharedData);
-
-	utils::availableCranesSharedData availableCranesSharedData;
-	availableCranesSharedData.availableCranes = getAvailableCrane(readOnlysharedData.config.craneConfig);
-	SharedMemory<utils::availableCranesSharedData> shMemAvailableCranes(utils::FILE_FTOK, utils::ID_FTOK_SHM_AVAIL_CRANES);
-	shMemAvailableCranes.write(availableCranesSharedData);
 
 	/**
 	 * Building semaphore for availability resources
@@ -70,11 +46,6 @@ int main(int argc, char** argv) {
 	readOnlysharedData.idSemAvailableShips = avShipsSem.getId();
 	readOnlysharedData.idSemAvailableTrucks = avTrucksSem.getId();
 	readOnlysharedData.idSemAvailableCranes = avCranesSem.getId();
-
-	readOnlysharedData.availableDockSharedDataId = shMemAvailableDocks.getShmId();
-	readOnlysharedData.availableShipsSharedDataId = shMemAvailableShips.getShmId();
-	readOnlysharedData.availableCranesSharedDataId = shMemAvailableCranes.getShmId();
-	readOnlysharedData.availableTrucksSharedDataId = shMemAvailableTrucks.getShmId();
 
 	SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly(utils::FILE_FTOK, utils::ID_FTOK_SHM_READ_ONLY);
 	log.debug("Writing data in shared memory");
@@ -160,7 +131,6 @@ int main(int argc, char** argv) {
 
 }
 
-
 utils::sharedDataConfig getSharedDataConfig(char** argv) {
 
 	utils::sharedDataConfig sharedDataConfig;
@@ -177,48 +147,4 @@ utils::sharedDataConfig getSharedDataConfig(char** argv) {
 	sharedDataConfig.dockConfig = dockConfig;
 
 	return sharedDataConfig;
-}
-
-vector<utils::availableShip> getAvailableShip(unsigned int shipConfig) {
-	vector<utils::availableShip> response;
-	for (unsigned int i = 0; i < shipConfig; ++i) {
-
-		utils::availableShip ship;
-		ship.available = true;
-		response.push_back(ship);
-	}
-	return response;
-}
-
-vector<utils::availableTruck> getAvailableTruck(unsigned int truckConfig) {
-	vector<utils::availableTruck> response;
-	for (unsigned int i = 0; i < truckConfig; ++i) {
-
-		utils::availableTruck truck;
-		truck.available = true;
-		response.push_back(truck);
-	}
-	return response;
-}
-
-vector<utils::availableCrane> getAvailableCrane(unsigned int craneConfig) {
-	vector<utils::availableCrane> response;
-	for (unsigned int i = 0; i < craneConfig; ++i) {
-
-		utils::availableCrane crane;
-		crane.available = true;
-		response.push_back(crane);
-	}
-	return response;
-}
-
-vector<utils::availableDock> getAvailableDock(unsigned int dockConfig) {
-	vector<utils::availableDock> response;
-	for (unsigned int i = 0; i < dockConfig; ++i) {
-		utils::availableDock dock;
-		dock.available = true;
-
-		response.push_back(dock);
-	}
-	return response;
 }

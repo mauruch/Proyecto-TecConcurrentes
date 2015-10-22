@@ -14,12 +14,12 @@ static const std::string LOG_FILE = "/tmp/TPConcurrentes.log";
 static const std::string FILE_FTOK = "src/main.cpp";
 static const std::string FILE_FTOK_SHIPS = "../ship/src/main.cpp";
 
-static int ID_FTOK_SHM_READ_ONLY = 14;
-static int ID_FTOK_SEM_DOCKS_PORT = 1;
-static int ID_FTOK_SEM_CRANE = 2;
-static int ID_FTOK_SEM_SHIPS = 3;
-static int ID_FTOK_SEM_TRUCKS = 4;
-static int ID_FTOK_SEM_COLLECTION = 5;
+static const char ID_FTOK_SHM_READ_ONLY = '6';
+static const char ID_FTOK_SEM_DOCKS_PORT = '1';
+static const char ID_FTOK_SEM_CRANE = '2';
+static const char ID_FTOK_SEM_SHIPS = '3';
+static const char ID_FTOK_SEM_TRUCKS = '4';
+static const char ID_FTOK_SEM_COLLECTION = '5';
 
 //static int ID_FTOK_LOCK_SHMEM_SEM_TRUCKS = 111;
 //static int ID_FTOK_LOCK_SHMEM_SEM_DOCKS = 222;
@@ -55,10 +55,10 @@ struct entryPortRequest {
 struct askForCraneRequest {
 
 	askForCraneRequest(int id = 0){
-		semId= id;
+		petitionerSemId= id;
 	}
 
-	int semId;
+	int petitionerSemId;
 };
 
 struct shipRequest {
@@ -79,6 +79,15 @@ struct unloadRequest {
 	}
 
 	int entityType;
+	unsigned int weight;
+};
+
+struct deliveryRequest {
+
+	deliveryRequest(unsigned int otherWeight = 0){
+		weight = otherWeight;
+	}
+
 	unsigned int weight;
 };
 

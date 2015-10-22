@@ -35,11 +35,20 @@ int main(int argc, char** argv) {
 
 	bool running = true;
 	while (running) {
+
 		log.info("Truck attending request...");
+		utils::deliveryRequest request = truck.attendRequest();
+		bool returnEmpty = truck.deliverToDestination(request);
+
+		if (returnEmpty) {
+			log.info("The truck returned empty");
+			truck.sendRequestToShip();
+
+		} else {
+			log.info("The truck returned loaded");
+			truck.unload();
+		}
 
 	}
-
-
-
 
 }

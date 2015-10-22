@@ -17,38 +17,6 @@ struct sharedDataConfig {
 
 } ;
 
-/**
- * Structure that contains information of all Ships
- * available on any time.
- */
-struct availableShip {
-	bool available;
-};
-
-/**
- * Structure that contains information of all trucks
- * available on any time.
- */
-struct availableTruck {
-	bool available;
-};
-
-/**
- * Structure that contains information of all cranes
- * available on any time.
- */
-struct availableCrane {
-	bool available;
-};
-
-/**
- * Structure that contains information of all docks
- * available on any time.
- */
-struct availableDock {
-	bool available;
-};
-
 struct readOnlysharedData {
 
 	sharedDataConfig config;
@@ -58,29 +26,8 @@ struct readOnlysharedData {
 	int idSemAvailableTrucks;
 	int idSemAvailableCranes;
 
-	int availableDockSharedDataId;
-	int availableShipsSharedDataId;
-	int availableCranesSharedDataId;
-	int availableTrucksSharedDataId;
-
 	unsigned long m_collection = 0;
 
-};
-
-struct availableDockSharedData {
-	vector<availableDock> availableDocks;
-};
-
-struct availableShipsSharedData {
-	vector<availableShip> availableShips;
-};
-
-struct availableCranesSharedData{
-	vector<availableCrane> availableCranes;
-};
-
-struct availableTrucksSharedData{
-	vector<availableTruck> availableTrucks;
 };
 
 }

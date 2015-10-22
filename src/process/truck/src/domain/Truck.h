@@ -9,6 +9,7 @@
 #define DOMAIN_TRUCK_H_
 
 #include <Fifos/FifoReader.h>
+#include <Fifos/FifoWriter.h>
 #include <Logger/Logger.h>
 #include <Semaphore/Semaphore.h>
 
@@ -18,17 +19,29 @@ public:
 	Truck(int semId, int shmId);
 	virtual ~Truck();
 
-	void attendRequest();
-	utils::unloadRequest getRequest();
+	utils::deliveryRequest attendRequest();
+//	utils::deliveryRequest getRequest();
 
-	void deliverToDestination();
+	void unload();
+	void sendRequestToShip();
+
+	bool deliverToDestination(utils::deliveryRequest);
 
 
 private:
 	int shmId;
 	Semaphore ownSem;
 	FifoReader ownFifo;
+	FifoWriter shipFifo;
+	FifoWriter controllerFifo;
+	FifoWriter craneFifo;
 	Logger log;
+	int truckLoad;
+
+	void signalMe();
+	void askForCrane();
+	void sendUnloadRequest();
+	void waitOnSemaphore();
 
 };
 

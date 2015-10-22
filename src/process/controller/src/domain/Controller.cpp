@@ -43,7 +43,7 @@ int Controller::getCraneSemIdFromMemory(){
 void Controller::signalAllowedToUseCrane(utils::askForCraneRequest request){
 
 	log.debug("Crane available for ship. Sending signal.");
-	Semaphore petitionerSem(request.semId);
+	Semaphore petitionerSem(request.petitionerSemId);
 	petitionerSem.signal();
 
 }
@@ -53,8 +53,8 @@ utils::askForCraneRequest Controller::getRequest() {
 	utils::askForCraneRequest request;
 	ownFifo.readFifo(&request, sizeof(request));
 
-	log.info(std::string("New request asking for a crane for shipId: ").append(
-			Helper::convertToString(request.semId)));
+	log.info(std::string("New request asking for a crane for petitioner: ").append(
+			Helper::convertToString(request.petitionerSemId)));
 	return request;
 }
 

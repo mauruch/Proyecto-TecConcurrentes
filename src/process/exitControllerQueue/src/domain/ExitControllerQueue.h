@@ -1,5 +1,5 @@
-#ifndef DOMAIN_CONTROLLERQUEUE_H_
-#define DOMAIN_CONTROLLERQUEUE_H_
+#ifndef DOMAIN_ExitControllerQueue_H_
+#define DOMAIN_ExitControllerQueue_H_
 
 #include <Logger/Logger.h>
 #include <Fifos/FifoReader.h>
@@ -15,21 +15,22 @@
 #include <utils/utils.h>
 
 
-class ControllerQueue {
+class ExitControllerQueue {
 public:
-	ControllerQueue(int shmId);
-	virtual ~ControllerQueue();
+	ExitControllerQueue(int shmId);
+	virtual ~ExitControllerQueue();
 
 	void attendRequest();
 
 private:
 
-	void handleEntryRequest(utils::portRequest request);
+	void handleLeaveRequest(utils::portRequest request);
 
 	void checkAvailability();
+	void increasingAvailability();
 	utils::portRequest getRequest();
 	int getDockSemIdFromMemory();
-	void signalShipToEnter(utils::portRequest request);
+	void signalShipToLeave(utils::portRequest request);
 
 	int shmId;
 	SharedMemory<utils::readOnlysharedData> shm;
@@ -37,4 +38,4 @@ private:
 	Logger log;
 };
 
-#endif /* DOMAIN_CONTROLLERQUEUE_H_ */
+#endif /* DOMAIN_EXITCONTROLLERQUEUE_H_ */

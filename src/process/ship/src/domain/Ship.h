@@ -20,6 +20,7 @@ public:
 	virtual ~Ship();
 
 	void enterPort();
+	void leavePort();
 	void dock();
 	void unload();
 	void setAsAvailable();
@@ -30,6 +31,7 @@ private:
 	string getSemaphoreName();
 
 	void sendEntryRequest();
+	void sendLeaveRequest();
 	void askForCrane();
 	void sendUnloadRequest();
 	void waitOnSemaphore();
@@ -45,6 +47,7 @@ private:
 
 	SharedMemory<utils::readOnlysharedData> shm;
 
+	FifoWriter exitControllerQueueFifo;
 	FifoWriter controllerQueueFifo;
 	FifoWriter controllerFifo;
 	FifoWriter craneFifo;

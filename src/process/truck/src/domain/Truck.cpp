@@ -37,9 +37,9 @@ bool Truck::deliverToDestination(utils::deliveryRequest deliveryRequest){
 	int requestWeight = deliveryRequest.weight;
 	log.info("The truck is delivering " +  Helper::convertToString(requestWeight) + "kgs to the destination, the estimated trip is: " +
 			Helper::convertToString(deliveryTime) + " seconds.");
-	log.debug("sleep " + Helper::convertToString(deliveryTime) + "seconds for simulating the truck trip");
-
-	sleep(deliveryTime);
+//	log.debug("sleep " + Helper::convertToString(deliveryTime) + "seconds for simulating the truck trip");
+//
+//	sleep(deliveryTime);
 
 	return returnEmpty;
 }

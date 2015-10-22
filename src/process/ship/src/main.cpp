@@ -45,6 +45,7 @@ int main(int argc, char** argv) {
 
 		ship.setAsAvailable();
 		ship.readLeavingRequest();
+		ship.leavePort();
 	}
 
 	cout << "ship dejo de loopear señal SIGINT" << endl;

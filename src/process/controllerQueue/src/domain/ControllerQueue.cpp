@@ -1,14 +1,8 @@
 #include "ControllerQueue.h"
 
-#include <utils/Helper.h>
-#include <utils/utils.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include <../utils/SharedData.h>
-#include <iostream>
-
-ControllerQueue::ControllerQueue(int shmid) : shmId(shmid), ownFifo(utils::CONTROLLER_QUEUE_FIFO),
-log(Logger::LogLevel::DEBUG, string("ControllerQueue")){
+ControllerQueue::ControllerQueue(int shmid) :
+		shmId(shmid), shm(shmId),
+		ownFifo(utils::CONTROLLER_QUEUE_FIFO), log(Logger::LogLevel::DEBUG, string("ControllerQueue")) {
 	log.info("Creating new ControllerQueue");
 	log.info("Reading on fifo " + utils::CONTROLLER_QUEUE_FIFO);
 }
@@ -19,38 +13,36 @@ ControllerQueue::~ControllerQueue() {
 }
 
 void ControllerQueue::attendRequest() {
-	utils::entryPortRequest request = getRequest();
+	utils::portRequest request = getRequest();
+	handleEntryRequest(request);
+}
+
+void ControllerQueue::handleEntryRequest(utils::portRequest request) {
 	this->checkAvailability();
 	this->signalShipToEnter(request);
 }
 
-void ControllerQueue::signalShipToEnter(utils::entryPortRequest request){
-	log.debug("Dock available for ship. Sending signal.");
+void ControllerQueue::signalShipToEnter(utils::portRequest request){
+	log.debug("Ship can enter. Sending signal.");
 	Semaphore shipSemaphore(request.shipSemId);
 	shipSemaphore.signal();
 }
 
 void ControllerQueue::checkAvailability(){
-	log.info("ControllerQ checking dock availability...");
+	log.info("Checking dock availability...");
 	log.debug("Blocking until there is a place available");
 	Semaphore dockSem(this->getDockSemIdFromMemory());
 	dockSem.wait();
 }
 
-//TODO refactor
 int ControllerQueue::getDockSemIdFromMemory(){
-
-	void* tmpPtr = shmat ( this->shmId,NULL,0 );
-	if ( tmpPtr != (void*) -1 ) {
-		struct utils::readOnlysharedData* sharedData = (struct utils::readOnlysharedData*) (tmpPtr);
-		return sharedData->idSemAvailableDocks;
-	}
-	return -1;
+	utils::readOnlysharedData data = shm.read();
+	return data.idSemAvailableDocks;
 }
 
-utils::entryPortRequest ControllerQueue::getRequest() {
+utils::portRequest ControllerQueue::getRequest() {
 	log.debug("Locking on new enterRequest");
-	utils::entryPortRequest request;
+	utils::portRequest request;
 	ownFifo.readFifo(&request, sizeof(request));
 
 	log.info(std::string("New request has arrived for shipId: ").append(

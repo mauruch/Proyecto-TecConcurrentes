@@ -12,6 +12,7 @@ Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
 		ownSem(semId),
 		shmId(shmid),
 		shm(shmId),
+		exitControllerQueueFifo(utils::EXIT_CONTROLLER_QUEUE_FIFO),
 		controllerQueueFifo(utils::CONTROLLER_QUEUE_FIFO),
 		controllerFifo(utils::CONTROLLER_FIFO),
 		craneFifo(utils::CRANE_FIFO),
@@ -35,6 +36,13 @@ void Ship::enterPort() {
 	log.info("Ship entering the port...");
 }
 
+void Ship::leavePort() {
+	this->sendLeaveRequest();
+	log.info("Waiting for the controllerQueue to let me leave port");
+	this->waitOnSemaphore();
+	log.info("Ship leaving the port...");
+}
+
 void Ship::dock() {
 	log.info("Docking...");
 }
@@ -55,13 +63,19 @@ void Ship::searchDock() {
 
 void Ship::sendEntryRequest() {
 	log.info("Sending entry request to port");
-	utils::entryPortRequest request(this->ownSem.getId(), this->numberShip);
-	controllerQueueFifo.write(static_cast<void*>(&request),sizeof(utils::entryPortRequest));
+	utils::portRequest request(this->ownSem.getId(), this->numberShip);
+	controllerQueueFifo.write(static_cast<void*>(&request),sizeof(utils::portRequest));
+}
+
+void Ship::sendLeaveRequest() {
+	log.info("Sending leave request to port");
+	utils::portRequest request(this->ownSem.getId(), this->numberShip);
+	exitControllerQueueFifo.write(static_cast<void*>(&request),sizeof(utils::portRequest));
 }
 
 void Ship::askForCrane() {
 	log.info("Sending crane request to Controller");
-	utils::askForCraneRequest request(this->ownSem.getId() , this->numberShip, utils::SHIP);
+	utils::askForCraneRequest request(this->ownSem.getId());
 	controllerFifo.write(static_cast<void*>(&request),
 			sizeof(utils::askForCraneRequest));
 }

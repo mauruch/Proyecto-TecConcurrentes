@@ -2,13 +2,14 @@
 #include <Fifos/Fifo.h>
 #include <Logger/Logger.h>
 #include <Process.h>
+#include <sys/ipc.h>
 #include <sched.h>
 #include <Semaphore/Semaphore.h>
 #include <SharedData.h>
 #include <SharedMemory/SharedMemory.h>
+#include <utils/Helper.h>
 #include <utils/utils.h>
 #include <cstdlib>
-#include <iostream>
 #include <string>
 #include <vector>
 #include <signal.h>
@@ -71,10 +72,12 @@ int main(int argc, char** argv) {
 		trucksSemaphoresIds.push_back(truckSem.getId());
 	}
 
-
 	/**
 	 * FIFOS
 	 */
+	log.debug("creating fifo for ExitControllerQueue");
+	Fifo exitControllerQFifo(utils::EXIT_CONTROLLER_QUEUE_FIFO);
+
 	log.debug("creating fifo for ControllerQueue");
 	Fifo controllerQFifo(utils::CONTROLLER_QUEUE_FIFO);
 
@@ -109,6 +112,11 @@ int main(int argc, char** argv) {
 		pids.push_back(ship.getPid());
 	}
 
+	log.debug("Launching ExitControllerQueue process...");
+	ArgsResolver exitControllerQArgs("../exitControllerQueue/Debug/ExitControllerQueue", "-m", sharedMemoryReadOnly.getShmId());
+	utils::Process exitControllerQ("../exitControllerQueue/Debug/ExitControllerQueue", exitControllerQArgs);
+	pids.push_back(exitControllerQ.getPid());
+
 	log.debug("Launching ControllerQueue process...");
 	ArgsResolver controllerQArgs("../controllerQueue/Debug/ControllerQueue", "-m", sharedMemoryReadOnly.getShmId());
 	utils::Process controllerQ("../controllerQueue/Debug/ControllerQueue", controllerQArgs);
@@ -140,7 +148,7 @@ int main(int argc, char** argv) {
 	cout << "Press key ENTER to quit simulation" << endl;
 	cin.ignore();
 
-	for (int i=0; i < pids.size(); i++){
+	for (unsigned int i=0; i < pids.size(); i++){
 
 		log.debug(string("sending SIGINT signal to: ").append(Helper::convertToString(pids[i])));
 		kill(pids[i], SIGINT);

@@ -17,7 +17,6 @@ public:
 	virtual ~Truck();
 
 	utils::deliveryRequest attendRequest();
-//	utils::deliveryRequest getRequest();
 
 	void unload();
 	void sendRequestToShip();

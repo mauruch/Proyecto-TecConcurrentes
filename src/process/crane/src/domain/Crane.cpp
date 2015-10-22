@@ -33,9 +33,9 @@ utils::unloadRequest Crane::getRequest(){
 	std::string entityTypeStr;
 
 	if(request.entityType == utils::SHIP){
-		entityTypeStr.append("Ship");
+		entityTypeStr.append("Ship").append(Helper::convertToString(request.identifier));
 	} else {
-		entityTypeStr.append("Truck");
+		entityTypeStr.append("Truck").append(Helper::convertToString(request.identifier));
 	}
 
 	log.info(std::string("New unload request from ").append(entityTypeStr));

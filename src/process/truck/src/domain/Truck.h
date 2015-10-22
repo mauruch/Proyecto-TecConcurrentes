@@ -37,6 +37,7 @@ private:
 	FifoWriter craneFifo;
 	int truckLoad;
 	Logger log;
+	int truckNumber;
 
 	void signalMe();
 	void askForCrane();

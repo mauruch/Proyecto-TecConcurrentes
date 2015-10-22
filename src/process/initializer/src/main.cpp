@@ -18,7 +18,7 @@ utils::sharedDataConfig getSharedDataConfig(char**);
 
 int main(int argc, char** argv) {
 
-	Logger log(Logger::LogLevel::DEBUG);
+	Logger log;
 
 	log.info("Initializing simulation..");
 

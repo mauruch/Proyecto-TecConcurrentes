@@ -41,6 +41,8 @@ private:
 	Semaphore ownSem;
 	int shmId;
 
+	int numberShip;
+
 	SharedMemory<utils::readOnlysharedData> shm;
 
 	FifoWriter controllerQueueFifo;

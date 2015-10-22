@@ -53,8 +53,13 @@ utils::askForCraneRequest Controller::getRequest() {
 	utils::askForCraneRequest request;
 	ownFifo.readFifo(&request, sizeof(request));
 
-	log.info(std::string("New request asking for a crane for petitioner: ").append(
-			Helper::convertToString(request.petitionerSemId)));
+	string petitioner;
+	if (request.entityType == utils::SHIP) petitioner = "Ship";
+	else petitioner = "Truck";
+
+	petitioner.append(Helper::convertToString(request.identifier));
+
+	log.info(std::string("New request asking for a crane for: ").append(petitioner));
 	return request;
 }
 

@@ -20,6 +20,8 @@ Truck::Truck(int semId, int shmid, int truckNumber) :
 		truckLoad(0),
 		log(Logger::LogLevel::DEBUG, string("Truck").append(Helper::convertToString(truckNumber))){
 		log.info("On constructor of new ship");
+
+		this->truckNumber = truckNumber;
 }
 
 Truck::~Truck() {
@@ -29,7 +31,8 @@ Truck::~Truck() {
 bool Truck::deliverToDestination(utils::deliveryRequest deliveryRequest){
 
 	//delivery simulation
-	int deliveryTime = rand()%(10 + 1) + 10;
+	srand(time(NULL));
+	int deliveryTime = rand()%(10 - 1) + 10;
 	bool returnEmpty = (rand() % 100) < 80;
 	int requestWeight = deliveryRequest.weight;
 	log.info("The truck is delivering " +  Helper::convertToString(requestWeight) + "kgs to the destination, the estimated trip is: " +
@@ -52,7 +55,7 @@ void Truck::unload(){
 
 void Truck::askForCrane() {
 	log.info("Truck is sending a crane request to Controller");
-	utils::askForCraneRequest request(this->ownSem.getId());
+	utils::askForCraneRequest request(this->ownSem.getId(), this->truckNumber, utils::TRUCK);
 	controllerFifo.write(static_cast<void*>(&request),
 			sizeof(utils::askForCraneRequest));
 }
@@ -70,7 +73,7 @@ utils::deliveryRequest Truck::attendRequest() {
 
 void Truck::sendUnloadRequest() {
 	log.info("Truck is sending unload request to crane");
-	utils::unloadRequest request(utils::TRUCK, this->truckLoad);
+	utils::unloadRequest request(utils::TRUCK, this->truckLoad, this->truckNumber);
 	craneFifo.write(static_cast<void*>(&request), sizeof(utils::unloadRequest));
 	this->truckLoad = 0;
 	log.info("All cargo unload");

@@ -19,6 +19,8 @@ Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
 		log(Logger::LogLevel::DEBUG, string("Ship").append(Helper::convertToString(numberShip)))
 		 {
 	log.info("On constructor of new ship");
+
+	this->numberShip = numberShip;
 }
 
 Ship::~Ship() {
@@ -53,13 +55,13 @@ void Ship::searchDock() {
 
 void Ship::sendEntryRequest() {
 	log.info("Sending entry request to port");
-	utils::entryPortRequest request(this->ownSem.getId());
+	utils::entryPortRequest request(this->ownSem.getId(), this->numberShip);
 	controllerQueueFifo.write(static_cast<void*>(&request),sizeof(utils::entryPortRequest));
 }
 
 void Ship::askForCrane() {
 	log.info("Sending crane request to Controller");
-	utils::askForCraneRequest request(this->ownSem.getId());
+	utils::askForCraneRequest request(this->ownSem.getId() , this->numberShip, utils::SHIP);
 	controllerFifo.write(static_cast<void*>(&request),
 			sizeof(utils::askForCraneRequest));
 }
@@ -70,7 +72,7 @@ void Ship::askForCrane() {
  */
 void Ship::sendUnloadRequest() {
 	log.info("Sending unload request to crane");
-	utils::unloadRequest request(utils::SHIP, this->shipload);
+	utils::unloadRequest request(utils::SHIP, this->shipload, this->numberShip);
 	craneFifo.write(static_cast<void*>(&request), sizeof(utils::unloadRequest));
 	this->shipload = 0;
 	log.info("All cargo unload");

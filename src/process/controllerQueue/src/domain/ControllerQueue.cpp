@@ -56,6 +56,6 @@ utils::entryPortRequest ControllerQueue::getRequest() {
 	ownFifo.readFifo(&request, sizeof(request));
 
 	log.info(std::string("New request has arrived for shipId: ").append(
-			Helper::convertToString(request.shipSemId)));
+			Helper::convertToString(request.identifier)));
 	return request;
 }

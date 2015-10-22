@@ -45,20 +45,26 @@ const int TRUCK = 2;
 
 struct entryPortRequest {
 
-	entryPortRequest(int id = 0){
+	entryPortRequest(int id = 0, unsigned int otherIdentifier = 1){
 		shipSemId = id;
+		identifier = otherIdentifier;
 	}
 
 	int shipSemId;
+	unsigned int identifier;
 };
 
 struct askForCraneRequest {
 
-	askForCraneRequest(int id = 0){
+	askForCraneRequest(int id = 0, unsigned int otherIdentifier = 1, int otherEntityType = 1){
 		petitionerSemId= id;
+		identifier = otherIdentifier;
+		entityType = otherEntityType;
 	}
 
+	int entityType;
 	int petitionerSemId;
+	unsigned int identifier;
 };
 
 struct shipRequest {
@@ -73,21 +79,25 @@ struct shipRequest {
 
 struct unloadRequest {
 
-	unloadRequest(int otherEntityType = 1, unsigned int otherWeight = 0){
+	unloadRequest(int otherEntityType = 1, unsigned int otherWeight = 0, unsigned petitionerId = 0){
 		entityType = otherEntityType;
 		weight = otherWeight;
+		identifier = petitionerId;
 	}
 
 	int entityType;
 	unsigned int weight;
+	unsigned int identifier;
 };
 
 struct deliveryRequest {
 
-	deliveryRequest(unsigned int otherWeight = 0){
+	deliveryRequest(unsigned int otherWeight = 0, unsigned petitionerId = 0){
 		weight = otherWeight;
+		identifier = petitionerId;
 	}
 
+	unsigned int identifier;
 	unsigned int weight;
 };
 

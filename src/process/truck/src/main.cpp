@@ -8,7 +8,6 @@
 
 #include <Logger/Logger.h>
 #include <unistd.h>
-#include <utils/utils.h>
 #include <iostream>
 #include <tclap/CmdLine.h>
 #include "domain/Truck.h"
@@ -17,7 +16,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-	Logger log();
+	Logger log;
 
 	//TODO refactor
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
@@ -36,8 +35,7 @@ int main(int argc, char** argv) {
 
 	bool running = true;
 	while (running) {
-
-
+		log.info("Truck attending request...");
 
 	}
 

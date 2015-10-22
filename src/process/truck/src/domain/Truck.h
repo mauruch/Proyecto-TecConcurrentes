@@ -18,11 +18,17 @@ public:
 	Truck(int semId, int shmId);
 	virtual ~Truck();
 
+	void attendRequest();
+	utils::unloadRequest getRequest();
+
+	void deliverToDestination();
+
+
 private:
-	Semaphore ownSem();
-	Logger log();
 	int shmId;
-	FifoReader truckFifo();
+	Semaphore ownSem;
+	FifoReader ownFifo;
+	Logger log;
 
 };
 

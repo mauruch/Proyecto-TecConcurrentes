@@ -73,7 +73,7 @@ struct shipRequest {
 
 struct unloadRequest {
 
-	unloadRequest(int otherEntityType, unsigned int otherWeight){
+	unloadRequest(int otherEntityType = 1, unsigned int otherWeight = 0){
 		entityType = otherEntityType;
 		weight = otherWeight;
 	}

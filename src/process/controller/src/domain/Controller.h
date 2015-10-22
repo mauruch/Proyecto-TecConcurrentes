@@ -8,8 +8,8 @@
 #ifndef DOMAIN_CONTROLLER_H_
 #define DOMAIN_CONTROLLER_H_
 
-#include <Fifos/FifoReader.h>
 #include <Logger/Logger.h>
+#include <Fifos/FifoReader.h>
 #include <sched.h>
 #include <Semaphore/Semaphore.h>
 #include <string>

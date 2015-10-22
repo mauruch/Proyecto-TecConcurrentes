@@ -7,8 +7,8 @@
 
 #include "Crane.h"
 
-Crane::Crane() {
-	// TODO Auto-generated constructor stub
+Crane::Crane(int semId, int shmId) : craneFifo(utils::CRANE_FIFO), ownSem(semId) {
+	this->shmId = shmId;
 
 }
 

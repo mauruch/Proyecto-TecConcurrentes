@@ -2,15 +2,16 @@
 #include <Fifos/Fifo.h>
 #include <Logger/Logger.h>
 #include <Process.h>
-#include <sys/ipc.h>
+#include <sched.h>
 #include <Semaphore/Semaphore.h>
 #include <SharedData.h>
 #include <SharedMemory/SharedMemory.h>
-#include <utils/Helper.h>
 #include <utils/utils.h>
 #include <cstdlib>
+#include <iostream>
 #include <string>
 #include <vector>
+#include <signal.h>
 
 using namespace std;
 
@@ -18,7 +19,7 @@ utils::sharedDataConfig getSharedDataConfig(char**);
 
 int main(int argc, char** argv) {
 
-	Logger log;
+	Logger log(Logger::LogLevel::DEBUG);
 
 	log.info("Initializing simulation..");
 
@@ -98,20 +99,25 @@ int main(int argc, char** argv) {
 	 */
 	log.debug("Launching ships:");
 
+	vector<pid_t> pids;
+
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
 		log.debug("Launching Ship process...");
 		ArgsResolver shipArgs("../ship/Debug/Ship", "-s", shipsSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId(),
 				"-i", i);
 		utils::Process ship("../ship/Debug/Ship", shipArgs);
+		pids.push_back(ship.getPid());
 	}
 
 	log.debug("Launching ControllerQueue process...");
 	ArgsResolver controllerQArgs("../controllerQueue/Debug/ControllerQueue", "-m", sharedMemoryReadOnly.getShmId());
 	utils::Process controllerQ("../controllerQueue/Debug/ControllerQueue", controllerQArgs);
+	pids.push_back(controllerQ.getPid());
 
 	log.debug("Launching Controller process...");
 	ArgsResolver controllerArgs("../controller/Debug/Controller", "-m", sharedMemoryReadOnly.getShmId());
 	utils::Process controller("../controller/Debug/Controller", controllerArgs);
+	pids.push_back(controller.getPid());
 
 
 
@@ -119,6 +125,7 @@ int main(int argc, char** argv) {
 		log.debug("Launching Cranes process...");
 		ArgsResolver craneArgs("../crane/Debug/Crane", "-m", sharedMemoryReadOnly.getShmId(), "-i", i);
 		utils::Process crane("../crane/Debug/Crane", craneArgs);
+		pids.push_back(crane.getPid());
 	}
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.truckConfig; i++) {
@@ -126,10 +133,19 @@ int main(int argc, char** argv) {
 		ArgsResolver truckArgs("../truck/Debug/Truck", "-s", trucksSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId(),
 				"-i", i);
 		utils::Process truck("../truck/Debug/Truck", truckArgs);
+		pids.push_back(truck.getPid());
+
 	}
 
-
+	cout << "Press key ENTER to quit simulation" << endl;
 	cin.ignore();
+
+	for (int i=0; i < pids.size(); i++){
+
+		log.debug(string("sending SIGINT signal to: ").append(Helper::convertToString(pids[i])));
+		kill(pids[i], SIGINT);
+
+	}
 
 	return 1;
 

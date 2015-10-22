@@ -3,10 +3,19 @@
 #include <iostream>
 #include <tclap/CmdLine.h>
 #include "domain/Truck.h"
+#include <signal.h>
+#include <Signals/SignalHandler.h>
+#include <Signals/SIGINT_Handler.h>
 
 using namespace std;
 
 int main(int argc, char** argv) {
+
+	// event handler para la senial SIGINT (-2)
+	SIGINT_Handler sigint_handler;
+
+	// se registra el event handler declarado antes
+	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
 	//TODO refactor
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
@@ -24,11 +33,9 @@ int main(int argc, char** argv) {
 	int shMemId = memArg.getValue();
 	int truckNumber = truckNumberArg.getValue();
 
-//	log.info("faf");
 	Truck truck(semId, shMemId, truckNumber);
 
-	bool running = true;
-	while (running) {
+	while (sigint_handler.getGracefulQuit() == 0) {
 
 		utils::deliveryRequest request = truck.attendRequest();
 		bool returnEmpty = truck.deliverToDestination(request);
@@ -41,5 +48,7 @@ int main(int argc, char** argv) {
 
 		truck.setAsAvailable();
 	}
+
+	cout << "Truck dejo de loopear señal SIGINT" << endl;
 
 }

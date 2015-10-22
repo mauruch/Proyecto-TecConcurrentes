@@ -3,6 +3,9 @@
 #include <tclap/ValueArg.h>
 #include <string>
 #include <utils/Helper.h>
+#include <signal.h>
+#include <Signals/SignalHandler.h>
+#include <Signals/SIGINT_Handler.h>
 
 #include "domain/Ship.h"
 
@@ -11,6 +14,12 @@ using namespace std;
 unsigned int generateLoad();
 
 int main(int argc, char** argv) {
+
+	// event handler para la senial SIGINT (-2)
+	SIGINT_Handler sigint_handler;
+
+	// se registra el event handler declarado antes
+	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
 	//TODO refactor
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
@@ -29,8 +38,7 @@ int main(int argc, char** argv) {
 
 	Ship ship(generateLoad(), semId, shMemId, shipNumber);
 
-	bool running = true;
-	while (running) {
+	while (sigint_handler.getGracefulQuit() == 0) {
 		ship.enterPort();
 		ship.dock();
 		ship.unload();
@@ -38,6 +46,8 @@ int main(int argc, char** argv) {
 		ship.setAsAvailable();
 		ship.readLeavingRequest();
 	}
+
+	cout << "ship dejo de loopear señal SIGINT" << endl;
 
 }
 

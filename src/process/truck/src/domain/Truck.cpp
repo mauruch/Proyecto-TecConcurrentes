@@ -19,7 +19,7 @@ Truck::Truck(int semId, int shmid, int truckNumber) :
 		craneFifo(utils::CRANE_FIFO),
 		truckLoad(0),
 		log(Logger::LogLevel::DEBUG, string("Truck").append(Helper::convertToString(truckNumber))){
-		log.info("On constructor of new ship");
+		log.debug("On constructor of new truck");
 
 		this->truckNumber = truckNumber;
 }

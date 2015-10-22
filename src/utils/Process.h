@@ -18,6 +18,7 @@ class Process {
 private:
 
 	char* execPath;
+	pid_t pid;
 
 public:
 
@@ -32,6 +33,13 @@ public:
 		if (id == 0) {
 			syscalls::execv(execPath, argResolver.getParams());
 		}
+
+		this->pid = id;
+
+	}
+
+	pid_t getPid(){
+		return this->pid;
 	}
 
 };

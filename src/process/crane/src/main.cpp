@@ -4,9 +4,17 @@
 #include <iostream>
 #include <tclap/CmdLine.h>
 #include "domain/Crane.h"
+#include <Signals/SignalHandler.h>
+#include <Signals/SIGINT_Handler.h>
 using namespace std;
 
 int main(int argc, char** argv) {
+
+	// event handler para la senial SIGINT (-2)
+	SIGINT_Handler sigint_handler;
+
+	// se registra el event handler declarado antes
+	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
 	//TODO refactor
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
@@ -19,11 +27,12 @@ int main(int argc, char** argv) {
 
 	Crane crane(shmId.getValue(), craneNumberArg.getValue());
 
-	bool running = true;
-		while (running) {
-			crane.readUnloadRequest();
-			crane.setAsAvailable();
-		}
+	while (sigint_handler.getGracefulQuit() == 0) {
+		crane.readUnloadRequest();
+		crane.setAsAvailable();
+	}
+
+	cout << "Crane dejo de loopear señal SIGINT" << endl;
 
 	return 1;
 

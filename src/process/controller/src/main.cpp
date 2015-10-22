@@ -6,10 +6,18 @@
 #include <iostream>
 #include <tclap/CmdLine.h>
 #include "domain/Controller.h"
+#include <Signals/SignalHandler.h>
+#include <Signals/SIGINT_Handler.h>
 
 using namespace std;
 
 int main(int argc, char** argv) {
+
+	// event handler para la senial SIGINT (-2)
+	SIGINT_Handler sigint_handler;
+
+	// se registra el event handler declarado antes
+	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
 	//TODO refactor
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
@@ -21,10 +29,11 @@ int main(int argc, char** argv) {
 
 	Controller controller(shmId);
 
-	bool running = true;
-	while (running) {
+	while (sigint_handler.getGracefulQuit() == 0) {
 		controller.attendRequest();
 	}
+
+	cout << "Controller dejo de loopear señal SIGINT" << endl;
 
 	return 0;
 }

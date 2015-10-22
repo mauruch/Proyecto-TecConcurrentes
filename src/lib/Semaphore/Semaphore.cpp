@@ -47,7 +47,6 @@ int Semaphore :: wait () const {
 	operaation.sem_flg = SEM_UNDO;
 
 	int result = semop ( this->id,&operaation,1 );
-	if (result < 0) perror("wait");
 
 	return result;
 }

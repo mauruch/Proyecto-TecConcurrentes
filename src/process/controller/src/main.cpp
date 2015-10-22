@@ -11,8 +11,6 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-	Logger log;
-
 	//TODO refactor
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
 	// such as "-f 9892".
@@ -21,16 +19,12 @@ int main(int argc, char** argv) {
 	cmd.parse(argc, argv);
 	int shmId = memArg.getValue();
 
-	log.info("New controller process created");
 	Controller controller(shmId);
 
 	bool running = true;
 	while (running) {
-		log.info("Controller taking requests cranes...");
 		controller.attendRequest();
-
 	}
-
 
 	return 0;
 }

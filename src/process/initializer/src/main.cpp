@@ -64,6 +64,8 @@ int main(int argc, char** argv) {
 	Semaphore avShipsSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_SHIPS, readOnlysharedData.config.shipConfig);
 	Semaphore avTrucksSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_TRUCKS, readOnlysharedData.config.truckConfig);
 
+	Semaphore collectionSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_COLLECTION, 1);
+
 	readOnlysharedData.idSemAvailableDocks = avDocksSem.getId();
 	readOnlysharedData.idSemAvailableShips = avShipsSem.getId();
 	readOnlysharedData.idSemAvailableTrucks = avTrucksSem.getId();
@@ -115,14 +117,8 @@ int main(int argc, char** argv) {
 	log.debug("creating fifo for Truck");
 	Fifo shipFifo(utils::SHIP_FIFO);
 
-
-	/**
-	 * Create SEMAPHORES for lock shared memory
-	 */
-	Semaphore lockShMemSemShips(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_SHIPS, 1);
-	Semaphore lockShMemSemCranes(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_CRANES, 1);
-	Semaphore lockShMemSemTrucks(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_TRUCKS, 1);
-	Semaphore lockShMemSemDocks(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_DOCKS, 1);
+	log.debug("creating fifo for Collection");
+	Fifo paymentRequests(utils::PAYMENTS_FIFO);
 
 
 	/**

@@ -63,6 +63,8 @@ struct readOnlysharedData {
 	int availableCranesSharedDataId;
 	int availableTrucksSharedDataId;
 
+	unsigned long m_collection = 0;
+
 };
 
 struct availableDockSharedData {

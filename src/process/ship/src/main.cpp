@@ -8,6 +8,8 @@
 
 using namespace std;
 
+unsigned int generateLoad();
+
 int main(int argc, char** argv) {
 
 	Logger log;
@@ -28,14 +30,20 @@ int main(int argc, char** argv) {
 
 	log.info("Launching ship simualation");
 
-	Ship ship(semId, shMemId);
+	Ship ship(generateLoad(), semId, shMemId);
 
 	bool running = true;
 	while (running) {
 		ship.enterPort();
-		ship.board();
-		ship.getCrane();
+		ship.dock();
+		ship.unload();
 
+		ship.setAsAvailable();
+		ship.readLeavingRequest();
 	}
 
+}
+
+unsigned int generateLoad(){
+	return 100;
 }

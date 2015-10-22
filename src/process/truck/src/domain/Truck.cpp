@@ -6,7 +6,6 @@
  */
 
 #include "Truck.h"
-#include <utils/utils.h>
 
 Truck::Truck(int semId, int shmId) {
 	this->shmId = shmId;

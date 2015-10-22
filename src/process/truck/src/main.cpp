@@ -12,6 +12,7 @@
 #include <iostream>
 #include <tclap/CmdLine.h>
 #include "domain/Truck.h"
+
 using namespace std;
 
 int main(int argc, char** argv) {

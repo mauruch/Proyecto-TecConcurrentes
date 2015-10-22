@@ -36,6 +36,10 @@ const std::string CRANE_FIFO = "/tmp/Crane.fifo";
 const std::string TRUCK_FIFO = "/tmp/Truck.fifo";
 const std::string SHIP_FIFO = "/tmp/Ship.fifo";
 
+//TODO Buscar si es posible enviar un enum por fifo
+const int SHIP = 1;
+const int TRUCK = 2;
+
 struct entryPortRequest {
 
 	entryPortRequest(int id = 0){
@@ -47,13 +51,32 @@ struct entryPortRequest {
 
 struct askForCraneRequest {
 
-	askForCraneRequest(int id = 0, int whoSendRequest=1){
+	askForCraneRequest(int id = 0){
 		semId= id;
-		who = whoSendRequest;
 	}
 
 	int semId;
-	int who;
+};
+
+struct shipRequest {
+
+	shipRequest(unsigned int load = 0){
+		shipload = load;
+	}
+
+	unsigned int shipload;
+
+};
+
+struct unloadRequest {
+
+	unloadRequest(int otherEntityType, unsigned int otherWeight){
+		entityType = otherEntityType;
+		weight = otherWeight;
+	}
+
+	int entityType;
+	unsigned int weight;
 };
 
 }

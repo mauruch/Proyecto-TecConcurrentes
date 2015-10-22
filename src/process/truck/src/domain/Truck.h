@@ -12,6 +12,7 @@
 #include <Logger/Logger.h>
 #include <Semaphore/Semaphore.h>
 
+
 class Truck {
 public:
 	Truck(int semId, int shmId);

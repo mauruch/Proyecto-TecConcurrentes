@@ -7,8 +7,8 @@
 
 #include "Controller.h"
 
-Controller::Controller(int shmId) : ownFifo(utils::CONTROLLER_FIFO) {
-	this->shmId = shmId;
+Controller::Controller(int shmid) : shmId(shmid), ownFifo(utils::CONTROLLER_FIFO),
+log(Logger::LogLevel::DEBUG, string("Controller")){
 	log.info("Reading on fifo " + utils::CONTROLLER_FIFO);
 
 }

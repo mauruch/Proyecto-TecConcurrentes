@@ -25,8 +25,8 @@ public:
 
 private:
 	int shmId;
-	Logger log;
 	FifoReader ownFifo;
+	Logger log;
 
 	utils::askForCraneRequest getRequest();
 	void checkCraneAvailability();

@@ -7,8 +7,8 @@
 #include <../utils/SharedData.h>
 #include <iostream>
 
-ControllerQueue::ControllerQueue(int shmId) : ownFifo(utils::CONTROLLER_QUEUE_FIFO){
-	this->shmId = shmId;
+ControllerQueue::ControllerQueue(int shmid) : shmId(shmid), ownFifo(utils::CONTROLLER_QUEUE_FIFO),
+log(Logger::LogLevel::DEBUG, string("ControllerQueue")){
 	log.info("Creating new ControllerQueue");
 	log.info("Reading on fifo " + utils::CONTROLLER_QUEUE_FIFO);
 }

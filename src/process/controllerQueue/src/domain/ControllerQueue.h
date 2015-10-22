@@ -16,14 +16,14 @@ public:
 
 private:
 
-	utils::entryPortRequest getRequest();
 	void checkAvailability();
+	utils::entryPortRequest getRequest();
 	int getDockSemIdFromMemory();
 	void signalShipToEnter(utils::entryPortRequest request);
 
 	int shmId;
-	Logger log;
 	FifoReader ownFifo;
+	Logger log;
 };
 
 #endif /* DOMAIN_CONTROLLERQUEUE_H_ */

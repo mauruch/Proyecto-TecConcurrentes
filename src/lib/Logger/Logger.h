@@ -29,7 +29,9 @@ public:
 	};
 
 	Logger(LogLevel logLevel);
+	Logger(LogLevel logLevel, string logName);
 	Logger();
+	Logger(string logName);
 	virtual ~Logger();
 
 	void debug(const std::string data);
@@ -48,10 +50,12 @@ private:
 	string createLogLine(const string data, LogLevel level);
 	string getProcessInfo();
 	string getFormattedDateTime();
+	string getName();
 	string getLogLevelFormatted(LogLevel level);
 
 	map<LogLevel, string> logLevelMap;
 	LockFile lockFile;
+	string name;
 	LogLevel log_level;
 };
 

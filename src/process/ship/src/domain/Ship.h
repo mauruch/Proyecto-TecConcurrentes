@@ -34,7 +34,7 @@ private:
 	void sendUnloadRequest();
 	void waitOnSemaphore();
 
-	int searchDock();
+	void searchDock();
 
 	unsigned int shipload;
 

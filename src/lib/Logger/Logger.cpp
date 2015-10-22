@@ -10,8 +10,20 @@ Logger::Logger() :
 	this->initializeEnumMapValues();
 }
 
+Logger::Logger(string logName) :
+		lockFile(utils::LOG_FILE.c_str()), name(logName) {
+	this->log_level = LogLevel::INFO;
+	this->initializeEnumMapValues();
+}
+
 Logger::Logger(LogLevel logLevel) :
 		lockFile(utils::LOG_FILE.c_str()) {
+	this->log_level = logLevel;
+	this->initializeEnumMapValues();
+}
+
+Logger::Logger(LogLevel logLevel, string logName) :
+		lockFile(utils::LOG_FILE.c_str()), name(logName) {
 	this->log_level = logLevel;
 	this->initializeEnumMapValues();
 }
@@ -70,11 +82,26 @@ string Logger::createLogLine(const string data, LogLevel level) {
 	logLine.append(utils::LOG_DELIMITER);
 	logLine.append(getProcessInfo());
 	logLine.append(utils::LOG_DELIMITER);
+	logLine.append(getName());
+	logLine.append(utils::LOG_DELIMITER);
 	logLine.append(getLogLevelFormatted(level));
 	logLine.append(utils::LOG_DELIMITER);
 	logLine.append(data);
 	logLine.append("\n");
 	return logLine;
+}
+
+string Logger::getName() {
+	if(name.size() == 0){
+		return string("");
+	}
+
+	string response;
+	response.append("[");
+	response.append(name);
+	response.append("]");
+
+	return name;
 }
 
 string Logger::getLogLevelFormatted(LogLevel level) {

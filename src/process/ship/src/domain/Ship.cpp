@@ -7,10 +7,17 @@
 #include <iostream>
 using namespace std;
 
-Ship::Ship(const unsigned int load, int semId, int shmId) :
-		shipload(load), ownSem(semId), shm(shmId), controllerQueueFifo(utils::CONTROLLER_QUEUE_FIFO),
-		controllerFifo(utils::CONTROLLER_FIFO), craneFifo(utils::CRANE_FIFO),
-		shipFifo(utils::SHIP_FIFO) {
+Ship::Ship(const unsigned int load, int semId, int shmid) :
+		shipload(load),
+		ownSem(semId),
+		shmId(shmid),
+		shm(shmId),
+		controllerQueueFifo(utils::CONTROLLER_QUEUE_FIFO),
+		controllerFifo(utils::CONTROLLER_FIFO),
+		craneFifo(utils::CRANE_FIFO),
+		shipFifo(utils::SHIP_FIFO),
+		log(Logger::LogLevel::DEBUG, string("Ship").append(Helper::convertToString(semId)))
+		 {
 	log.info("On constructor of new ship");
 }
 
@@ -39,7 +46,7 @@ void Ship::unload() {
 }
 
 
-int Ship::searchDock() {
+void Ship::searchDock() {
 	log.info("The ship took place in the port");
 
 }
@@ -47,8 +54,7 @@ int Ship::searchDock() {
 void Ship::sendEntryRequest() {
 	log.info("Sending entry request to port");
 	utils::entryPortRequest request(this->ownSem.getId());
-	controllerQueueFifo.write(static_cast<void*>(&request),
-			sizeof(utils::entryPortRequest));
+	controllerQueueFifo.write(static_cast<void*>(&request),sizeof(utils::entryPortRequest));
 }
 
 void Ship::askForCrane() {

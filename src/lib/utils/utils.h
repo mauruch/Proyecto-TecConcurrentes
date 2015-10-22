@@ -17,6 +17,7 @@ static const std::string FILE_FTOK_SHIPS = "../ship/src/main.cpp";
 static char ID_FTOK_SHM_CONF_DATA = 'A';
 static char ID_FTOK_SHM_CONF_DOCK = 'B';
 static int ID_FTOK_SEM_DOCKS_PORT = 123;
+static int ID_FTOK_SEM_CRANE = 321;
 static int ID_FTOK_LOCK_SHMEM_SEM = 111;
 
 const std::string CONTROLLER_QUEUE_FIFO = "/tmp/ControllerQueue.fifo";
@@ -33,11 +34,13 @@ struct entryPortRequest {
 
 struct askForCraneRequest {
 
-	askForCraneRequest(int id = 0){
+	askForCraneRequest(int id = 0, int whoSendRequest=1){
 		shipSemId = id;
+		who = whoSendRequest;
 	}
 
 	int shipSemId;
+	int who;
 };
 
 }

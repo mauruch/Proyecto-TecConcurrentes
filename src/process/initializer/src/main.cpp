@@ -38,9 +38,9 @@ int main(int argc, char** argv) {
 	vector<utils::availableCrane> availableCranes = getAvailableCrane(sharedDataConfig.craneConfig);
 
 	Semaphore avDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_DOCKS_PORT, sharedDataConfig.dockConfig);
+	Semaphore avCranesSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_CRANE, sharedDataConfig.craneConfig);
 	Semaphore avShipsSem(utils::FILE_FTOK, sharedDataConfig.shipConfig, 0);
 	Semaphore avTrucksSem(utils::FILE_FTOK, sharedDataConfig.truckConfig, 0);
-	Semaphore avCranesSem(utils::FILE_FTOK, sharedDataConfig.craneConfig, 0);
 
 	//TODO create others shared data struct
 	sharedData.config = sharedDataConfig;
@@ -71,8 +71,8 @@ int main(int argc, char** argv) {
 	Fifo controllerQFifo(utils::CONTROLLER_QUEUE_FIFO);
 
 	//create CONTROLLER_FIFO
-	log.debug("creating fifo for Controller");
-	Fifo controllerFifo(utils::CONTROLLER_FIFO);
+//	log.debug("creating fifo for Controller");
+//	Fifo controllerFifo(utils::CONTROLLER_FIFO);
 
 
 	//create semaphore to lock ShareMemory

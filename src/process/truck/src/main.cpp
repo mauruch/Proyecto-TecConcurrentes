@@ -1,11 +1,3 @@
-//============================================================================
-// Name        : Truck.cpp
-// Author      : 
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-
 #include <Logger/Logger.h>
 #include <unistd.h>
 #include <iostream>
@@ -49,6 +41,7 @@ int main(int argc, char** argv) {
 			truck.unload();
 		}
 
+		truck.setAsAvailable();
 	}
 
 }

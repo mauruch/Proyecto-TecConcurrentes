@@ -8,6 +8,7 @@
 
 Truck::Truck(int semId, int shmid) :
 		shmId(shmid),
+		shm(shmId),
 		ownSem(semId),
 		ownFifo(utils::TRUCK_FIFO),
 		shipFifo(utils::SHIP_FIFO),
@@ -42,7 +43,6 @@ void Truck::unload(){
 	log.info("Truck taking an available crane");
 	this->truckLoad = (rand() % 100);
 	this->sendUnloadRequest();
-	this->signalMe();
 }
 
 void Truck::askForCrane() {
@@ -75,12 +75,20 @@ void  Truck::sendRequestToShip(){
 	utils::shipRequest shipRequest(0);
 	this->shipFifo.write(static_cast<void*>(&shipRequest),
 			sizeof(utils::shipRequest));
-	this->signalMe();
 }
 
-void Truck::signalMe(){
-	this->ownSem.signal();
+/**
+ * Set current truck as available.
+ * After this set the truck is available for attending
+ * deliveryRequests.
+ */
+void Truck::setAsAvailable() {
+	utils::readOnlysharedData data = shm.read();
+	Semaphore trucksSemaphore(data.idSemAvailableTrucks);
+	trucksSemaphore.signal();
+	log.info("Setting as an available truck");
 }
+
 
 void Truck::waitOnSemaphore(){
 	this->ownSem.wait();

@@ -9,7 +9,7 @@ using namespace std;
 
 
 Ship::Ship(const std::string fifoName, int semId, int shmId) : ownSem(semId),
-		lockShMemDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM), controllerQueueFifo(utils::CONTROLLER_QUEUE_FIFO),
+		lockShMemDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_DOCKS), controllerQueueFifo(utils::CONTROLLER_QUEUE_FIFO),
 		controllerFifo(utils::CONTROLLER_FIFO){
 	this->shmId = shmId;
 	log.info("On constructor of new ship");
@@ -29,48 +29,24 @@ void Ship::enterPort() {
 
 void Ship::board() {
 	log.info("Ship looking for a place to tie...");
-	this->lockSharedMemory();
 	int dock = this->searchDock();
-	cout << "place: " << dock << endl;
-	log.info("Ship tying at dock number: " + Helper::convertToString(dock));
-	this->unlockSharedMemory();
 }
 
 void Ship::getCrane(){
 	log.info("Ship asking for a crane...");
 	this->sendCraneRequest();
+	this->waitOnSemaphore();
+	log.info("Ship taking an available crane");
 }
 
 
 
 void Ship::lockSharedMemory() {
-	log.info("check ahora: " + Helper::convertToString(lockShMemDocksSem.getId()));
-
 	this->lockShMemDocksSem.wait();
 }
 
 int Ship::searchDock() {
-	cout << "buscando en memoria" << endl;
-	log.info("buscando en memoria");
-	void* tmpPtr = shmat ( this->shmId,NULL,0 );
-	perror("ship shmat");
-	int places = 0;
-	if ( tmpPtr != (void*) -1 ) {
-		struct utils::sharedData* sharedData = (struct utils::sharedData*) (tmpPtr);
-		cout << "shared data: " << sharedData->availableDocks.size() << endl;
-		log.info("jujuju");
-//		vector<utils::availableDock> availableDocks = sharedData->availableDocks;
-		for(vector<utils::availableDock>::iterator it = sharedData->availableDocks.begin(); it != sharedData->availableDocks.end(); ++it) {
-			cout << places << endl;
-//			cout << (*it).available << endl;
-//		    if ( (*it).available == true ){
-//		    	(*it).available = false;
-//		    	return places;
-//		    }
-		    places++;
-		}
-	}
-	return 0;
+	log.info("The ship took place in the port");
 }
 
 void Ship::unlockSharedMemory() {

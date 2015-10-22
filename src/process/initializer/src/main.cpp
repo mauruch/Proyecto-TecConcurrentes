@@ -25,79 +25,107 @@ int main(int argc, char** argv) {
 
 	log.info("Initializing simulation..");
 
-	utils::availableShip crane;
+	log.info("Building sharedData");
 
-	log.info("Preparing sharedData");
+	/**
+	 * Building SHARED MEMORY **************
+	 */
+	utils::readOnlysharedData readOnlysharedData;
 
-	utils::sharedData sharedData;
-	utils::sharedDataConfig sharedDataConfig = getSharedDataConfig(argv);
+	readOnlysharedData.config = getSharedDataConfig(argv);
 
-	vector<utils::availableDock> availableDocks = getAvailableDock(sharedDataConfig.dockConfig);
-	vector<utils::availableShip> availableShips = getAvailableShip(sharedDataConfig.shipConfig);
-	vector<utils::availableTruck> availableTrucks = getAvailableTruck(sharedDataConfig.truckConfig);
-	vector<utils::availableCrane> availableCranes = getAvailableCrane(sharedDataConfig.craneConfig);
+	utils::availableDockSharedData availableDocksSharedData;
+	availableDocksSharedData.availableDocks = getAvailableDock(readOnlysharedData.config.dockConfig);
+	SharedMemory<utils::availableDockSharedData> shMemAvailableDocks(utils::FILE_FTOK, utils::ID_FTOK_SHM_AVAIL_DOCKS);
+	shMemAvailableDocks.write(availableDocksSharedData);
 
-	Semaphore avDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_DOCKS_PORT, sharedDataConfig.dockConfig);
-	Semaphore avCranesSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_CRANE, sharedDataConfig.craneConfig);
-	Semaphore avShipsSem(utils::FILE_FTOK, sharedDataConfig.shipConfig, 0);
-	Semaphore avTrucksSem(utils::FILE_FTOK, sharedDataConfig.truckConfig, 0);
+	utils::availableShipsSharedData availableShipsSharedData;
+	vector<utils::availableShip> availableShips = getAvailableShip(readOnlysharedData.config.shipConfig);
+	availableShipsSharedData.availableShips = availableShips;
+	SharedMemory<utils::availableShipsSharedData> shMemAvailableShips(utils::FILE_FTOK, utils::ID_FTOK_SHM_AVAIL_SHIPS);
+	shMemAvailableShips.write(availableShipsSharedData);
 
-	//TODO create others shared data struct
-	sharedData.config = sharedDataConfig;
-	sharedData.availableDocks = availableDocks;
-	sharedData.availableShips = availableShips;
-	sharedData.availableTrucks = availableTrucks;
-	sharedData.availableCranes = availableCranes;
-	sharedData.idSemAvailableDocks = avDocksSem.getId();
-	sharedData.idSemAvailableShips = avShipsSem.getId();
-	sharedData.idSemAvailableTrucks = avTrucksSem.getId();
-	sharedData.idSemAvailableCranes = avCranesSem.getId();
+	utils::availableTrucksSharedData availableTrucksSharedData;
+	availableTrucksSharedData.availableTrucks = getAvailableTruck(readOnlysharedData.config.truckConfig);
+	SharedMemory<utils::availableTrucksSharedData> shMemAvailableTrucks(utils::FILE_FTOK, utils::ID_FTOK_SHM_AVAIL_TRUCKS);
+	shMemAvailableTrucks.write(availableTrucksSharedData);
 
-	SharedMemory<utils::sharedData> sharedMemory(utils::FILE_FTOK, utils::ID_FTOK_SHM_CONF_DATA);
+	utils::availableCranesSharedData availableCranesSharedData;
+	availableCranesSharedData.availableCranes = getAvailableCrane(readOnlysharedData.config.craneConfig);
+	SharedMemory<utils::availableCranesSharedData> shMemAvailableCranes(utils::FILE_FTOK, utils::ID_FTOK_SHM_AVAIL_CRANES);
+	shMemAvailableCranes.write(availableCranesSharedData);
 
+	/**
+	 * Building semaphore for availability resources
+	 */
+
+	Semaphore avDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_DOCKS_PORT, readOnlysharedData.config.dockConfig);
+	Semaphore avCranesSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_CRANE, readOnlysharedData.config.craneConfig);
+//	Semaphore avShipsSem(utils::FILE_FTOK, readOnlysharedData.config.shipConfig, 0);
+//	Semaphore avTrucksSem(utils::FILE_FTOK, readOnlysharedData.config.truckConfig, 0);
+
+	readOnlysharedData.idSemAvailableDocks = avDocksSem.getId();
+//	readOnlysharedData.idSemAvailableShips = avShipsSem.getId();
+//	readOnlysharedData.idSemAvailableTrucks = avTrucksSem.getId();
+	readOnlysharedData.idSemAvailableCranes = avCranesSem.getId();
+
+	readOnlysharedData.availableDockSharedDataId = shMemAvailableDocks.getShmId();
+	readOnlysharedData.availableShipsSharedDataId = shMemAvailableShips.getShmId();
+	readOnlysharedData.availableCranesSharedDataId = shMemAvailableCranes.getShmId();
+	readOnlysharedData.availableTrucksSharedDataId = shMemAvailableTrucks.getShmId();
+
+	SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly(utils::FILE_FTOK, utils::ID_FTOK_SHM_READ_ONLY);
 	log.debug("Writing data in shared memory");
-	sharedMemory.write(sharedData);
+	sharedMemoryReadOnly.write(readOnlysharedData);
 
+	/**
+	 * Create SEMAPHORES for each ship
+	 */
 	log.debug("Creating semaphores for ships");
 	vector<int> shipsSemaphoresIds;
-	for (unsigned int i = 0; i < sharedDataConfig.shipConfig; i++) {
+	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
 		Semaphore shipSem(utils::FILE_FTOK_SHIPS, i, 0);
 		shipsSemaphoresIds.push_back(shipSem.getId());
 	}
 
 
-	//create CONTROLLER_QUEUE_FIFO
+	/**
+	 * FIFOS
+	 */
 	log.debug("creating fifo for ControllerQueue");
 	Fifo controllerQFifo(utils::CONTROLLER_QUEUE_FIFO);
 
-	//create CONTROLLER_FIFO
 //	log.debug("creating fifo for Controller");
-//	Fifo controllerFifo(utils::CONTROLLER_FIFO);
+	Fifo controllerFifo(utils::CONTROLLER_FIFO);
 
 
-	//create semaphore to lock ShareMemory
-	Semaphore lockShMemSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM, 1);
-	cout << "check: " << lockShMemSem.getId() << endl;
-//	sleep(20);
-//
-//	Semaphore same(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM);
-//	cout << "again: " << same.getId() << endl;
-//	sleep(20);
+	/**
+	 * Create SEMAPHORES for lock shared memory
+	 */
+	Semaphore lockShMemSemShips(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_SHIPS, 1);
+	Semaphore lockShMemSemCranes(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_CRANES, 1);
+	Semaphore lockShMemSemTrucks(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_TRUCKS, 1);
+	Semaphore lockShMemSemDocks(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_DOCKS, 1);
 
 
-
+	/**
+	 * Launching PROCESS
+	 */
 	log.debug("Launching ships:");
-	for (unsigned int i = 0; i < sharedDataConfig.shipConfig; i++) {
+	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
 		ArgsResolver args("../ship/Debug/Ship", "-f", availableShips[i].shipFifo, "-s", shipsSemaphoresIds[i],
-				"-m", sharedMemory.getShmId());
+				"-m", sharedMemoryReadOnly.getShmId());
 		log.debug("Launching Ship process...");
 		utils::Process ship("../ship/Debug/Ship", args);
 	}
 
-	//create semaphore portDock
 	log.debug("Launching ControllerQueue process...");
-	ArgsResolver controllerQArgs("../controllerQueue/Debug/ControllerQueue", "-m", sharedMemory.getShmId());
+	ArgsResolver controllerQArgs("../controllerQueue/Debug/ControllerQueue", "-m", sharedMemoryReadOnly.getShmId());
 	utils::Process controllerQ("../controllerQueue/Debug/ControllerQueue",controllerQArgs);
+
+	log.debug("Launching Controller process...");
+	ArgsResolver controllerArgs("../controller/Debug/Controller", "-m", sharedMemoryReadOnly.getShmId());
+	utils::Process controller("../controller/Debug/Controller",controllerArgs);
 
 
 	cin.ignore();

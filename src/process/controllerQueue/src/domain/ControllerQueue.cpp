@@ -7,7 +7,7 @@
 #include <../utils/SharedData.h>
 #include <iostream>
 
-ControllerQueue::ControllerQueue(int shmId) : ownFifo(utils::CONTROLLER_QUEUE_FIFO), lockShMemDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM){
+ControllerQueue::ControllerQueue(int shmId) : ownFifo(utils::CONTROLLER_QUEUE_FIFO), lockShMemDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_LOCK_SHMEM_SEM_DOCKS){
 	this->shmId = shmId;
 	log.info("Creating new ControllerQueue");
 	log.info("Reading on fifo " + utils::CONTROLLER_QUEUE_FIFO);
@@ -34,6 +34,7 @@ void ControllerQueue::checkAvailability(){
 	log.info("ControllerQ checking dock availability...");
 	//check availability
 	Semaphore dockSem(this->getDockSemIdFromMemory());
+
 	log.debug("Blocking until there is a place available");
 	dockSem.wait();
 }
@@ -43,7 +44,7 @@ int ControllerQueue::getDockSemIdFromMemory(){
 
 	void* tmpPtr = shmat ( this->shmId,NULL,0 );
 	if ( tmpPtr != (void*) -1 ) {
-		struct utils::sharedData* sharedData = (struct utils::sharedData*) (tmpPtr);
+		struct utils::readOnlysharedData* sharedData = (struct utils::readOnlysharedData*) (tmpPtr);
 		return sharedData->idSemAvailableDocks;
 	}
 	return -1;

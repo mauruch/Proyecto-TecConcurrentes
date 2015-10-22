@@ -7,15 +7,45 @@
 
 #include "Controller.h"
 
-Controller::Controller(int shmId) : ownFifo(utils::CONTROLLER_QUEUE_FIFO) {
+Controller::Controller(int shmId) : ownFifo(utils::CONTROLLER_FIFO) {
 	this->shmId = shmId;
+	log.info("Reading on fifo " + utils::CONTROLLER_FIFO);
 
 }
 
 void Controller::attendRequest() {
 	utils::askForCraneRequest request = getRequest();
-//	this->checkAvailability();
-//	this->signalShipToEnter(request);
+	this->checkCraneAvailability();
+	this->signalAllowedToUseCrane(request);
+}
+
+void Controller::checkCraneAvailability(){
+
+	log.info("Controller checking crane availability...");
+	//check availability
+	Semaphore craneSem(this->getCraneSemIdFromMemory());
+	craneSem.wait();
+
+}
+
+int Controller::getCraneSemIdFromMemory(){
+
+	void* tmpPtr = shmat(this->shmId, NULL, 0);
+	if (tmpPtr != (void*) -1) {
+		struct utils::readOnlysharedData* sharedData =
+				(struct utils::readOnlysharedData*) (tmpPtr);
+		return sharedData->idSemAvailableCranes;
+	}
+	return -1;
+
+}
+
+void Controller::signalAllowedToUseCrane(utils::askForCraneRequest request){
+
+	log.debug("Crane available for ship. Sending signal.");
+	Semaphore petitionerSem(request.semId);
+	petitionerSem.signal();
+
 }
 
 utils::askForCraneRequest Controller::getRequest() {
@@ -24,7 +54,7 @@ utils::askForCraneRequest Controller::getRequest() {
 	ownFifo.readFifo(&request, sizeof(request));
 
 	log.info(std::string("New request asking for a crane for shipId: ").append(
-			Helper::convertToString(request.shipSemId)));
+			Helper::convertToString(request.semId)));
 	return request;
 }
 

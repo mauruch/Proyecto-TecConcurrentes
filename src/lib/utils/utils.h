@@ -14,11 +14,19 @@ static const std::string LOG_FILE = "/tmp/TPConcurrentes.log";
 static const std::string FILE_FTOK = "src/main.cpp";
 static const std::string FILE_FTOK_SHIPS = "../ship/src/main.cpp";
 
-static char ID_FTOK_SHM_CONF_DATA = 'A';
-static char ID_FTOK_SHM_CONF_DOCK = 'B';
-static int ID_FTOK_SEM_DOCKS_PORT = 123;
-static int ID_FTOK_SEM_CRANE = 321;
-static int ID_FTOK_LOCK_SHMEM_SEM = 111;
+static int ID_FTOK_SHM_READ_ONLY = 14;
+static int ID_FTOK_SEM_DOCKS_PORT = 1;
+static int ID_FTOK_SEM_CRANE = 2;
+
+static int ID_FTOK_LOCK_SHMEM_SEM_TRUCKS = 111;
+static int ID_FTOK_LOCK_SHMEM_SEM_DOCKS = 222;
+static int ID_FTOK_LOCK_SHMEM_SEM_SHIPS = 333;
+static int ID_FTOK_LOCK_SHMEM_SEM_CRANES = 444;
+
+static int ID_FTOK_SHM_AVAIL_DOCKS = 10;
+static int ID_FTOK_SHM_AVAIL_SHIPS = 11;
+static int ID_FTOK_SHM_AVAIL_TRUCKS = 12;
+static int ID_FTOK_SHM_AVAIL_CRANES = 13;
 
 const std::string CONTROLLER_QUEUE_FIFO = "/tmp/ControllerQueue.fifo";
 const std::string CONTROLLER_FIFO = "/tmp/Controller.fifo";
@@ -35,11 +43,11 @@ struct entryPortRequest {
 struct askForCraneRequest {
 
 	askForCraneRequest(int id = 0, int whoSendRequest=1){
-		shipSemId = id;
+		semId= id;
 		who = whoSendRequest;
 	}
 
-	int shipSemId;
+	int semId;
 	int who;
 };
 

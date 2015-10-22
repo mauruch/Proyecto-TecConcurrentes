@@ -49,17 +49,36 @@ struct availableDock {
 	bool available;
 };
 
-struct sharedData {
+struct readOnlysharedData {
 
 	sharedDataConfig config;
-	vector<availableDock> availableDocks;
-	vector<availableShip> availableShips;
-	vector<availableTruck> availableTrucks;
-	vector<availableCrane> availableCranes;
+
 	int idSemAvailableDocks;
 	int idSemAvailableShips;
 	int idSemAvailableTrucks;
 	int idSemAvailableCranes;
 
+	int availableDockSharedDataId;
+	int availableShipsSharedDataId;
+	int availableCranesSharedDataId;
+	int availableTrucksSharedDataId;
+
 };
+
+struct availableDockSharedData {
+	vector<availableDock> availableDocks;
+};
+
+struct availableShipsSharedData {
+	vector<availableShip> availableShips;
+};
+
+struct availableCranesSharedData{
+	vector<availableCrane> availableCranes;
+};
+
+struct availableTrucksSharedData{
+	vector<availableTruck> availableTrucks;
+};
+
 }

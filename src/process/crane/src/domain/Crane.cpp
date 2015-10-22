@@ -5,7 +5,9 @@ Crane::Crane(int shmid, int craneNumber) :
 		shm(shmId),
 		craneFifo(utils::CRANE_FIFO),
 		shipFifo(utils::SHIP_FIFO),
-		truckFifo(utils::TRUCK_FIFO) {
+		truckFifo(utils::TRUCK_FIFO),
+		log(Logger::LogLevel::DEBUG, string("Crane").append(Helper::convertToString(craneNumber)))
+		{
 
 }
 

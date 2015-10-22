@@ -1,10 +1,3 @@
-/*
- * Truck.h
- *
- *  Created on: Oct 22, 2015
- *      Author: mauruch
- */
-
 #ifndef DOMAIN_TRUCK_H_
 #define DOMAIN_TRUCK_H_
 
@@ -13,6 +6,7 @@
 #include <Logger/Logger.h>
 #include <Semaphore/Semaphore.h>
 #include <SharedMemory/SharedMemory.h>
+#include <string>
 
 #include "../../../../utils/SharedData.h"
 

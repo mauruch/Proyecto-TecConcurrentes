@@ -2,9 +2,12 @@
 
 #include <unistd.h>
 #include <utils/Helper.h>
-#include <utils/utils.h>
 #include <cstdlib>
 #include <string>
+
+
+
+using namespace std;
 
 Truck::Truck(int semId, int shmid, int truckNumber) :
 		shmId(shmid),
@@ -15,7 +18,8 @@ Truck::Truck(int semId, int shmid, int truckNumber) :
 		controllerFifo(utils::CONTROLLER_FIFO),
 		craneFifo(utils::CRANE_FIFO),
 		truckLoad(0),
-		log(Logger::LogLevel::DEBUG, string("Truck").append(Helper::convertToString(truckNumber))) {
+		log(Logger::LogLevel::DEBUG, string("Truck").append(Helper::convertToString(truckNumber))){
+		log.info("On constructor of new ship");
 }
 
 Truck::~Truck() {

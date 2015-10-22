@@ -8,8 +8,6 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-	Logger log;
-
 	//TODO refactor
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
 	// such as "-f 9892".
@@ -20,7 +18,6 @@ int main(int argc, char** argv) {
 	cmd.parse(argc, argv);
 
 	Crane crane(shmId.getValue(), craneNumberArg.getValue());
-
 
 	bool running = true;
 		while (running) {

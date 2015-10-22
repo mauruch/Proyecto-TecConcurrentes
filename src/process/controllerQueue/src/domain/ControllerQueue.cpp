@@ -32,10 +32,8 @@ void ControllerQueue::signalShipToEnter(utils::entryPortRequest request){
 
 void ControllerQueue::checkAvailability(){
 	log.info("ControllerQ checking dock availability...");
-	//check availability
-	Semaphore dockSem(this->getDockSemIdFromMemory());
-
 	log.debug("Blocking until there is a place available");
+	Semaphore dockSem(this->getDockSemIdFromMemory());
 	dockSem.wait();
 }
 

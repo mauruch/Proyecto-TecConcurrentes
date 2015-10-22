@@ -12,10 +12,6 @@ unsigned int generateLoad();
 
 int main(int argc, char** argv) {
 
-	Logger log;
-
-	log.info("Processing arguments");
-
 	//TODO refactor
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
 	// such as "-f 9892".
@@ -30,8 +26,6 @@ int main(int argc, char** argv) {
 	int semId = semArg.getValue();
 	int shMemId = memArg.getValue();
 	int shipNumber = shipNumberArg.getValue();
-
-	log.info("Launching ship simualation");
 
 	Ship ship(generateLoad(), semId, shMemId, shipNumber);
 

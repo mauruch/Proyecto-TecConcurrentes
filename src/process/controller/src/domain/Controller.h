@@ -1,10 +1,3 @@
-/*
- * Controller.h
- *
- *  Created on: Oct 21, 2015
- *      Author: mauruch
- */
-
 #ifndef DOMAIN_CONTROLLER_H_
 #define DOMAIN_CONTROLLER_H_
 
@@ -12,6 +5,7 @@
 #include <Fifos/FifoReader.h>
 #include <sched.h>
 #include <Semaphore/Semaphore.h>
+#include <SharedMemory/SharedMemory.h>
 #include <string>
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -25,6 +19,7 @@ public:
 
 private:
 	int shmId;
+	SharedMemory<utils::readOnlysharedData> shm;
 	FifoReader ownFifo;
 	Logger log;
 

@@ -1,3 +1,6 @@
+#ifndef SHARED_DATA_H_
+#define SHARED_DATA_H_
+
 #include <vector>
 #include <unistd.h>
 
@@ -5,14 +8,14 @@ using namespace std;
 
 namespace utils {
 
-typedef struct sharedDataConfig {
+struct sharedDataConfig {
 
 	unsigned int shipConfig;
 	unsigned int truckConfig;
 	unsigned int craneConfig;
 	unsigned int dockConfig;
 
-} sharedDataConfig;
+} ;
 
 /**
  * Structure that contains information of all Ships
@@ -82,3 +85,5 @@ struct availableTrucksSharedData{
 };
 
 }
+
+#endif /* DOMAIN_SHIP_H_ */

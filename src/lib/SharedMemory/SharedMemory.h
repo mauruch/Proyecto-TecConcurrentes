@@ -23,6 +23,7 @@ public:
 	void release ();
 	int getShmId();
 	SharedMemory ( const std::string& file,const char letter );
+	SharedMemory ( const int shmId );
 	SharedMemory ( const SharedMemory& origin );
 	~SharedMemory ();
 	SharedMemory<T>& operator= ( const SharedMemory& origin );
@@ -94,6 +95,18 @@ template <class T> SharedMemory<T>::SharedMemory ( const std::string& file,const
 		throw message;
 	}
 }
+
+template <class T> SharedMemory<T>::SharedMemory ( const int id ):shmId(id) {
+	void* tmpPtr = shmat ( id,NULL,0 );
+
+	if ( tmpPtr != (void*) -1 ) {
+		this->ptrData = static_cast<T*> (tmpPtr);
+	} else {
+		std::string message = std::string("Error en shmat(): ") + std::string(strerror(errno));
+		throw message;
+	}
+}
+
 
 template <class T> SharedMemory<T>::SharedMemory ( const SharedMemory& origin ):shmId(origin.shmId) {
 	void* tmpPtr = shmat ( origin.shmId,NULL,0 );

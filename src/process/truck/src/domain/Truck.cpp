@@ -1,16 +1,19 @@
-/*
- * Truck.cpp
- *
- *  Created on: Oct 22, 2015
- *      Author: mauruch
- */
-
 #include "Truck.h"
 
-Truck::Truck(int semId, int shmId) : ownSem(semId), ownFifo(utils::TRUCK_FIFO), shipFifo(utils::SHIP_FIFO),
-		craneFifo(utils::CRANE_FIFO), controllerFifo(utils::CONTROLLER_FIFO){
-	this->shmId = shmId;
-	this->truckLoad = 0;
+#include <unistd.h>
+#include <utils/Helper.h>
+#include <utils/utils.h>
+#include <cstdlib>
+#include <string>
+
+Truck::Truck(int semId, int shmid) :
+		shmId(shmid),
+		ownSem(semId),
+		ownFifo(utils::TRUCK_FIFO),
+		shipFifo(utils::SHIP_FIFO),
+		controllerFifo(utils::CONTROLLER_FIFO),
+		craneFifo(utils::CRANE_FIFO),
+		truckLoad(0) {
 }
 
 Truck::~Truck() {

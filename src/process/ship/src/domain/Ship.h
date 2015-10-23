@@ -26,6 +26,8 @@ public:
 	void setAsAvailable();
 	void readLeavingRequest();
 
+	void payRate();
+
 private:
 
 	string getSemaphoreName();
@@ -52,6 +54,8 @@ private:
 	FifoWriter controllerFifo;
 	FifoWriter craneFifo;
 	FifoReader shipFifo;
+	FifoWriter requestsPayment;
+
 	Logger log;
 };
 

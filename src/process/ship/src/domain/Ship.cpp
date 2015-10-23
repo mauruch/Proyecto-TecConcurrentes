@@ -4,6 +4,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <../utils/SharedData.h>
+#include <FareboxRequest.h>
 #include <iostream>
 using namespace std;
 
@@ -17,6 +18,7 @@ Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
 		controllerFifo(utils::CONTROLLER_FIFO),
 		craneFifo(utils::CRANE_FIFO),
 		shipFifo(utils::SHIP_FIFO),
+		requestsPayment(utils::PAYMENTS_FIFO),
 		log(Logger::LogLevel::DEBUG, string("Ship").append(Helper::convertToString(numberShip)))
 		 {
 	log.info("On constructor of new ship");
@@ -118,4 +120,17 @@ void Ship::readLeavingRequest() {
 
 void Ship::waitOnSemaphore() {
 	this->ownSem.wait();
+}
+
+void Ship::payRate(){
+
+	unsigned long rate = 10;
+	log.info("PID =   getpid()  . Ship paying rate. Amount =   rate");
+
+	int buffsize = sizeof(FareboxRequest);
+	FareboxRequest request;
+
+	request.rate = rate;
+
+	requestsPayment.write(&request,buffsize);
 }

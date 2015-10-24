@@ -1,7 +1,5 @@
 #include "Logger.h"
 
-#include <ctime>
-
 using namespace std;
 
 Logger::Logger() :
@@ -71,8 +69,8 @@ void Logger::log(const string data, LogLevel level) {
 }
 
 //Evaluates a precondition, or logs an error
-void Logger::logErrOn(bool cond){
-	if(cond)
+void Logger::logErrOn(bool cond) {
+	if (cond)
 		this->error(Helper::errStr());
 }
 
@@ -92,7 +90,7 @@ string Logger::createLogLine(const string data, LogLevel level) {
 }
 
 string Logger::getName() {
-	if(name.size() == 0){
+	if (name.size() == 0) {
 		return string("");
 	}
 

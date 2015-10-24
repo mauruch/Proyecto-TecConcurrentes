@@ -3,12 +3,12 @@
 ControllerQueue::ControllerQueue(int shmid) :
 		shmId(shmid), shm(shmId),
 		ownFifo(utils::CONTROLLER_QUEUE_FIFO), log(Logger::LogLevel::DEBUG, string("ControllerQueue")) {
-	log.info("Creating new ControllerQueue");
-	log.info("Reading on fifo " + utils::CONTROLLER_QUEUE_FIFO);
+	log.info("On constructor of ControllerQueue");
+	log.info("Reading on fifo {}", utils::CONTROLLER_QUEUE_FIFO);
 }
 
 ControllerQueue::~ControllerQueue() {
-	log.debug("Deleting ControllerQueue");
+	log.debug("On destructor of ControllerQueue");
 	ownFifo.deleteFifo();
 }
 
@@ -23,7 +23,7 @@ void ControllerQueue::handleEntryRequest(utils::portRequest request) {
 }
 
 void ControllerQueue::signalShipToEnter(utils::portRequest request){
-	log.debug("Ship can enter. Sending signal.");
+	log.debug("{} can enter. Sending signal.", request.name );
 	Semaphore shipSemaphore(request.shipSemId);
 	shipSemaphore.signal();
 }
@@ -44,8 +44,6 @@ utils::portRequest ControllerQueue::getRequest() {
 	log.debug("Locking on new enterRequest");
 	utils::portRequest request;
 	ownFifo.readFifo(&request, sizeof(request));
-
-	log.info(std::string("New request has arrived for shipId: ").append(
-			Helper::convertToString(request.identifier)));
+	log.info("New request has arrived from {}", request.name);
 	return request;
 }

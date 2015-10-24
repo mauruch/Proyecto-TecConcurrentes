@@ -4,7 +4,7 @@ ExitControllerQueue::ExitControllerQueue(int shmid) :
 		shmId(shmid), shm(shmId),
 		ownFifo(utils::EXIT_CONTROLLER_QUEUE_FIFO), log(Logger::LogLevel::DEBUG, string("ExitControllerQueue")) {
 	log.info("Creating new ExitControllerQueue");
-	log.info("Reading on fifo " + utils::CONTROLLER_QUEUE_FIFO);
+	log.info("Reading on fifo {}", utils::CONTROLLER_QUEUE_FIFO);
 }
 
 ExitControllerQueue::~ExitControllerQueue() {
@@ -23,7 +23,7 @@ void ExitControllerQueue::handleLeaveRequest(utils::portRequest request) {
 }
 
 void ExitControllerQueue::signalShipToLeave(utils::portRequest request){
-	log.debug("Ship can leave. Sending signal.");
+	log.debug("Ship {} can leave. Sending signal.", request.name);
 	Semaphore shipSemaphore(request.shipSemId);
 	shipSemaphore.signal();
 }
@@ -45,7 +45,6 @@ utils::portRequest ExitControllerQueue::getRequest() {
 	utils::portRequest request;
 	ownFifo.readFifo(&request, sizeof(request));
 
-	log.info(std::string("New request has arrived for shipId: ").append(
-			Helper::convertToString(request.identifier)));
+	log.info("New request has arrived for ship {}", request.name);
 	return request;
 }

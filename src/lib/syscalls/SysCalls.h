@@ -1,10 +1,3 @@
-/*
- * SysCalls.h
- *
- *  Created on: Oct 20, 2015
- *      Author: mauruch
- */
-
 #ifndef SRC_UTILS_SYSCALLS_H_
 #define SRC_UTILS_SYSCALLS_H_
 
@@ -25,7 +18,7 @@ using namespace std;
 
 namespace syscalls {
 
-pid_t fork() {
+inline pid_t fork() {
 
 	pid_t id = ::fork();
 
@@ -37,7 +30,7 @@ pid_t fork() {
 
 }
 
-pid_t getpid() {
+inline pid_t getpid() {
 
 	pid_t result = ::getpid();
 
@@ -48,7 +41,7 @@ pid_t getpid() {
 	return result;
 }
 
-void execv(const string &execPath, vector<string> params) {
+inline void execv(const string &execPath, vector<string> params) {
 
 	vector<const char *> argsVector;
 	for (string arg : params) {
@@ -65,7 +58,7 @@ void execv(const string &execPath, vector<string> params) {
 	}
 }
 
-int mknod(const char *pathname, mode_t mode, dev_t dev) {
+inline int mknod(const char *pathname, mode_t mode, dev_t dev) {
 	int response = ::mknod(pathname, mode, dev);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a mknod()");
@@ -73,7 +66,7 @@ int mknod(const char *pathname, mode_t mode, dev_t dev) {
 	return response;
 }
 
-int unlink(const char *pathname) {
+inline int unlink(const char *pathname) {
 	int response = ::unlink(pathname);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a unlink()");
@@ -81,7 +74,7 @@ int unlink(const char *pathname) {
 	return response;
 }
 
-int close(int fd) {
+inline int close(int fd) {
 	int response = ::close(fd);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a close()");
@@ -89,7 +82,7 @@ int close(int fd) {
 	return response;
 }
 
-int open(const char *pathname, int flags) {
+inline int open(const char *pathname, int flags) {
 	int response = ::open(pathname, flags);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a open()");
@@ -97,7 +90,7 @@ int open(const char *pathname, int flags) {
 	return response;
 }
 
-ssize_t read(int fd, void *buf, size_t count) {
+inline ssize_t read(int fd, void *buf, size_t count) {
 	int response = ::read(fd, buf, count);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a read()");
@@ -105,7 +98,7 @@ ssize_t read(int fd, void *buf, size_t count) {
 	return response;
 }
 
-ssize_t write(int fd, const void *buf, size_t count) {
+inline ssize_t write(int fd, const void *buf, size_t count) {
 	int response = ::write(fd, buf, count);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a write()");
@@ -113,7 +106,7 @@ ssize_t write(int fd, const void *buf, size_t count) {
 	return response;
 }
 
-off_t lseek(int fd, off_t offset, int whence) {
+inline off_t lseek(int fd, off_t offset, int whence) {
 	off_t response = ::lseek(fd, offset, whence);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a lseek()");
@@ -121,7 +114,7 @@ off_t lseek(int fd, off_t offset, int whence) {
 	return response;
 }
 
-key_t ftok(const char *pathname, int proj_id) {
+inline key_t ftok(const char *pathname, int proj_id) {
 	key_t response = ::ftok(pathname, proj_id);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a ftok()");
@@ -129,7 +122,7 @@ key_t ftok(const char *pathname, int proj_id) {
 	return response;
 }
 
-int semget(key_t key, int nsems, int semflg) {
+inline int semget(key_t key, int nsems, int semflg) {
 	int response = ::semget(key, nsems, semflg);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a semget()");
@@ -137,7 +130,7 @@ int semget(key_t key, int nsems, int semflg) {
 	return response;
 }
 
-int semop(int semid, struct sembuf *sops, size_t nsops) {
+inline int semop(int semid, struct sembuf *sops, size_t nsops) {
 	int response = ::semop(semid, sops, nsops);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a semop()");
@@ -145,7 +138,7 @@ int semop(int semid, struct sembuf *sops, size_t nsops) {
 	return response;
 }
 
-int shmget(key_t key, size_t size, int shmflg) {
+inline int shmget(key_t key, size_t size, int shmflg) {
 	int response = ::shmget(key, size, shmflg);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a shmget()");
@@ -153,7 +146,7 @@ int shmget(key_t key, size_t size, int shmflg) {
 	return response;
 }
 
-void *shmat(int shmid, const void *shmaddr, int shmflg) {
+inline void *shmat(int shmid, const void *shmaddr, int shmflg) {
 	void* response = ::shmat(shmid, shmaddr, shmflg);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a shmat()");
@@ -161,7 +154,7 @@ void *shmat(int shmid, const void *shmaddr, int shmflg) {
 	return response;
 }
 
-int shmdt(const void *shmaddr) {
+inline int shmdt(const void *shmaddr) {
 	int response = ::shmdt(shmaddr);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a shmdt()");
@@ -169,7 +162,7 @@ int shmdt(const void *shmaddr) {
 	return response;
 }
 
-int shmctl(int shmid, int cmd, struct shmid_ds *buf) {
+inline int shmctl(int shmid, int cmd, struct shmid_ds *buf) {
 	int response = ::shmctl(shmid, cmd, buf);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a shmctl()");

@@ -6,6 +6,7 @@
 #include <Logger/Logger.h>
 #include <Semaphore/Semaphore.h>
 #include <SharedMemory/SharedMemory.h>
+#include <utils/utils.h>
 #include <string>
 
 #include "../../../../utils/SharedData.h"
@@ -27,6 +28,7 @@ public:
 
 
 private:
+	string name;
 	int shmId;
 	SharedMemory<utils::readOnlysharedData> shm;
 	Semaphore ownSem;
@@ -34,9 +36,8 @@ private:
 	FifoWriter shipFifo;
 	FifoWriter controllerFifo;
 	FifoWriter craneFifo;
-	int truckLoad;
+	int load;
 	Logger log;
-	int truckNumber;
 
 	void signalMe();
 	void askForCrane();

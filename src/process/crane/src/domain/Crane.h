@@ -32,6 +32,7 @@ private:
 	int getTruckSemIdFromMemory();
 
 
+	std::string name;
 	int shmId;
 	SharedMemory<utils::readOnlysharedData> shm;
 	FifoReader craneFifo;

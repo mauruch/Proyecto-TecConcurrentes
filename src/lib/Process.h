@@ -8,7 +8,7 @@
 #ifndef SRC_UTILS_PROCESS_H_
 #define SRC_UTILS_PROCESS_H_
 #include "../lib/Logger/Logger.h"
-#include "SysCalls.h"
+#include <syscalls/SysCalls.h>
 #include "ArgsResolver.h"
 
 namespace utils{

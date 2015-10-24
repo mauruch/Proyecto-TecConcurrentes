@@ -23,7 +23,6 @@ int main(int argc, char** argv) {
 	Logger log(Logger::LogLevel::DEBUG);
 
 	log.info("Initializing simulation..");
-
 	log.info("Building sharedData");
 
 	/**
@@ -100,10 +99,9 @@ int main(int argc, char** argv) {
 	/**
 	 * Launching PROCESS
 	 */
-	log.debug("Launching ships:");
-
 	vector<pid_t> pids;
 
+	log.debug("Launching {} ships:", readOnlysharedData.config.shipConfig);
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
 		log.debug("Launching Ship process...");
 		ArgsResolver shipArgs("../ship/Debug/Ship", "-s", shipsSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId(),
@@ -128,7 +126,7 @@ int main(int argc, char** argv) {
 	pids.push_back(controller.getPid());
 
 
-
+	log.debug("Launching {} cranes:", readOnlysharedData.config.craneConfig);
 	for (unsigned int i = 0; i < readOnlysharedData.config.craneConfig; i++) {
 		log.debug("Launching Cranes process...");
 		ArgsResolver craneArgs("../crane/Debug/Crane", "-m", sharedMemoryReadOnly.getShmId(), "-i", i);
@@ -136,6 +134,7 @@ int main(int argc, char** argv) {
 		pids.push_back(crane.getPid());
 	}
 
+	log.debug("Launching {} trucks:", readOnlysharedData.config.truckConfig);
 	for (unsigned int i = 0; i < readOnlysharedData.config.truckConfig; i++) {
 		log.debug("Launching Trucks process...");
 		ArgsResolver truckArgs("../truck/Debug/Truck", "-s", trucksSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId(),

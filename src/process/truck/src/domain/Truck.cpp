@@ -1,15 +1,9 @@
 #include "Truck.h"
 
-#include <unistd.h>
-#include <utils/Helper.h>
-#include <cstdlib>
-#include <string>
-
-
-
 using namespace std;
 
 Truck::Truck(int semId, int shmid, int truckNumber) :
+		name(string("Truck").append(Helper::convertToString(truckNumber))),
 		shmId(shmid),
 		shm(shmId),
 		ownSem(semId),
@@ -17,72 +11,71 @@ Truck::Truck(int semId, int shmid, int truckNumber) :
 		shipFifo(utils::SHIP_FIFO),
 		controllerFifo(utils::CONTROLLER_FIFO),
 		craneFifo(utils::CRANE_FIFO),
-		truckLoad(0),
-		log(Logger::LogLevel::DEBUG, string("Truck").append(Helper::convertToString(truckNumber))){
-		log.debug("On constructor of new truck");
+		load(0),
+		log(Logger::LogLevel::DEBUG, name){
 
-		this->truckNumber = truckNumber;
+		log.debug("On constructor of {}", name);
 }
 
 Truck::~Truck() {
-	// TODO Auto-generated destructor stub
+	log.debug("On destructor of {}", name);
 }
 
 bool Truck::deliverToDestination(utils::deliveryRequest deliveryRequest){
 
 	//delivery simulation
 	srand(time(NULL));
-	int deliveryTime = rand()%(10 - 1) + 10;
+	int deliveryTime = rand()%(5 - 1);
 	bool returnEmpty = (rand() % 100) < 80;
 	int requestWeight = deliveryRequest.weight;
-	log.info("The truck is delivering " +  Helper::convertToString(requestWeight) + "kgs to the destination, the estimated trip is: " +
-			Helper::convertToString(deliveryTime) + " seconds.");
-//	log.debug("sleep " + Helper::convertToString(deliveryTime) + "seconds for simulating the truck trip");
-//
-//	sleep(deliveryTime);
+
+	log.info("Delivering {} tons, the estimated trip is {} seconds.", requestWeight, deliveryTime);
+	log.debug("sleep {} seconds for simulating the truck trip", deliveryTime);
+
+	sleep(deliveryTime);
 
 	return returnEmpty;
 }
 
 void Truck::unload(){
-	log.info("Truck asking for a crane...");
 	this->askForCrane();
 	this->waitOnSemaphore();
 	log.info("Truck taking an available crane");
-	this->truckLoad = (rand() % 100);
+	this->load = (rand() % 100);
 	this->sendUnloadRequest();
 }
 
 void Truck::askForCrane() {
-	log.info("Truck is sending a crane request to Controller");
-	utils::askForCraneRequest request(this->ownSem.getId(), this->truckNumber, utils::TRUCK);
-	controllerFifo.write(static_cast<void*>(&request),
-			sizeof(utils::askForCraneRequest));
+	log.info("Sending a crane request to Controller");
+	utils::askForCraneRequest request(this->ownSem.getId(), this->name, utils::TRUCK);
+	controllerFifo.write(static_cast<void*>(&request), sizeof(utils::askForCraneRequest));
 }
 
 utils::deliveryRequest Truck::attendRequest() {
-
 	log.debug("Locking on new unloadRequest");
 	utils::deliveryRequest unloadRequest;
 	ownFifo.readFifo(&unloadRequest, sizeof(unloadRequest));
 
-	log.info(std::string("New unloadRequest has arrived from ship with weight:  ").append(
-			Helper::convertToString(unloadRequest.weight)));
+	cout << unloadRequest.name << unloadRequest.weight ;
+
+
+
+	log.info("New unloadRequest has arrived from {} with weight {}", unloadRequest.name.c_str() ,unloadRequest.weight);
 	return unloadRequest;
 }
 
 void Truck::sendUnloadRequest() {
-	log.info("Truck is sending unload request to crane");
-	utils::unloadRequest request(utils::TRUCK, this->truckLoad, this->truckNumber);
+	log.info("Sending unload request to crane");
+	utils::unloadRequest request(utils::TRUCK, this->load, this->name);
 	craneFifo.write(static_cast<void*>(&request), sizeof(utils::unloadRequest));
-	this->truckLoad = 0;
+	this->load = 0;
 	log.info("All cargo unload");
 }
 
 void  Truck::sendRequestToShip(){
+	log.info("Sending shipRequest to leave port");
 	utils::shipRequest shipRequest(0);
-	this->shipFifo.write(static_cast<void*>(&shipRequest),
-			sizeof(utils::shipRequest));
+	this->shipFifo.write(static_cast<void*>(&shipRequest), sizeof(utils::shipRequest));
 }
 
 /**

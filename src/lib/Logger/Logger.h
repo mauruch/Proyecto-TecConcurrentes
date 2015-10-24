@@ -5,18 +5,27 @@
 #include <map>
 #include <sstream>
 #include <list>
-
+#include "../syscalls/SysCalls.h"
+#include <unistd.h>
+#include <ctime>
+#include <vector>
 #include "../LockFile/LockFile.h"
 #include "../utils/Helper.h"
 #include "../utils/utils.h"
 
 using namespace std;
 
-template<typename T>
-string convertToString(T t) {
-	stringstream convert;
-	convert << t;
-	return string(convert.str());
+static void replacer(string& data, string toReplace) {
+	data = data.replace(data.find_first_of("{}"), toReplace.length(), toReplace);
+}
+
+template< typename ... Args >
+std::string replace(string data, Args... args ){
+    std::ostringstream stream;
+    using List= int[];
+    (void)List{0, ( (void)(replacer(data, Helper::convertToString(args))), 0 ) ... };
+
+    return data;
 }
 
 class Logger {
@@ -34,10 +43,33 @@ public:
 	Logger(string logName);
 	virtual ~Logger();
 
-	void debug(const std::string data);
-	void info(const string data);
-	void warn(const string data);
-	void error(const string data);
+	void debug(string data);
+	template<typename ... Args>
+	void debug(string first, Args ... args) {
+		string toLog = replace(first, args...);
+		debug(toLog);
+	}
+
+	void info(string data);
+	template<typename ... Args>
+	void info(string first, Args ... args) {
+		string toLog = replace(first, args...);
+		info(toLog);
+	}
+
+	void warn(string data);
+	template<typename ... Args>
+	void warn(string first, Args ... args) {
+		string toLog = replace(first, args...);
+		warn(toLog);
+	}
+
+	void error(string data);
+	template<typename ... Args>
+	void error(string first, Args ... args) {
+		string toLog = replace(first, args...);
+		error(toLog);
+	}
 
 	void logErrOn(bool cond);
 

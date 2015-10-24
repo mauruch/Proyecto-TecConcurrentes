@@ -1,14 +1,9 @@
 #include "Ship.h"
-#include <utils/utils.h>
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include <../utils/SharedData.h>
-#include <FareboxRequest.h>
-#include <iostream>
+
 using namespace std;
 
 Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
+		name(string("Ship").append(Helper::convertToString(numberShip))),
 		shipload(load),
 		ownSem(semId),
 		shmId(shmid),
@@ -19,15 +14,13 @@ Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
 		craneFifo(utils::CRANE_FIFO),
 		shipFifo(utils::SHIP_FIFO),
 		requestsPayment(utils::PAYMENTS_FIFO),
-		log(Logger::LogLevel::DEBUG, string("Ship").append(Helper::convertToString(numberShip)))
+		log(Logger::LogLevel::DEBUG, name)
 		 {
-	log.info("On constructor of new ship");
-
-	this->numberShip = numberShip;
+	log.info("On constructor of {}", name);
 }
 
 Ship::~Ship() {
-	log.debug("Deleting Ship");
+	log.debug("On destructor of {}", name);
 	controllerQueueFifo.deleteFifo();
 }
 
@@ -65,21 +58,20 @@ void Ship::searchDock() {
 
 void Ship::sendEntryRequest() {
 	log.info("Sending entry request to port");
-	utils::portRequest request(this->ownSem.getId(), this->numberShip);
+	utils::portRequest request(this->ownSem.getId(), this->name);
 	controllerQueueFifo.write(static_cast<void*>(&request),sizeof(utils::portRequest));
 }
 
 void Ship::sendLeaveRequest() {
 	log.info("Sending leave request to port");
-	utils::portRequest request(this->ownSem.getId(), this->numberShip);
+	utils::portRequest request(this->ownSem.getId(), this->name);
 	exitControllerQueueFifo.write(static_cast<void*>(&request),sizeof(utils::portRequest));
 }
 
 void Ship::askForCrane() {
 	log.info("Sending crane request to Controller");
 	utils::askForCraneRequest request(this->ownSem.getId());
-	controllerFifo.write(static_cast<void*>(&request),
-			sizeof(utils::askForCraneRequest));
+	controllerFifo.write(static_cast<void*>(&request), sizeof(utils::askForCraneRequest));
 }
 
 /**
@@ -88,7 +80,7 @@ void Ship::askForCrane() {
  */
 void Ship::sendUnloadRequest() {
 	log.info("Sending unload request to crane");
-	utils::unloadRequest request(utils::SHIP, this->shipload, this->numberShip);
+	utils::unloadRequest request(utils::SHIP, this->shipload, this->name);
 	craneFifo.write(static_cast<void*>(&request), sizeof(utils::unloadRequest));
 	this->shipload = 0;
 	log.info("All cargo unload");
@@ -115,7 +107,7 @@ void Ship::readLeavingRequest() {
 	utils::shipRequest shipRequest;
 	shipFifo.readFifo(&shipRequest, sizeof(utils::shipRequest));
 	this->shipload = shipRequest.shipload;
-	log.info("Leaving port with " + Helper::convertToString(this->shipload) + " of shipload");
+	log.info("Leaving port with {}", this->shipload);
 }
 
 void Ship::waitOnSemaphore() {
@@ -125,7 +117,7 @@ void Ship::waitOnSemaphore() {
 void Ship::payRate(){
 
 	unsigned long rate = 10;
-	log.info("PID =   getpid()  . Ship paying rate. Amount =   rate");
+	log.info("PID = {}. Ship paying rate. Amount = {}", getpid(), rate);
 
 	int buffsize = sizeof(FareboxRequest);
 	FareboxRequest request;

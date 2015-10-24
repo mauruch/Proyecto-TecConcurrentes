@@ -1,17 +1,19 @@
 #include "Crane.h"
 
 Crane::Crane(int shmid, int craneNumber) :
+		name(std::string("Crane").append(Helper::convertToString(craneNumber))),
 		shmId(shmid),
 		shm(shmId),
 		craneFifo(utils::CRANE_FIFO),
 		shipFifo(utils::SHIP_FIFO),
 		truckFifo(utils::TRUCK_FIFO),
-		log(Logger::LogLevel::DEBUG, string("Crane").append(Helper::convertToString(craneNumber)))
+		log(Logger::LogLevel::DEBUG, name)
 		{
-
+	log.debug("On constructor of {}", name);
 }
 
 Crane::~Crane() {
+	log.debug("On destructor of {}", name);
 }
 
 
@@ -29,16 +31,7 @@ utils::unloadRequest Crane::getRequest(){
 	log.info("Waiting for an unload request");
 	utils::unloadRequest request;
 	craneFifo.readFifo(&request, sizeof(utils::unloadRequest));
-
-	std::string entityTypeStr;
-
-	if(request.entityType == utils::SHIP){
-		entityTypeStr.append("Ship").append(Helper::convertToString(request.identifier));
-	} else {
-		entityTypeStr.append("Truck").append(Helper::convertToString(request.identifier));
-	}
-
-	log.info(std::string("New unload request from ").append(entityTypeStr));
+	log.info("New unload request from {}", request.name);
 	return request;
 }
 

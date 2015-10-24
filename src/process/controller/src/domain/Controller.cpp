@@ -40,9 +40,7 @@ utils::askForCraneRequest Controller::getRequest() {
 	if (request.entityType == utils::SHIP) petitioner = "Ship";
 	else petitioner = "Truck";
 
-	petitioner.append(Helper::convertToString(request.identifier));
-
-	log.info(std::string("New request asking for a crane for: ").append(petitioner));
+	log.info("New request asking for a crane from {}", request.name);
 	return request;
 }
 

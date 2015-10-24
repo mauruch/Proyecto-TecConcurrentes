@@ -5,6 +5,7 @@
 #include <sys/sem.h>
 #include <sys/types.h>
 #include <string>
+#include "../syscalls/SysCalls.h"
 #include "../Logger/Logger.h"
 
 class Semaphore {

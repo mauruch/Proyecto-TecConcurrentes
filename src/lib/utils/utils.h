@@ -35,26 +35,26 @@ const int TRUCK = 2;
 
 struct portRequest {
 
-	portRequest(int id = 0, std::string otherName = "") {
+	portRequest(int id = 0, int num = 0) {
 		shipSemId = id;
-		name = otherName;
+		shipId = num;
 	}
 
 	int shipSemId;
-	std::string name;
+	int shipId;
 };
 
 struct askForCraneRequest {
 
-	askForCraneRequest(int id = 0, std::string entityName = "", int otherEntityType = 1) {
-		petitionerSemId = id;
-		name = entityName;
+	askForCraneRequest(int id = 0, int entId = 0, int otherEntityType = 1) {
+		entitySemId = id;
+		entityId = entId;
 		entityType = otherEntityType;
 	}
 
 	int entityType;
-	int petitionerSemId;
-	std::string name;
+	int entitySemId;
+	int entityId;
 };
 
 struct shipRequest {
@@ -70,25 +70,25 @@ struct shipRequest {
 struct unloadRequest {
 
 	unloadRequest(int otherEntityType = 1, unsigned int otherWeight = 0,
-			std::string entityName = "") {
+			int entId = 0) {
 		entityType = otherEntityType;
 		weight = otherWeight;
-		name = entityName;
+		id = entId;
 	}
 
 	int entityType;
 	unsigned int weight;
-	std::string name;
+	int id;
 };
 
 struct deliveryRequest {
 
-	deliveryRequest(unsigned int otherWeight = 0, std::string entityName = "" ) {
+	deliveryRequest(unsigned int otherWeight = 0, int number = 0 ) {
 		weight = otherWeight;
-		name = entityName;
+		numberShip = number;
 	}
 
-	std::string name;
+	int numberShip;
 	unsigned int weight;
 };
 

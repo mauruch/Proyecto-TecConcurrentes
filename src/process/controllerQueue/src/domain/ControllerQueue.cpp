@@ -23,7 +23,7 @@ void ControllerQueue::handleEntryRequest(utils::portRequest request) {
 }
 
 void ControllerQueue::signalShipToEnter(utils::portRequest request){
-	log.debug("{} can enter. Sending signal.", request.name );
+	log.debug("{}{} can enter. Sending signal.", "ship", request.shipId);
 	Semaphore shipSemaphore(request.shipSemId);
 	shipSemaphore.signal();
 }
@@ -44,6 +44,6 @@ utils::portRequest ControllerQueue::getRequest() {
 	log.debug("Locking on new enterRequest");
 	utils::portRequest request;
 	ownFifo.readFifo(&request, sizeof(request));
-	log.info("New request has arrived from {}", request.name);
+	log.info("New request has arrived from {}{}", "ship",request.shipId);
 	return request;
 }

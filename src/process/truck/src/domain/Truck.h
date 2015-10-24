@@ -28,6 +28,7 @@ public:
 
 
 private:
+	int id;
 	string name;
 	int shmId;
 	SharedMemory<utils::readOnlysharedData> shm;

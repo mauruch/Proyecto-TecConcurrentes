@@ -27,7 +27,7 @@ int Controller::getCraneSemIdFromMemory(){
 
 void Controller::signalAllowedToUseCrane(utils::askForCraneRequest request){
 	log.debug("Crane available! Sending signal.");
-	Semaphore petitionerSem(request.petitionerSemId);
+	Semaphore petitionerSem(request.entitySemId);
 	petitionerSem.signal();
 }
 
@@ -40,7 +40,7 @@ utils::askForCraneRequest Controller::getRequest() {
 	if (request.entityType == utils::SHIP) petitioner = "Ship";
 	else petitioner = "Truck";
 
-	log.info("New request asking for a crane from {}", request.name);
+	log.info("New request asking for a crane from {}{}", petitioner, request.entityId);
 	return request;
 }
 

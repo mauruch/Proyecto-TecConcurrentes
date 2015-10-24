@@ -20,9 +20,6 @@ utils::sharedDataConfig getSharedDataConfig(char**);
 
 int main(int argc, char** argv) {
 
-	Configuration conf;
-	conf.getProperty("fafa");
-
 	Logger log(Logger::LogLevel::DEBUG);
 
 	log.info("Initializing simulation..");
@@ -34,8 +31,8 @@ int main(int argc, char** argv) {
 	 */
 	utils::readOnlysharedData readOnlysharedData;
 
+	log.debug("Reading app config from " + Configuration::CONFIGURATION_FILE_NAME);
 	readOnlysharedData.config = getSharedDataConfig(argv);
-
 
 	/**
 	 * Building semaphore for availability resources
@@ -166,11 +163,10 @@ utils::sharedDataConfig getSharedDataConfig(char** argv) {
 
 	utils::sharedDataConfig sharedDataConfig;
 
-	//TODO validate input and read loglevel
-	int craneConfig = atoi(argv[1]);
-	int shipConfig = atoi(argv[2]);
-	int truckConfig = atoi(argv[3]);
-	int dockConfig = atoi(argv[4]);
+	int craneConfig = atoi(Configuration::getProperty("cranes").c_str());
+	int shipConfig =  atoi(Configuration::getProperty("ships").c_str());
+	int truckConfig = atoi(Configuration::getProperty("trucks").c_str());
+	int dockConfig =  atoi(Configuration::getProperty("docks").c_str());
 
 	sharedDataConfig.craneConfig = craneConfig;
 	sharedDataConfig.shipConfig = shipConfig;

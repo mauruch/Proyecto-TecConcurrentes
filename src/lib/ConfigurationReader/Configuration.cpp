@@ -1,6 +1,9 @@
 #include "Configuration.h"
-
-std::string Configuration::CONFIGURATION_FILE_NAME = "../../etc/app.config";
+#include <iostream>
+#include <errno.h>
+#include <stdio.h>
+#include <string.h>
+std::string Configuration::CONFIGURATION_FILE_NAME = "../../../etc/app.config";
 
 Configuration::Configuration() {
 	// TODO Auto-generated constructor stub
@@ -13,8 +16,7 @@ Configuration::~Configuration() {
 
 std::string Configuration::getProperty(std::string propertyName) {
 	std::ifstream configFile;
-	std::string nameConfigFile = CONFIGURATION_FILE_NAME;
-	configFile.open(nameConfigFile.c_str());
+	configFile.open(CONFIGURATION_FILE_NAME.c_str());
 	std::string value = "";
 	if (configFile.is_open()) {
 		configFile.seekg(0,configFile.beg);
@@ -29,12 +31,11 @@ std::string Configuration::getProperty(std::string propertyName) {
 			}
 		}
 		if(!propFound) {
-//			throw std::exception
-//			("No se encontro la propiedad "+propertyName+" en el archivo de configuracion");
+			//TODO print error msg
 		}
 	}
 	else {
-//		throw std::exception("No se pudo abrir el archivo de configuracion "+nameConfigFile);
+		//TODO print error msg
 	}
 	return value;
 }

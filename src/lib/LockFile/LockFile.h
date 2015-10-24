@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string>
+#include "../syscalls/SysCalls.h"
 
 class LockFile {
 

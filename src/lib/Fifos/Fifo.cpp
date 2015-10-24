@@ -4,17 +4,17 @@
 #include <string.h>
 Fifo::Fifo(const std::string name) :
 		name(name), fd(-1) {
-	log.logErrOn(mknod(static_cast<const char*>(name.c_str()), S_IFIFO | 0666, 0)<0);
+	log.logErrOn(syscalls::mknod(static_cast<const char*>(name.c_str()), S_IFIFO | 0666, 0)<0);
 }
 
 Fifo::~Fifo() {
 }
 
 void Fifo::closeFifo() {
-	close(fd);
+	syscalls::close(fd);
 	fd = -1;
 }
 
 void Fifo::deleteFifo() const {
-	unlink(name.c_str());
+	syscalls::unlink(name.c_str());
 }

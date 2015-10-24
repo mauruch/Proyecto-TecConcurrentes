@@ -82,6 +82,14 @@ inline int close(int fd) {
 	return response;
 }
 
+inline int open(const char *pathname, int flags, int otherFlags) {
+	int response = ::open(pathname, flags, otherFlags);
+	if (response < 0) {
+		throw SysCallException("Error trying to execute a open()");
+	}
+	return response;
+}
+
 inline int open(const char *pathname, int flags) {
 	int response = ::open(pathname, flags);
 	if (response < 0) {
@@ -150,6 +158,14 @@ inline void *shmat(int shmid, const void *shmaddr, int shmflg) {
 	void* response = ::shmat(shmid, shmaddr, shmflg);
 	if (response < 0) {
 		throw SysCallException("Error trying to execute a shmat()");
+	}
+	return response;
+}
+
+inline int semctl(int semid, int senum, int cmd) {
+	int response = ::semctl(semid, senum, cmd);
+	if (response < 0) {
+		throw SysCallException("Error trying to execute a semctl()");
 	}
 	return response;
 }

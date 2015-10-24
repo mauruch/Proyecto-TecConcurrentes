@@ -1,24 +1,27 @@
 #include <ArgsResolver.h>
+#include <ConfigurationReader/Configuration.h>
 #include <Fifos/Fifo.h>
 #include <Logger/Logger.h>
 #include <Process.h>
-#include <sys/ipc.h>
-#include <sched.h>
+#include <signal.h>
 #include <Semaphore/Semaphore.h>
 #include <SharedData.h>
 #include <SharedMemory/SharedMemory.h>
 #include <utils/Helper.h>
 #include <utils/utils.h>
 #include <cstdlib>
+#include <iostream>
 #include <string>
 #include <vector>
-#include <signal.h>
 
 using namespace std;
 
 utils::sharedDataConfig getSharedDataConfig(char**);
 
 int main(int argc, char** argv) {
+
+	Configuration conf;
+	conf.getProperty("fafa");
 
 	Logger log(Logger::LogLevel::DEBUG);
 

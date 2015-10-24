@@ -1,10 +1,3 @@
-/*
- * Configuration.cpp
- *
- *  Created on: 19 Oct 2015
- *      Author: osboxes
- */
-
 #include "Configuration.h"
 
 std::string Configuration::CONFIGURATION_FILE_NAME = "../../etc/app.config";
@@ -36,12 +29,12 @@ std::string Configuration::getProperty(std::string propertyName) {
 			}
 		}
 		if(!propFound) {
-			throw std::exception
-			("No se encontro la propiedad "+propertyName+" en el archivo de configuracion");
+//			throw std::exception
+//			("No se encontro la propiedad "+propertyName+" en el archivo de configuracion");
 		}
 	}
 	else {
-		throw std::exception("No se pudo abrir el archivo de configuracion "+nameConfigFile);
+//		throw std::exception("No se pudo abrir el archivo de configuracion "+nameConfigFile);
 	}
 	return value;
 }

@@ -1,13 +1,8 @@
-/*
- * Configuration.h
- *
- *  Created on: 19 Oct 2015
- *      Author: osboxes
- */
-
 #ifndef CONFIGURATION_H_
 #define CONFIGURATION_H_
 
+#include <iostream>
+#include <sstream>
 #include <string>
 #include <fstream>
 #include <exception>

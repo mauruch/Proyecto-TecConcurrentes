@@ -12,14 +12,13 @@ static const std::string SEM_EXTENSION = "-sem";
 static const std::string LOG_DELIMITER = " - ";
 static const std::string LOG_FILE = "/tmp/TPConcurrentes.log";
 static const std::string FILE_FTOK = "src/main.cpp";
-static const std::string FILE_FTOK_SHIPS = "../ship/src/main.cpp";
 
 static const char ID_FTOK_SHM_READ_ONLY = '6';
 static const char ID_FTOK_SEM_DOCKS_PORT = '1';
 static const char ID_FTOK_SEM_CRANE = '2';
 static const char ID_FTOK_SEM_SHIPS = '3';
 static const char ID_FTOK_SEM_TRUCKS = '4';
-static const char ID_FTOK_SEM_COLLECTION = '5';
+static const char ID_FTOK_SEM_FAREBOX = '5';
 
 const std::string EXIT_CONTROLLER_QUEUE_FIFO = "/tmp/ExitControllerQueue.fifo";
 const std::string CONTROLLER_QUEUE_FIFO = "/tmp/ControllerQueue.fifo";
@@ -28,7 +27,7 @@ const std::string CRANE_FIFO = "/tmp/Crane.fifo";
 const std::string TRUCK_FIFO = "/tmp/Truck.fifo";
 const std::string SHIP_FIFO = "/tmp/Ship.fifo";
 
-const std::string PAYMENTS_FIFO = "/tmp/Payments.fifo";
+const std::string FAREBOX_FIFO = "/tmp/Farebox.fifo";
 
 const int SHIP = 1;
 const int TRUCK = 2;

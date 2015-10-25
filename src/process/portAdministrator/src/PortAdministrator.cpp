@@ -18,7 +18,9 @@ void PortAdministrator::getFareboxAccumulatedTotal(){
 }
 
 void PortAdministrator::goAway(){
-	log.info("Leaving port. Next visit is in {} seconds", getSleepTime());
+	int sleepTime = getSleepTime();
+	log.info("Leaving port. Next visit is in {} seconds", sleepTime);
+	sleep(sleepTime);
 }
 
 void PortAdministrator::lockFarebox(){
@@ -29,12 +31,12 @@ void PortAdministrator::lockFarebox(){
 }
 
 void PortAdministrator::unlockFarebox(){
-	log.debug("Locking farebox in order to read payment");
+	log.debug("Unlocking farebox");
 	utils::readOnlysharedData data = shm.read();
 	Semaphore fareboxSem(data.idSemFarebox);
 	fareboxSem.signal();
 }
 
 int PortAdministrator::getSleepTime(){
-	sleep(rand()%(5 - 1));
+	return (rand()%(10));
 }

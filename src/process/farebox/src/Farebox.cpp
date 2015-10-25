@@ -5,7 +5,7 @@ using namespace std;
 
 Farebox::Farebox(int shmid):
 		shm(shmid),
-		fareboxFifo(utils::PAYMENTS_FIFO),
+		fareboxFifo(utils::FAREBOX_FIFO),
 		log(Logger::LogLevel::DEBUG, "Farebox"){
 	log.debug("On constructor");
 }
@@ -47,7 +47,7 @@ void Farebox::lockFarebox(){
 }
 
 void Farebox::unlockFarebox(){
-	log.debug("Locking farebox in order to save payment");
+	log.debug("Unocking farebox");
 	utils::readOnlysharedData data = shm.read();
 	Semaphore fareboxSem(data.idSemFarebox);
 	fareboxSem.signal();

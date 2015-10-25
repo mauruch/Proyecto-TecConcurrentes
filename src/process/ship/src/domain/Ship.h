@@ -22,13 +22,15 @@ using namespace std;
 
 class Ship {
 public:
-	Ship(const unsigned int load, int semId, int shmId, int numberShip);
+	Ship(int semId, int shmId, int numberShip);
 
 	virtual ~Ship();
 
+	void setLoad(const unsigned int load);
 	void enterPort();
 	void leavePort();
 	void dock();
+	void payTax();
 	void unload();
 	void setAsAvailable();
 	void readLeavingRequest();
@@ -58,7 +60,7 @@ private:
 	FifoWriter controllerFifo;
 	FifoWriter craneFifo;
 	FifoReader shipFifo;
-	FifoWriter requestsPayment;
+	FifoWriter fareboxFifo;
 
 	Logger log;
 };

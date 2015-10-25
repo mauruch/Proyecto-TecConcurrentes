@@ -5,7 +5,6 @@
 #include <Process.h>
 #include <signal.h>
 #include <Semaphore/Semaphore.h>
-#include <SharedData.h>
 #include <SharedMemory/SharedMemory.h>
 #include <utils/Helper.h>
 #include <utils/utils.h>
@@ -13,6 +12,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include "../../../utils/SharedData.h"
 
 using namespace std;
 

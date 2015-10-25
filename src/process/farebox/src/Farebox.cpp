@@ -1,10 +1,3 @@
-/*
- * farebox.cpp
- *
- *  Created on: 19 Oct 2015
- *      Author: osboxes
- */
-
 
 #include "Farebox.h"
 #include <FareboxRequest.h>

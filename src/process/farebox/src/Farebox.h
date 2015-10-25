@@ -1,10 +1,3 @@
-/*
- * farebox.h
- *
- *  Created on: 19 Oct 2015
- *      Author: osboxes
- */
-
 #ifndef FAREBOX_H_
 #define FAREBOX_H_
 

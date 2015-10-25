@@ -1,11 +1,8 @@
 #include "PortAdministrator.h"
-#include <FareboxRequest.h>
-
 
 PortAdministrator::PortAdministrator(int shmid)
 		:m_collectionSemaphore(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_COLLECTION),
 		m_collection(shmid){
-
 }
 
 PortAdministrator::~PortAdministrator() {

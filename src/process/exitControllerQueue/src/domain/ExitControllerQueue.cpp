@@ -23,7 +23,7 @@ void ExitControllerQueue::handleLeaveRequest(utils::portRequest request) {
 }
 
 void ExitControllerQueue::signalShipToLeave(utils::portRequest request){
-	log.debug("Ship {} can leave. Sending signal.", request.name);
+	log.debug("Ship{} can leave. Sending signal.", request.shipId);
 	Semaphore shipSemaphore(request.shipSemId);
 	shipSemaphore.signal();
 }
@@ -45,6 +45,6 @@ utils::portRequest ExitControllerQueue::getRequest() {
 	utils::portRequest request;
 	ownFifo.readFifo(&request, sizeof(request));
 
-	log.info("New request has arrived for ship {}", request.name);
+	log.info("New request has arrived for ship{}", request.shipId);
 	return request;
 }

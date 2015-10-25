@@ -6,12 +6,13 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
 #include <Logger/Logger.h>
-
-#include <tclap/CmdLine.h>
 #include <Signals/SignalHandler.h>
 #include <Signals/SIGINT_Handler.h>
+#include <tclap/CmdLine.h>
+#include <tclap/ValueArg.h>
+#include <unistd.h>
+#include <csignal>
 
 #include "Farebox.h"
 

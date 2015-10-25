@@ -11,12 +11,10 @@
 
 using namespace std;
 
+
 int main(int argc, char** argv) {
 
-	// event handler para la senial SIGINT (-2)
 	SIGINT_Handler sigint_handler;
-
-	// se registra el event handler declarado antes
 	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
 	//TODO refactor

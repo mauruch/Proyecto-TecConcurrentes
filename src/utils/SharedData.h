@@ -28,7 +28,7 @@ struct readOnlysharedData {
 
 	int idSemFarebox;
 
-	unsigned long fareboxAccumulatedTotal = 0;
+	double fareboxAccumulatedTotal = 0;
 
 };
 

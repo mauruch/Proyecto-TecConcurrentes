@@ -12,7 +12,6 @@ static const std::string SEM_EXTENSION = "-sem";
 static const std::string LOG_DELIMITER = " - ";
 static const std::string LOG_FILE = "/tmp/TPConcurrentes.log";
 static const std::string FILE_FTOK = "src/main.cpp";
-static const std::string FILE_FTOK_SHIPS = "../ship/src/main.cpp";
 
 static const char ID_FTOK_SHM_READ_ONLY = '6';
 static const char ID_FTOK_SEM_DOCKS_PORT = '1';

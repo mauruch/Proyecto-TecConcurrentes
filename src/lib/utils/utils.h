@@ -91,6 +91,17 @@ struct deliveryRequest {
 	unsigned int weight;
 };
 
+struct fareboxRequest {
+
+	fareboxRequest(int otherId = 0 ,double otherTax = 0){
+		id= otherId;
+		tax = otherTax;
+	}
+
+	int id;
+	double tax;
+};
+
 }
 
 #endif

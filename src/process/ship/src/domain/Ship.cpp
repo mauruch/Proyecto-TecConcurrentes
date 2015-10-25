@@ -55,12 +55,8 @@ void Ship::dock() {
 void Ship::payTax(){
 	double taxToPay = double(shipload) * 0.02;
 	log.info("Paying {} of tax", taxToPay);
-
-	FareboxRequest request;
-	request.tax = taxToPay;
-	request.id = this->id;
-
-	fareboxFifo.write(&request,sizeof(FareboxRequest));
+	utils::fareboxRequest request(this->id, taxToPay);
+	fareboxFifo.write(&request,sizeof(utils::fareboxRequest));
 }
 
 void Ship::unload() {

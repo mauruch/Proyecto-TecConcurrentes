@@ -101,6 +101,11 @@ int main(int argc, char** argv) {
 	 */
 	vector<pid_t> pids;
 
+	log.debug("Launching Farebox process...");
+	ArgsResolver fareboxArgs("../farebox/Debug/farebox", "-m", sharedMemoryReadOnly.getShmId());
+	utils::Process farebox("../farebox/Debug/farebox", fareboxArgs);
+	pids.push_back(farebox.getPid());
+
 	log.debug("Launching {} ships:", readOnlysharedData.config.shipConfig);
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
 		log.debug("Launching Ship process...");
@@ -109,6 +114,11 @@ int main(int argc, char** argv) {
 		utils::Process ship("../ship/Debug/Ship", shipArgs);
 		pids.push_back(ship.getPid());
 	}
+
+	log.debug("Launching Port Administrator process...");
+	ArgsResolver portAdminArgs("../portAdministrator/Debug/portAdministrator", "-m", sharedMemoryReadOnly.getShmId());
+	utils::Process portAdministrator("../portAdministrator/Debug/portAdministrator", portAdminArgs);
+	pids.push_back(portAdministrator.getPid());
 
 	log.debug("Launching ExitControllerQueue process...");
 	ArgsResolver exitControllerQArgs("../exitControllerQueue/Debug/ExitControllerQueue", "-m", sharedMemoryReadOnly.getShmId());

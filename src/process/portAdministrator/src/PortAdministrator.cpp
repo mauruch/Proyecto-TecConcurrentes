@@ -16,12 +16,12 @@ unsigned long PortAdministrator::getCollection(){
 
 	unsigned long collectionValue = 0;
 
-	log.info("PID = . PortAdministrator waiting for reading the collection.");
+	log.info("PID = {}. PortAdministrator waiting for reading the collection.", getpid());
 	m_collectionSemaphore.wait();
 
 	utils::readOnlysharedData data = m_collection.read();
 
-	log.info("PID =. PortAdministrator returns collection =  data.m_collection");
+	log.info("PID = {}. PortAdministrator returns collection = {}", getpid(), data.m_collection);
 
 	return collectionValue;
 }

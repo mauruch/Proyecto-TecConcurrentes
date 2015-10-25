@@ -6,6 +6,6 @@ FifoReader::FifoReader(const std::string name) : Fifo(){
 FifoReader::~FifoReader() {
 }
 
-ssize_t FifoReader::readFifo(void* buffer,const ssize_t buffsize) const{
+ssize_t FifoReader::read(void* buffer,const ssize_t buffsize) const{
 	return syscalls::read(fd,buffer,buffsize);
 }

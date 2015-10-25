@@ -1,24 +1,40 @@
 #include "PortAdministrator.h"
 
-PortAdministrator::PortAdministrator(int shmid)
-		:m_collectionSemaphore(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_COLLECTION),
-		m_collection(shmid){
+PortAdministrator::PortAdministrator(int shmid) : shm(shmid),
+log(Logger::LogLevel::DEBUG, "PortAdministrator"){
+	log.debug("On constructor");
 }
 
 PortAdministrator::~PortAdministrator() {
-	m_collection.release();
+	log.debug("On destructor");
+	shm.release();
 }
 
-unsigned long PortAdministrator::getCollection(){
+void PortAdministrator::getFareboxAccumulatedTotal(){
+	lockFarebox();
+	utils::readOnlysharedData data = shm.read();
+	log.info("Tax accumulated is {}", data.fareboxAccumulatedTotal);
+	unlockFarebox();
+}
 
-	unsigned long collectionValue = 0;
+void PortAdministrator::goAway(){
+	log.info("Leaving port. Next visit is in {} seconds", getSleepTime());
+}
 
-	log.info("PID = {}. PortAdministrator waiting for reading the collection.", getpid());
-	m_collectionSemaphore.wait();
+void PortAdministrator::lockFarebox(){
+	log.debug("Locking farebox in order to read payment");
+	utils::readOnlysharedData data = shm.read();
+	Semaphore fareboxSem(data.idSemFarebox);
+	fareboxSem.wait();
+}
 
-	utils::readOnlysharedData data = m_collection.read();
+void PortAdministrator::unlockFarebox(){
+	log.debug("Locking farebox in order to read payment");
+	utils::readOnlysharedData data = shm.read();
+	Semaphore fareboxSem(data.idSemFarebox);
+	fareboxSem.signal();
+}
 
-	log.info("PID = {}. PortAdministrator returns collection = {}", getpid(), data.m_collection);
-
-	return collectionValue;
+int PortAdministrator::getSleepTime(){
+	sleep(rand()%(5 - 1));
 }

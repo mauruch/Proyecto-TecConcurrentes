@@ -4,9 +4,8 @@
 
 typedef struct tFareboxRequest {
 
-	unsigned long rate;
-	pid_t pid;
-	bool success;
+	int id;
+	unsigned long tax;
 
 } FareboxRequest;
 

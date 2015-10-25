@@ -7,7 +7,7 @@ class FifoReader : public Fifo{
 public:
 	FifoReader(const std::string name);
 	~FifoReader();
-	ssize_t readFifo(void* buffer, const ssize_t buffsize) const;
+	ssize_t read(void* buffer, const ssize_t buffsize) const;
 
 private:
   int fd;

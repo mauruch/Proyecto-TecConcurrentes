@@ -1,5 +1,8 @@
 #include "Ship.h"
 
+#include <unistd.h>
+#include <utils/Helper.h>
+
 using namespace std;
 
 Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
@@ -14,7 +17,7 @@ Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
 		controllerFifo(utils::CONTROLLER_FIFO),
 		craneFifo(utils::CRANE_FIFO),
 		shipFifo(utils::SHIP_FIFO),
-//		requestsPayment(utils::PAYMENTS_FIFO),
+		requestsPayment(utils::PAYMENTS_FIFO),
 		log(Logger::LogLevel::DEBUG, name)
 		 {
 	log.info("On constructor of {}", name);
@@ -106,7 +109,7 @@ void Ship::setAsAvailable() {
 void Ship::readLeavingRequest() {
 	log.info("Reading leaving request..");
 	utils::shipRequest shipRequest;
-	shipFifo.readFifo(&shipRequest, sizeof(utils::shipRequest));
+	shipFifo.read(&shipRequest, sizeof(utils::shipRequest));
 	this->shipload = shipRequest.shipload;
 	log.info("Leaving port with {}", this->shipload);
 }
@@ -115,7 +118,7 @@ void Ship::waitOnSemaphore() {
 	this->ownSem.wait();
 }
 
-/*void Ship::payRate(){
+void Ship::payRate(){
 
 	unsigned long rate = 10;
 	log.info("PID = {}. Ship paying rate. Amount = {}", getpid(), rate);
@@ -123,7 +126,7 @@ void Ship::waitOnSemaphore() {
 	int buffsize = sizeof(FareboxRequest);
 	FareboxRequest request;
 
-	request.rate = rate;
+	request.tax = rate;
 
 	requestsPayment.write(&request,buffsize);
-}*/
+}

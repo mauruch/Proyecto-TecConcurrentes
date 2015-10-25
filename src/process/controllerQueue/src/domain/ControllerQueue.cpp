@@ -43,7 +43,7 @@ int ControllerQueue::getDockSemIdFromMemory(){
 utils::portRequest ControllerQueue::getRequest() {
 	log.debug("Locking on new enterRequest");
 	utils::portRequest request;
-	ownFifo.readFifo(&request, sizeof(request));
+	ownFifo.read(&request, sizeof(request));
 	log.info("New request has arrived from {}{}", "ship",request.shipId);
 	return request;
 }

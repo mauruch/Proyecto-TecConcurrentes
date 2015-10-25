@@ -10,12 +10,16 @@ public:
 	PortAdministrator(int shmid);
 	virtual ~PortAdministrator();
 
-	unsigned long  getCollection();
+	void getFareboxAccumulatedTotal();
+	void goAway();
 
 private:
-	SharedMemory<utils::readOnlysharedData> m_collection;
-	Semaphore m_collectionSemaphore;
 
+	void lockFarebox();
+	void unlockFarebox();
+	int getSleepTime();
+
+	SharedMemory<utils::readOnlysharedData> shm;
 	Logger log;
 };
 

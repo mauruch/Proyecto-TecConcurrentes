@@ -26,7 +26,9 @@ struct readOnlysharedData {
 	int idSemAvailableTrucks;
 	int idSemAvailableCranes;
 
-	unsigned long m_collection = 0;
+	int idSemFarebox;
+
+	unsigned long fareboxAccumulatedTotal = 0;
 
 };
 

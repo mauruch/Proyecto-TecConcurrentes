@@ -34,7 +34,7 @@ void Controller::signalAllowedToUseCrane(utils::askForCraneRequest request){
 utils::askForCraneRequest Controller::getRequest() {
 	log.debug("Locking on new craneRequest");
 	utils::askForCraneRequest request;
-	ownFifo.readFifo(&request, sizeof(request));
+	ownFifo.read(&request, sizeof(request));
 
 	string petitioner;
 	if (request.entityType == utils::SHIP) petitioner = "Ship";

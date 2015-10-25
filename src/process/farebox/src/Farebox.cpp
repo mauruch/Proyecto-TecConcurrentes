@@ -1,43 +1,55 @@
 
 #include "Farebox.h"
-#include <FareboxRequest.h>
-
 
 using namespace std;
 
 Farebox::Farebox(int shmid):
-		m_paymentRequests(utils::PAYMENTS_FIFO),
-		m_collectionSemaphore(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_COLLECTION),
-		m_collection(shmid){
-
-	m_collectionValue = 0;
-
-	this->m_pid = getpid();
-
+		shm(shmid),
+		fareboxFifo(utils::PAYMENTS_FIFO),
+		log(Logger::LogLevel::DEBUG, "Farebox"){
+	log.debug("On constructor");
 }
 
 Farebox::~Farebox(){
-	// TODO Auto-generated destructor stub
-	m_collection.release();
+	log.debug("On constructor");
+	shm.release();
 }
 
-void Farebox::chargeRate(){
+void Farebox::attendPaymentRequest(){
+	savePayment(getPaymentRequest());
+}
 
-	int buffsize = sizeof(FareboxRequest);
+FareboxRequest Farebox::getPaymentRequest(){
+	log.info("Waiting for next tax payment");
 	FareboxRequest request;
-
-	ssize_t bytesLeidos = m_paymentRequests.readFifo(&request,buffsize);
-
-	log.info("PID = {}. Farebox reading payment of Ship PID =  {}. Amount =  {}", getpid(),request.pid,request.rate);
-	m_collectionValue += request.rate;
-
-	log.info("PID =  {}. Farebox updating the collection. Total Collection =  {}", m_collectionValue);
-	utils::readOnlysharedData data = m_collection.read();
-	data.m_collection = m_collectionValue;
-
-	m_collection.write(data);
-
-	m_collectionSemaphore.signal();
-
-	request.success = true;
+	fareboxFifo.read(&request, sizeof(FareboxRequest));
+	log.info("New payment from ship{} for a total of ${}", request.id, request.tax);
+	return request;
 }
+
+void Farebox::savePayment(FareboxRequest request){
+	lockFarebox();
+
+	utils::readOnlysharedData data = shm.read();
+	data.fareboxAccumulatedTotal += request.tax;
+	shm.write(data);
+
+	log.info("Payment saved");
+
+	unlockFarebox();
+}
+
+void Farebox::lockFarebox(){
+	log.debug("Locking farebox in order to save payment");
+	utils::readOnlysharedData data = shm.read();
+	Semaphore fareboxSem(data.idSemFarebox);
+	fareboxSem.wait();
+}
+
+void Farebox::unlockFarebox(){
+	log.debug("Locking farebox in order to save payment");
+	utils::readOnlysharedData data = shm.read();
+	Semaphore fareboxSem(data.idSemFarebox);
+	fareboxSem.signal();
+}
+

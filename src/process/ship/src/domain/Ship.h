@@ -6,7 +6,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <../utils/SharedData.h>
-/*#include <FareboxRequest.h>*/
+#include <FareboxRequest.h>
 #include <iostream>
 #include <Fifos/FifoReader.h>
 #include <Fifos/FifoWriter.h>
@@ -58,7 +58,7 @@ private:
 	FifoWriter controllerFifo;
 	FifoWriter craneFifo;
 	FifoReader shipFifo;
-//	FifoWriter requestsPayment;
+	FifoWriter requestsPayment;
 
 	Logger log;
 };

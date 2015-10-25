@@ -55,7 +55,7 @@ void Truck::askForCrane() {
 utils::deliveryRequest Truck::attendRequest() {
 	log.debug("Locking on new unloadRequest");
 	utils::deliveryRequest unloadRequest;
-	ownFifo.readFifo(&unloadRequest, sizeof(unloadRequest));
+	ownFifo.read(&unloadRequest, sizeof(unloadRequest));
 	log.info("New unloadRequest has arrived from {}{} with weight {}", "ship", unloadRequest.numberShip ,unloadRequest.weight);
 	return unloadRequest;
 }

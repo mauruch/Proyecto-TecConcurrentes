@@ -30,7 +30,7 @@ void Crane::readUnloadRequest(){
 utils::unloadRequest Crane::getRequest(){
 	log.info("Waiting for an unload request");
 	utils::unloadRequest request;
-	craneFifo.readFifo(&request, sizeof(utils::unloadRequest));
+	craneFifo.read(&request, sizeof(utils::unloadRequest));
 	log.info("New unload request from {}", request.id);
 	return request;
 }

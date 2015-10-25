@@ -37,7 +37,6 @@ int main(int argc, char** argv) {
 	/**
 	 * Building semaphore for availability resources
 	 */
-
 	Semaphore avDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_DOCKS_PORT, readOnlysharedData.config.dockConfig);
 	Semaphore avCranesSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_CRANE, readOnlysharedData.config.craneConfig);
 	Semaphore avShipsSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_SHIPS, readOnlysharedData.config.shipConfig);
@@ -103,8 +102,8 @@ int main(int argc, char** argv) {
 	vector<pid_t> pids;
 
 	log.debug("Launching Farebox process...");
-	ArgsResolver fareboxArgs("../farebox/Debug/farebox", "-m", sharedMemoryReadOnly.getShmId());
-	utils::Process farebox("../farebox/Debug/farebox", fareboxArgs);
+	ArgsResolver fareboxArgs("../farebox/Debug/Farebox", "-m", sharedMemoryReadOnly.getShmId());
+	utils::Process farebox("../farebox/Debug/Farebox", fareboxArgs);
 	pids.push_back(farebox.getPid());
 
 	log.debug("Launching {} ships:", readOnlysharedData.config.shipConfig);
@@ -117,8 +116,8 @@ int main(int argc, char** argv) {
 	}
 
 	log.debug("Launching Port Administrator process...");
-	ArgsResolver portAdminArgs("../portAdministrator/Debug/portAdministrator", "-m", sharedMemoryReadOnly.getShmId());
-	utils::Process portAdministrator("../portAdministrator/Debug/portAdministrator", portAdminArgs);
+	ArgsResolver portAdminArgs("../portAdministrator/Debug/PortAdministrator", "-m", sharedMemoryReadOnly.getShmId());
+	utils::Process portAdministrator("../portAdministrator/Debug/PortAdministrator", portAdminArgs);
 	pids.push_back(portAdministrator.getPid());
 
 	log.debug("Launching ExitControllerQueue process...");

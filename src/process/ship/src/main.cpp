@@ -36,9 +36,10 @@ int main(int argc, char** argv) {
 	int shMemId = memArg.getValue();
 	int shipNumber = shipNumberArg.getValue();
 
-	Ship ship(generateLoad(), semId, shMemId, shipNumber);
+	Ship ship(semId, shMemId, shipNumber);
 
 	while (sigint_handler.getGracefulQuit() == 0) {
+		ship.setLoad(generateLoad());
 		ship.enterPort();
 		ship.dock();
 		ship.unload();
@@ -53,5 +54,5 @@ int main(int argc, char** argv) {
 }
 
 unsigned int generateLoad(){
-	return 100;
+	return (rand()%(10000));
 }

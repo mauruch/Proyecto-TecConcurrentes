@@ -5,10 +5,10 @@
 
 using namespace std;
 
-Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
+Ship::Ship(int semId, int shmid, int numberShip) :
 		id(numberShip),
 		name(string("Ship").append(Helper::convertToString(numberShip))),
-		shipload(load),
+		shipload(0),
 		ownSem(semId),
 		shmId(shmid),
 		shm(shmId),
@@ -17,7 +17,7 @@ Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
 		controllerFifo(utils::CONTROLLER_FIFO),
 		craneFifo(utils::CRANE_FIFO),
 		shipFifo(utils::SHIP_FIFO),
-		requestsPayment(utils::PAYMENTS_FIFO),
+		fareboxFifo(utils::FAREBOX_FIFO),
 		log(Logger::LogLevel::DEBUG, name)
 		 {
 	log.info("On constructor of {}", name);
@@ -26,6 +26,11 @@ Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
 Ship::~Ship() {
 	log.debug("On destructor of {}", name);
 	controllerQueueFifo.deleteFifo();
+}
+
+void Ship::setLoad(const unsigned int load){
+	this->shipload = load;
+	log.info("Loading with {} tons", load);
 }
 
 void Ship::enterPort() {
@@ -44,6 +49,18 @@ void Ship::leavePort() {
 
 void Ship::dock() {
 	log.info("Docking...");
+	payTax();
+}
+
+void Ship::payTax(){
+	double taxToPay = double(shipload) * 0.02;
+	log.info("Paying {} of tax", taxToPay);
+
+	FareboxRequest request;
+	request.tax = taxToPay;
+	request.id = this->id;
+
+	fareboxFifo.write(&request,sizeof(FareboxRequest));
 }
 
 void Ship::unload() {
@@ -54,7 +71,6 @@ void Ship::unload() {
 	this->sendUnloadRequest();
 }
 
-
 void Ship::searchDock() {
 	log.info("The ship took place in the port");
 
@@ -63,19 +79,19 @@ void Ship::searchDock() {
 void Ship::sendEntryRequest() {
 	log.info("Sending entry request to port");
 	utils::portRequest request(this->ownSem.getId(), this->id);
-	controllerQueueFifo.write(static_cast<void*>(&request),sizeof(utils::portRequest));
+	controllerQueueFifo.write(&request,sizeof(utils::portRequest));
 }
 
 void Ship::sendLeaveRequest() {
 	log.info("Sending leave request to port");
 	utils::portRequest request(this->ownSem.getId(), this->id);
-	exitControllerQueueFifo.write(static_cast<void*>(&request),sizeof(utils::portRequest));
+	exitControllerQueueFifo.write(&request,sizeof(utils::portRequest));
 }
 
 void Ship::askForCrane() {
 	log.info("Sending crane request to Controller");
 	utils::askForCraneRequest request(this->ownSem.getId());
-	controllerFifo.write(static_cast<void*>(&request), sizeof(utils::askForCraneRequest));
+	controllerFifo.write(&request, sizeof(utils::askForCraneRequest));
 }
 
 /**
@@ -85,7 +101,7 @@ void Ship::askForCrane() {
 void Ship::sendUnloadRequest() {
 	log.info("Sending unload request to crane");
 	utils::unloadRequest request(utils::SHIP, this->shipload, this->id);
-	craneFifo.write(static_cast<void*>(&request), sizeof(utils::unloadRequest));
+	craneFifo.write(&request, sizeof(utils::unloadRequest));
 	this->shipload = 0;
 	log.info("All cargo unload");
 }
@@ -116,17 +132,4 @@ void Ship::readLeavingRequest() {
 
 void Ship::waitOnSemaphore() {
 	this->ownSem.wait();
-}
-
-void Ship::payRate(){
-
-	unsigned long rate = 10;
-	log.info("PID = {}. Ship paying rate. Amount = {}", getpid(), rate);
-
-	int buffsize = sizeof(FareboxRequest);
-	FareboxRequest request;
-
-	request.tax = rate;
-
-	requestsPayment.write(&request,buffsize);
 }

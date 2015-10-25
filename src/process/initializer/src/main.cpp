@@ -37,17 +37,17 @@ int main(int argc, char** argv) {
 	/**
 	 * Building semaphore for availability resources
 	 */
-	Semaphore avDocksSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_DOCKS_PORT, readOnlysharedData.config.dockConfig);
+	Semaphore avDocksSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_DOCKS_PORT, readOnlysharedData.config.dockConfig);
 	Semaphore avCranesSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_CRANE, readOnlysharedData.config.craneConfig);
 	Semaphore avShipsSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_SHIPS, readOnlysharedData.config.shipConfig);
 	Semaphore avTrucksSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_TRUCKS, readOnlysharedData.config.truckConfig);
-
-	Semaphore collectionSem(utils::FILE_FTOK.c_str(), utils::ID_FTOK_SEM_COLLECTION, 1);
+	Semaphore fareboxSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_FAREBOX, 1);
 
 	readOnlysharedData.idSemAvailableDocks = avDocksSem.getId();
 	readOnlysharedData.idSemAvailableShips = avShipsSem.getId();
 	readOnlysharedData.idSemAvailableTrucks = avTrucksSem.getId();
 	readOnlysharedData.idSemAvailableCranes = avCranesSem.getId();
+	readOnlysharedData.idSemFarebox = fareboxSem.getId();
 
 	SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly(utils::FILE_FTOK, utils::ID_FTOK_SHM_READ_ONLY);
 	log.debug("Writing data in shared memory");
@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
 	Fifo shipFifo(utils::SHIP_FIFO);
 
 	log.debug("creating fifo for Collection");
-	Fifo paymentRequests(utils::PAYMENTS_FIFO);
+	Fifo paymentRequests(utils::FAREBOX_FIFO);
 
 
 	/**
@@ -106,6 +106,11 @@ int main(int argc, char** argv) {
 	utils::Process farebox("../farebox/Debug/Farebox", fareboxArgs);
 	pids.push_back(farebox.getPid());
 
+	log.debug("Launching Port Administrator process...");
+	ArgsResolver portAdminArgs("../portAdministrator/Debug/PortAdministrator", "-m", sharedMemoryReadOnly.getShmId());
+	utils::Process portAdministrator("../portAdministrator/Debug/PortAdministrator", portAdminArgs);
+	pids.push_back(portAdministrator.getPid());
+
 	log.debug("Launching {} ships:", readOnlysharedData.config.shipConfig);
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
 		log.debug("Launching Ship process...");
@@ -114,11 +119,6 @@ int main(int argc, char** argv) {
 		utils::Process ship("../ship/Debug/Ship", shipArgs);
 		pids.push_back(ship.getPid());
 	}
-
-	log.debug("Launching Port Administrator process...");
-	ArgsResolver portAdminArgs("../portAdministrator/Debug/PortAdministrator", "-m", sharedMemoryReadOnly.getShmId());
-	utils::Process portAdministrator("../portAdministrator/Debug/PortAdministrator", portAdminArgs);
-	pids.push_back(portAdministrator.getPid());
 
 	log.debug("Launching ExitControllerQueue process...");
 	ArgsResolver exitControllerQArgs("../exitControllerQueue/Debug/ExitControllerQueue", "-m", sharedMemoryReadOnly.getShmId());

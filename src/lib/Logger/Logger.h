@@ -16,7 +16,7 @@
 using namespace std;
 
 static void replacer(string& data, string toReplace) {
-	data = data.replace(data.find_first_of("{}"), toReplace.length(), toReplace);
+	data = data.replace(data.find_first_of("{}"), 2, toReplace);
 }
 
 template< typename ... Args >

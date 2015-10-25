@@ -3,6 +3,7 @@
 using namespace std;
 
 Truck::Truck(int semId, int shmid, int truckNumber) :
+		id(truckNumber),
 		name(string("Truck").append(Helper::convertToString(truckNumber))),
 		shmId(shmid),
 		shm(shmId),
@@ -47,7 +48,7 @@ void Truck::unload(){
 
 void Truck::askForCrane() {
 	log.info("Sending a crane request to Controller");
-	utils::askForCraneRequest request(this->ownSem.getId(), this->name, utils::TRUCK);
+	utils::askForCraneRequest request(this->ownSem.getId(), this->id, utils::TRUCK);
 	controllerFifo.write(static_cast<void*>(&request), sizeof(utils::askForCraneRequest));
 }
 
@@ -55,18 +56,13 @@ utils::deliveryRequest Truck::attendRequest() {
 	log.debug("Locking on new unloadRequest");
 	utils::deliveryRequest unloadRequest;
 	ownFifo.readFifo(&unloadRequest, sizeof(unloadRequest));
-
-	cout << unloadRequest.name << unloadRequest.weight ;
-
-
-
-	log.info("New unloadRequest has arrived from {} with weight {}", unloadRequest.name.c_str() ,unloadRequest.weight);
+	log.info("New unloadRequest has arrived from {}{} with weight {}", "ship", unloadRequest.numberShip ,unloadRequest.weight);
 	return unloadRequest;
 }
 
 void Truck::sendUnloadRequest() {
 	log.info("Sending unload request to crane");
-	utils::unloadRequest request(utils::TRUCK, this->load, this->name);
+	utils::unloadRequest request(utils::TRUCK, this->load, this->id);
 	craneFifo.write(static_cast<void*>(&request), sizeof(utils::unloadRequest));
 	this->load = 0;
 	log.info("All cargo unload");

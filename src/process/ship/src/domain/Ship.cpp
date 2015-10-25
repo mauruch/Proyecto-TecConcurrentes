@@ -3,6 +3,7 @@
 using namespace std;
 
 Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
+		id(numberShip),
 		name(string("Ship").append(Helper::convertToString(numberShip))),
 		shipload(load),
 		ownSem(semId),
@@ -13,7 +14,7 @@ Ship::Ship(const unsigned int load, int semId, int shmid, int numberShip) :
 		controllerFifo(utils::CONTROLLER_FIFO),
 		craneFifo(utils::CRANE_FIFO),
 		shipFifo(utils::SHIP_FIFO),
-		requestsPayment(utils::PAYMENTS_FIFO),
+//		requestsPayment(utils::PAYMENTS_FIFO),
 		log(Logger::LogLevel::DEBUG, name)
 		 {
 	log.info("On constructor of {}", name);
@@ -28,14 +29,14 @@ void Ship::enterPort() {
 	this->sendEntryRequest();
 	log.info("Waiting for the controllerQueue to let me enter port");
 	this->waitOnSemaphore();
-	log.info("Ship entering the port...");
+	log.info("Entering the port...");
 }
 
 void Ship::leavePort() {
 	this->sendLeaveRequest();
 	log.info("Waiting for the controllerQueue to let me leave port");
 	this->waitOnSemaphore();
-	log.info("Ship leaving the port...");
+	log.info("Leaving the port...");
 }
 
 void Ship::dock() {
@@ -43,10 +44,10 @@ void Ship::dock() {
 }
 
 void Ship::unload() {
-	log.info("Ship asking for a crane...");
+	log.info("Asking for a crane...");
 	this->askForCrane();
 	this->waitOnSemaphore();
-	log.info("Ship taking an available crane");
+	log.info("Taking an available crane");
 	this->sendUnloadRequest();
 }
 
@@ -58,13 +59,13 @@ void Ship::searchDock() {
 
 void Ship::sendEntryRequest() {
 	log.info("Sending entry request to port");
-	utils::portRequest request(this->ownSem.getId(), this->name);
+	utils::portRequest request(this->ownSem.getId(), this->id);
 	controllerQueueFifo.write(static_cast<void*>(&request),sizeof(utils::portRequest));
 }
 
 void Ship::sendLeaveRequest() {
 	log.info("Sending leave request to port");
-	utils::portRequest request(this->ownSem.getId(), this->name);
+	utils::portRequest request(this->ownSem.getId(), this->id);
 	exitControllerQueueFifo.write(static_cast<void*>(&request),sizeof(utils::portRequest));
 }
 
@@ -80,7 +81,7 @@ void Ship::askForCrane() {
  */
 void Ship::sendUnloadRequest() {
 	log.info("Sending unload request to crane");
-	utils::unloadRequest request(utils::SHIP, this->shipload, this->name);
+	utils::unloadRequest request(utils::SHIP, this->shipload, this->id);
 	craneFifo.write(static_cast<void*>(&request), sizeof(utils::unloadRequest));
 	this->shipload = 0;
 	log.info("All cargo unload");
@@ -114,7 +115,7 @@ void Ship::waitOnSemaphore() {
 	this->ownSem.wait();
 }
 
-void Ship::payRate(){
+/*void Ship::payRate(){
 
 	unsigned long rate = 10;
 	log.info("PID = {}. Ship paying rate. Amount = {}", getpid(), rate);
@@ -125,4 +126,4 @@ void Ship::payRate(){
 	request.rate = rate;
 
 	requestsPayment.write(&request,buffsize);
-}
+}*/

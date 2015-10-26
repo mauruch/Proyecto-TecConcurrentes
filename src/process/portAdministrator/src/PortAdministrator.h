@@ -7,7 +7,7 @@
 
 class PortAdministrator {
 public:
-	PortAdministrator(int shmid);
+	PortAdministrator(int shmid, Logger::LogLevel logLevel);
 	virtual ~PortAdministrator();
 
 	void getFareboxAccumulatedTotal();

@@ -12,6 +12,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <ArgumentHandler/ArgHandler.h>
 
 #include "../../../utils/SharedData.h"
 
@@ -29,33 +30,37 @@ void launchPortAdministratorProcess(
 		vector<pid_t>& pids);
 void launchExitControllerQueueProcess(
 		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
+		vector<pid_t>& pids, int logLevel);
 void launchControllerQueueProcess(
 		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
+		vector<pid_t>& pids, int logLevel);
 void launchControllerProcess(
 		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
+		vector<pid_t>& pids, int logLevel);
 void launchCranesProcesses(const utils::readOnlysharedData& readOnlysharedData,
 		Logger& log,
 		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
+		vector<pid_t>& pids, int logLevel);
 void launchShipsProcesses(const utils::readOnlysharedData& readOnlysharedData,
 		Logger& log,
 		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
+		vector<pid_t>& pids, int logLevel);
 void launchTrucksProcesses(const utils::readOnlysharedData& readOnlysharedData,
 		SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly,
-		Logger& log, vector<pid_t>& pids);
+		Logger& log, vector<pid_t>& pids, int logLevel);
 
 void launchProcesses(
 		SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly,
 		const utils::readOnlysharedData& readOnlysharedData, Logger& log,
-		vector<pid_t>& pids);
+		vector<pid_t>& pids, int logLevel);
 
 int main(int argc, char** argv) {
 
-	Logger log(Logger::LogLevel::DEBUG);
+	LogLevelArgs logArg(argc, argv);
+
+	Logger::LogLevel logLevel = static_cast<Logger::LogLevel>(logArg.getLogLevel());
+
+	Logger log(logLevel);
 	utils::readOnlysharedData readOnlysharedData;
 	vector<pid_t> pids;
 
@@ -83,7 +88,7 @@ int main(int argc, char** argv) {
 	/**
 	 * Launching processes
 	 */
-	launchProcesses(sharedMemoryReadOnly, readOnlysharedData, log, pids);
+	launchProcesses(sharedMemoryReadOnly, readOnlysharedData, log, pids, logArg.getLogLevel());
 
 	cout << "Press key ENTER to quit simulation" << endl;
 	cin.ignore();
@@ -167,50 +172,50 @@ void creatingFifos(Logger& log) {
 
 }
 
-void launchFareboxProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids) {
-	ArgsResolver fareboxArgs("../farebox/Debug/Farebox", "-m", sharedMemoryReadOnly.getShmId());
+void launchFareboxProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids, int logLevel) {
+	ArgsResolver fareboxArgs("../farebox/Debug/Farebox", "-m", sharedMemoryReadOnly.getShmId(), "-l", logLevel);
 	utils::Process farebox("../farebox/Debug/Farebox", fareboxArgs);
 	pids.push_back(farebox.getPid());
 }
 
-void launchPortAdministratorProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids) {
-	ArgsResolver portAdminArgs("../portAdministrator/Debug/PortAdministrator", "-m", sharedMemoryReadOnly.getShmId());
+void launchPortAdministratorProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids, int logLevel) {
+	ArgsResolver portAdminArgs("../portAdministrator/Debug/PortAdministrator", "-m", sharedMemoryReadOnly.getShmId(), "-l", logLevel);
 	utils::Process portAdministrator("../portAdministrator/Debug/PortAdministrator", portAdminArgs);
 	pids.push_back(portAdministrator.getPid());
 }
 
 
-void launchExitControllerQueueProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids) {
-	ArgsResolver exitControllerQArgs("../exitControllerQueue/Debug/ExitControllerQueue", "-m", sharedMemoryReadOnly.getShmId());
+void launchExitControllerQueueProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids, int logLevel) {
+	ArgsResolver exitControllerQArgs("../exitControllerQueue/Debug/ExitControllerQueue", "-m", sharedMemoryReadOnly.getShmId(), "-l", logLevel);
 	utils::Process exitControllerQ("../exitControllerQueue/Debug/ExitControllerQueue",exitControllerQArgs);
 	pids.push_back(exitControllerQ.getPid());
 }
 
-void launchControllerQueueProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,vector<pid_t>& pids) {
-	ArgsResolver controllerQArgs("../controllerQueue/Debug/ControllerQueue","-m", sharedMemoryReadOnly.getShmId());
+void launchControllerQueueProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,vector<pid_t>& pids, int logLevel) {
+	ArgsResolver controllerQArgs("../controllerQueue/Debug/ControllerQueue","-m", sharedMemoryReadOnly.getShmId(), "-l", logLevel);
 	utils::Process controllerQ("../controllerQueue/Debug/ControllerQueue",controllerQArgs);
 	pids.push_back(controllerQ.getPid());
 }
 
-void launchControllerProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,vector<pid_t>& pids) {
-	ArgsResolver controllerArgs("../controller/Debug/Controller", "-m",sharedMemoryReadOnly.getShmId());
+void launchControllerProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,vector<pid_t>& pids, int logLevel) {
+	ArgsResolver controllerArgs("../controller/Debug/Controller", "-m",sharedMemoryReadOnly.getShmId(), "-l", logLevel);
 	utils::Process controller("../controller/Debug/Controller", controllerArgs);
 	pids.push_back(controller.getPid());
 }
 
 void launchCranesProcesses(const utils::readOnlysharedData& readOnlysharedData,Logger& log,
-		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,vector<pid_t>& pids) {
+		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,vector<pid_t>& pids, int logLevel) {
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.craneConfig; i++) {
 		log.debug("Launching Crane process...");
-		ArgsResolver craneArgs("../crane/Debug/Crane", "-m", sharedMemoryReadOnly.getShmId(), "-i", i);
+		ArgsResolver craneArgs("../crane/Debug/Crane", "-m", sharedMemoryReadOnly.getShmId(), "-i", i, "-l", logLevel);
 		utils::Process crane("../crane/Debug/Crane", craneArgs);
 		pids.push_back(crane.getPid());
 	}
 }
 
 void launchShipsProcesses(const utils::readOnlysharedData& readOnlysharedData, Logger& log,
-		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids) {
+		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids, int logLevel) {
 
 	vector<int> shipsSemaphoresIds;
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
@@ -220,14 +225,15 @@ void launchShipsProcesses(const utils::readOnlysharedData& readOnlysharedData, L
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
 		log.debug("Launching Ship process...");
-		ArgsResolver shipArgs("../ship/Debug/Ship", "-s", shipsSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId(), "-i", i);
+		ArgsResolver shipArgs("../ship/Debug/Ship", "-s", shipsSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId(), "-i", i,
+				"-l", logLevel);
 		utils::Process ship("../ship/Debug/Ship", shipArgs);
 		pids.push_back(ship.getPid());
 	}
 }
 
 void launchTrucksProcesses(const utils::readOnlysharedData& readOnlysharedData,
-		SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly, Logger& log, vector<pid_t>& pids) {
+		SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly, Logger& log, vector<pid_t>& pids, int logLevel) {
 
 	vector<int> trucksSemaphoresIds;
 	int offset = readOnlysharedData.config.shipConfig;
@@ -238,7 +244,8 @@ void launchTrucksProcesses(const utils::readOnlysharedData& readOnlysharedData,
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.truckConfig; i++) {
 		log.debug("Launching Truck process...");
-		ArgsResolver truckArgs("../truck/Debug/Truck", "-s", trucksSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId(), "-i", i);
+		ArgsResolver truckArgs("../truck/Debug/Truck", "-s", trucksSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId(), "-i", i,
+				"-l", logLevel);
 		utils::Process truck("../truck/Debug/Truck", truckArgs);
 		pids.push_back(truck.getPid());
 	}
@@ -248,30 +255,30 @@ void launchTrucksProcesses(const utils::readOnlysharedData& readOnlysharedData,
  * Launching processes
  */
 void launchProcesses(SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly,
-		const utils::readOnlysharedData& readOnlysharedData, Logger& log,vector<pid_t>& pids) {
+		const utils::readOnlysharedData& readOnlysharedData, Logger& log,vector<pid_t>& pids, int logLevel) {
 
 	log.debug("Launching Farebox process...");
-	launchFareboxProcess(sharedMemoryReadOnly, pids);
+	launchFareboxProcess(sharedMemoryReadOnly, pids, logLevel);
 
 	log.debug("Launching Port Administrator process...");
-	launchPortAdministratorProcess(sharedMemoryReadOnly, pids);
+	launchPortAdministratorProcess(sharedMemoryReadOnly, pids, logLevel);
 
 	log.debug("Launching ExitControllerQueue process...");
-	launchExitControllerQueueProcess(sharedMemoryReadOnly, pids);
+	launchExitControllerQueueProcess(sharedMemoryReadOnly, pids, logLevel);
 
 	log.debug("Launching ControllerQueue process...");
-	launchControllerQueueProcess(sharedMemoryReadOnly, pids);
+	launchControllerQueueProcess(sharedMemoryReadOnly, pids, logLevel);
 
 	log.debug("Launching Controller process...");
-	launchControllerProcess(sharedMemoryReadOnly, pids);
+	launchControllerProcess(sharedMemoryReadOnly, pids, logLevel);
 
 	log.debug("Launching {} cranes:", readOnlysharedData.config.craneConfig);
-	launchCranesProcesses(readOnlysharedData, log, sharedMemoryReadOnly, pids);
+	launchCranesProcesses(readOnlysharedData, log, sharedMemoryReadOnly, pids, logLevel);
 
 	log.debug("Launching {} ships:", readOnlysharedData.config.shipConfig);
-	launchShipsProcesses(readOnlysharedData, log, sharedMemoryReadOnly, pids);
+	launchShipsProcesses(readOnlysharedData, log, sharedMemoryReadOnly, pids, logLevel);
 
 	log.debug("Launching {} trucks:", readOnlysharedData.config.truckConfig);
-	launchTrucksProcesses(readOnlysharedData, sharedMemoryReadOnly, log, pids);
+	launchTrucksProcesses(readOnlysharedData, sharedMemoryReadOnly, log, pids, logLevel);
 }
 

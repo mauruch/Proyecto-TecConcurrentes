@@ -17,7 +17,7 @@
 
 class ControllerQueue {
 public:
-	ControllerQueue(int shmId);
+	ControllerQueue(int shmId, Logger::LogLevel logLevel);
 	virtual ~ControllerQueue();
 
 	void attendRequest();

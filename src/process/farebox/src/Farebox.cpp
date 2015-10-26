@@ -3,10 +3,10 @@
 
 using namespace std;
 
-Farebox::Farebox(int shmid):
+Farebox::Farebox(int shmid, Logger::LogLevel logLevel):
 		shm(shmid),
 		fareboxFifo(utils::FAREBOX_FIFO),
-		log(Logger::LogLevel::DEBUG, "Farebox"){
+		log(logLevel, "Farebox"){
 	log.debug("On constructor");
 }
 

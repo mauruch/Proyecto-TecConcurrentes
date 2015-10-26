@@ -1,7 +1,7 @@
 #include "PortAdministrator.h"
 
-PortAdministrator::PortAdministrator(int shmid) : shm(shmid),
-log(Logger::LogLevel::DEBUG, "PortAdministrator"){
+PortAdministrator::PortAdministrator(int shmid, Logger::LogLevel logLevel) : shm(shmid),
+log(logLevel, "PortAdministrator"){
 	log.debug("On constructor");
 }
 

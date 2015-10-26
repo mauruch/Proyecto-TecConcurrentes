@@ -14,7 +14,7 @@ bool running = true;
 int main(int argc, char** argv) {
 
 	DefaultArgs args(argc, argv);
-	ExitControllerQueue ExitControllerQueue(args.getShmId());
+	ExitControllerQueue ExitControllerQueue(args.getShmId(), static_cast<Logger::LogLevel>(args.getLogLevel()));
 
 	while(running){
 		ExitControllerQueue.attendRequest();

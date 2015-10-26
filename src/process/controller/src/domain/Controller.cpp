@@ -1,9 +1,9 @@
 #include "Controller.h"
 
-Controller::Controller(int shmid) :
+Controller::Controller(int shmid, Logger::LogLevel logLevel) :
 		shmId(shmid), shm(shmId),
 		ownFifo(utils::CONTROLLER_FIFO),
-		log(Logger::LogLevel::DEBUG, string("Controller")) {
+		log(logLevel, string("Controller")) {
 	log.info("Creating new Controller");
 	log.info("Reading on fifo " + utils::CONTROLLER_FIFO);
 }

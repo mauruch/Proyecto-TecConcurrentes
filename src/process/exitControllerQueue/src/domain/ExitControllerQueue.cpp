@@ -1,8 +1,8 @@
 #include "ExitControllerQueue.h"
 
-ExitControllerQueue::ExitControllerQueue(int shmid) :
+ExitControllerQueue::ExitControllerQueue(int shmid, Logger::LogLevel logLevel) :
 		shmId(shmid), shm(shmId),
-		ownFifo(utils::EXIT_CONTROLLER_QUEUE_FIFO), log(Logger::LogLevel::DEBUG, string("ExitControllerQueue")) {
+		ownFifo(utils::EXIT_CONTROLLER_QUEUE_FIFO), log(logLevel, string("ExitControllerQueue")) {
 	log.info("Creating new ExitControllerQueue");
 	log.info("Reading on fifo {}", utils::CONTROLLER_QUEUE_FIFO);
 }

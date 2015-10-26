@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
 	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
 	DefaultArgs args(argc, argv);
-	PortAdministrator administrator(args.getShmId());
+	PortAdministrator administrator(args.getShmId(), static_cast<Logger::LogLevel>(args.getLogLevel()));
 
 	while (sigint_handler.getGracefulQuit() == 0) {
 		administrator.getFareboxAccumulatedTotal();

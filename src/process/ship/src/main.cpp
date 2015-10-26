@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
 	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
 	EntityArgs args(argc, argv);
-	Ship ship(args.getSemId(), args.getShmId(), args.getId());
+	Ship ship(args.getSemId(), args.getShmId(), args.getId(), static_cast<Logger::LogLevel>(args.getLogLevel()));
 
 	while (sigint_handler.getGracefulQuit() == 0) {
 		ship.setLoad(generateLoad());

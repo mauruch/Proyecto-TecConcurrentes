@@ -1,8 +1,8 @@
 #include "ControllerQueue.h"
 
-ControllerQueue::ControllerQueue(int shmid) :
+ControllerQueue::ControllerQueue(int shmid, Logger::LogLevel logLevel) :
 		shmId(shmid), shm(shmId),
-		ownFifo(utils::CONTROLLER_QUEUE_FIFO), log(Logger::LogLevel::DEBUG, string("ControllerQueue")) {
+		ownFifo(utils::CONTROLLER_QUEUE_FIFO), log(logLevel, string("ControllerQueue")) {
 	log.info("On constructor of ControllerQueue");
 	log.info("Reading on fifo {}", utils::CONTROLLER_QUEUE_FIFO);
 }

@@ -21,7 +21,7 @@ using namespace std;
 
 class Ship {
 public:
-	Ship(int semId, int shmId, int numberShip);
+	Ship(int semId, int shmId, int numberShip, Logger::LogLevel logLevel);
 
 	virtual ~Ship();
 

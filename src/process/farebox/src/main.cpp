@@ -17,7 +17,7 @@ int main(int argc, char** argv)  {
 	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
 	DefaultArgs args(argc, argv);
-	Farebox farebox(args.getShmId());
+	Farebox farebox(args.getShmId(), static_cast<Logger::LogLevel>(args.getLogLevel()));
 
 	while (sigint_handler.getGracefulQuit() == 0) {
 		farebox.attendPaymentRequest();

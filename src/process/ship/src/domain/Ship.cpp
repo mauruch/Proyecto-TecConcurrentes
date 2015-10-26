@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Ship::Ship(int semId, int shmid, int numberShip) :
+Ship::Ship(int semId, int shmid, int numberShip, Logger::LogLevel logLevel) :
 		id(numberShip),
 		name(string("Ship").append(Helper::convertToString(numberShip))),
 		shipload(0),
@@ -18,7 +18,7 @@ Ship::Ship(int semId, int shmid, int numberShip) :
 		craneFifo(utils::CRANE_FIFO),
 		shipFifo(utils::SHIP_FIFO),
 		fareboxFifo(utils::FAREBOX_FIFO),
-		log(Logger::LogLevel::DEBUG, name)
+		log(logLevel, name)
 		 {
 	log.info("On constructor of {}", name);
 }

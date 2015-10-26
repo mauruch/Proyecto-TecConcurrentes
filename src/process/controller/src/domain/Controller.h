@@ -13,7 +13,7 @@
 
 class Controller {
 public:
-	Controller(int shmId);
+	Controller(int shmId, Logger::LogLevel logLevel);
 	virtual ~Controller();
 	void attendRequest();
 

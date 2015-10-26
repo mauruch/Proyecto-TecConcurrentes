@@ -17,7 +17,7 @@
 
 class ExitControllerQueue {
 public:
-	ExitControllerQueue(int shmId);
+	ExitControllerQueue(int shmId, Logger::LogLevel logLevel);
 	virtual ~ExitControllerQueue();
 
 	void attendRequest();

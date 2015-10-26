@@ -10,7 +10,7 @@
 
 class Farebox {
 public:
-	Farebox(int shmid);
+	Farebox(int shmid, Logger::LogLevel logLevel);
 	virtual ~Farebox();
 
 	void attendPaymentRequest();

@@ -20,6 +20,8 @@ int main(int argc, char** argv) {
 	cmd.add(shmId);
 	TCLAP::ValueArg<int> craneNumberArg("i", "number", "number of crane", true, 7, "int");
 	cmd.add(craneNumberArg);
+	TCLAP::ValueArg<int> log("l", "log", "log level", true, 8, "int");
+	cmd.add(log);
 	cmd.parse(argc, argv);
 
 	Crane crane(shmId.getValue(), craneNumberArg.getValue());

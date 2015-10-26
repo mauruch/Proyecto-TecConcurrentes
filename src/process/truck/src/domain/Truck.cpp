@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Truck::Truck(int semId, int shmid, int truckNumber) :
+Truck::Truck(int semId, int shmid, int truckNumber, Logger::LogLevel logLevel) :
 		id(truckNumber),
 		name(string("Truck").append(Helper::convertToString(truckNumber))),
 		shmId(shmid),
@@ -13,7 +13,7 @@ Truck::Truck(int semId, int shmid, int truckNumber) :
 		controllerFifo(utils::CONTROLLER_FIFO),
 		craneFifo(utils::CRANE_FIFO),
 		load(0),
-		log(Logger::LogLevel::DEBUG, name){
+		log(logLevel, name){
 
 		log.debug("On constructor of {}", name);
 }

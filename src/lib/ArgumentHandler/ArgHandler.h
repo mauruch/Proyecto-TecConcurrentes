@@ -12,6 +12,7 @@ public:
 			shmId("m", "mem","smId to get shared memory", true, 6, "int"),
 			logLevel("l", "log", "log level", true, 7, "int"){
 		cmd.add(shmId);
+		cmd.add(logLevel);
 		cmd.parse(argc, argv);
 	}
 
@@ -64,7 +65,7 @@ public:
 			sem("s", "sem", "sem to get semaphore", true, 5, "int"),
 			shmId("m", "mem", "smId to get shared memory", true, 6, "int"),
 			logLevel("l", "log", "log level", true, 7, "int"),
-			id("i", "number", "number of truck", true, 7, "int"){
+			id("i", "number", "number of truck", true, 8, "int"){
 		cmd.add(sem);
 		cmd.add(shmId);
 		cmd.add(id);
@@ -96,8 +97,9 @@ private:
 	TCLAP::CmdLine cmd;
 	TCLAP::ValueArg<int> sem;
 	TCLAP::ValueArg<int> shmId;
-	TCLAP::ValueArg<int> id;
 	TCLAP::ValueArg<int> logLevel;
+	TCLAP::ValueArg<int> id;
+
 
 };
 

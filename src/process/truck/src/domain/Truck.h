@@ -14,7 +14,7 @@
 
 class Truck {
 public:
-	Truck(int semId, int shmId, int truckNumber);
+	Truck(int semId, int shmId, int truckNumber, Logger::LogLevel logLevel);
 	virtual ~Truck();
 
 	utils::deliveryRequest attendRequest();

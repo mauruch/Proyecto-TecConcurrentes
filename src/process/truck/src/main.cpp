@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
 	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
 	EntityArgs args(argc, argv);
-	Truck truck(args.getSemId(), args.getShmId(), args.getId());
+	Truck truck(args.getSemId(), args.getShmId(), args.getId(), static_cast<Logger::LogLevel>(args.getLogLevel()));
 
 	while (sigint_handler.getGracefulQuit() == 0) {
 

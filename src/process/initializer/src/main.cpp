@@ -202,7 +202,7 @@ void launchCranesProcesses(const utils::readOnlysharedData& readOnlysharedData,L
 		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,vector<pid_t>& pids) {
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.craneConfig; i++) {
-		log.debug("Launching Cranes process...");
+		log.debug("Launching Crane process...");
 		ArgsResolver craneArgs("../crane/Debug/Crane", "-m", sharedMemoryReadOnly.getShmId(), "-i", i);
 		utils::Process crane("../crane/Debug/Crane", craneArgs);
 		pids.push_back(crane.getPid());
@@ -237,7 +237,7 @@ void launchTrucksProcesses(const utils::readOnlysharedData& readOnlysharedData,
 	}
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.truckConfig; i++) {
-		log.debug("Launching Trucks process...");
+		log.debug("Launching Truck process...");
 		ArgsResolver truckArgs("../truck/Debug/Truck", "-s", trucksSemaphoresIds[i], "-m", sharedMemoryReadOnly.getShmId(), "-i", i);
 		utils::Process truck("../truck/Debug/Truck", truckArgs);
 		pids.push_back(truck.getPid());

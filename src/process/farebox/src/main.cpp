@@ -1,4 +1,5 @@
 #include <Logger/Logger.h>
+#include <ArgumentHandler/ArgHandler.h>
 #include <Signals/SignalHandler.h>
 #include <Signals/SIGINT_Handler.h>
 #include <tclap/CmdLine.h>
@@ -15,13 +16,8 @@ int main(int argc, char** argv)  {
 	SIGINT_Handler sigint_handler;
 	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
-	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
-	TCLAP::ValueArg<int> memArg("m", "mem", "smId to get shared memory", true, 6, "int");
-	cmd.add(memArg);
-	cmd.parse(argc, argv);
-	int shmId = memArg.getValue();
-
-	Farebox farebox(shmId);
+	DefaultArgs args(argc, argv);
+	Farebox farebox(args.getShmId());
 
 	while (sigint_handler.getGracefulQuit() == 0) {
 		farebox.attendPaymentRequest();

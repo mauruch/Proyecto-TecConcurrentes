@@ -4,21 +4,18 @@
 #include <iostream>
 #include <tclap/CmdLine.h>
 #include "domain/Crane.h"
+#include <ArgumentHandler/ArgHandler.h>
 #include <Signals/SignalHandler.h>
 #include <Signals/SIGINT_Handler.h>
+
 using namespace std;
 
 int main(int argc, char** argv) {
 
-	// event handler para la senial SIGINT (-2)
 	SIGINT_Handler sigint_handler;
-
-	// se registra el event handler declarado antes
 	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
-	//TODO refactor
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
-	// such as "-f 9892".
 	TCLAP::ValueArg<int> shmId("m", "mem", "smId to get shared memory", true, 6, "int");
 	cmd.add(shmId);
 	TCLAP::ValueArg<int> craneNumberArg("i", "number", "number of crane", true, 7, "int");

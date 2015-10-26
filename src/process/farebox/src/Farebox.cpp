@@ -19,15 +19,15 @@ void Farebox::attendPaymentRequest(){
 	savePayment(getPaymentRequest());
 }
 
-FareboxRequest Farebox::getPaymentRequest(){
+utils::fareboxRequest Farebox::getPaymentRequest(){
 	log.info("Waiting for next tax payment");
-	FareboxRequest request;
-	fareboxFifo.read(&request, sizeof(FareboxRequest));
+	utils::fareboxRequest request;
+	fareboxFifo.read(&request, sizeof(utils::fareboxRequest));
 	log.info("New payment from ship{} for a total of ${}", request.id, request.tax);
 	return request;
 }
 
-void Farebox::savePayment(FareboxRequest request){
+void Farebox::savePayment(utils::fareboxRequest request){
 	lockFarebox();
 
 	utils::readOnlysharedData data = shm.read();

@@ -12,13 +12,13 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-	SIGINT_Handler sigint_handler;
-	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
+	bool running = true;
 
 	DefaultArgs args(argc, argv);
 	PortAdministrator administrator(args.getShmId());
+	SignalHandler::getInstance()->registrarHandler(SIGINT, &administrator);
 
-	while (sigint_handler.getGracefulQuit() == 0) {
+	while(running){
 		administrator.getFareboxAccumulatedTotal();
 		administrator.goAway();
 	}

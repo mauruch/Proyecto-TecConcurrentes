@@ -9,14 +9,13 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-
-	SIGINT_Handler sigint_handler;
-	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
+	bool running = true;
 
 	DefaultArgs args(argc, argv);
 	ControllerQueue controllerQueue(args.getShmId());
+	SignalHandler::getInstance()->registrarHandler(SIGINT, &controllerQueue);
 
-	while(sigint_handler.getGracefulQuit() == 0){
+	while (running) {
 		controllerQueue.attendRequest();
 	}
 

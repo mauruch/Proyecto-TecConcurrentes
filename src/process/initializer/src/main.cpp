@@ -1,6 +1,7 @@
 #include <ArgsResolver.h>
 #include <ConfigurationReader/Configuration.h>
 #include <Fifos/Fifo.h>
+#include <Fifos/FifoReader.h>
 #include <Logger/Logger.h>
 #include <Process.h>
 #include <signal.h>
@@ -11,87 +12,89 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
-#include <vector>
+#include <sys/wait.h>
+#include <list>
 
 #include "../../../utils/SharedData.h"
 
 using namespace std;
 
 utils::sharedDataConfig getSharedDataConfig(char**);
-void creatingFifos(Logger& log);
-void createSemForResources(Logger& log,
-		utils::readOnlysharedData& readOnlysharedData);
-void launchFareboxProcess(
-		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
-void launchPortAdministratorProcess(
-		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
-void launchExitControllerQueueProcess(
-		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
-void launchControllerQueueProcess(
-		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
-void launchControllerProcess(
-		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
-void launchCranesProcesses(const utils::readOnlysharedData& readOnlysharedData,
-		Logger& log,
-		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
-void launchShipsProcesses(const utils::readOnlysharedData& readOnlysharedData,
-		Logger& log,
-		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,
-		vector<pid_t>& pids);
-void launchTrucksProcesses(const utils::readOnlysharedData& readOnlysharedData,
-		SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly,
-		Logger& log, vector<pid_t>& pids);
+void createFifos(Logger &log);
+void createSemForResources(Logger &log);
+void launchFareboxProcess();
+void launchPortAdministratorProcess();
+void launchExitControllerQueueProcess();
+void launchControllerQueueProcess();
+void launchControllerProcess();
+void launchCranesProcesses(Logger &log);
+void launchShipsProcesses(Logger &log);
+void launchTrucksProcesses(Logger &log);
+void launchProcesses(Logger &log);
 
-void launchProcesses(
-		SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly,
-		const utils::readOnlysharedData& readOnlysharedData, Logger& log,
-		vector<pid_t>& pids);
+SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly(utils::FILE_FTOK, utils::ID_FTOK_SHM_READ_ONLY);
+utils::readOnlysharedData readOnlysharedData;
+vector<pid_t> pids;
+list<Semaphore> sems;
 
 int main(int argc, char** argv) {
 
-	Logger log(Logger::LogLevel::DEBUG);
-	utils::readOnlysharedData readOnlysharedData;
-	vector<pid_t> pids;
+	Logger log(Logger::LogLevel::DEBUG, "Initializer");
 
-	log.info("Initializing simulation..");
+	log.info("Initializing simulation...");
 
-	/**
-	 * Setting shared memory data
-	 */
 	log.debug("Reading app config from " + Configuration::CONFIGURATION_FILE_NAME);
 	readOnlysharedData.config = getSharedDataConfig(argv);
 
 	log.debug("Creating semaphores for available resources");
-	createSemForResources(log, readOnlysharedData);
+	createSemForResources(log);
 
 	log.debug("Writing data in shared memory");
-	SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly(utils::FILE_FTOK, utils::ID_FTOK_SHM_READ_ONLY);
 	sharedMemoryReadOnly.write(readOnlysharedData);
 
-	/**
-	 * Creating FIFOS
-	 */
-	log.debug("Creating Fifos");
-	creatingFifos(log);
+	log.debug("Creating fifos...");
+	createFifos(log);
 
-	/**
-	 * Launching processes
-	 */
-	launchProcesses(sharedMemoryReadOnly, readOnlysharedData, log, pids);
+	log.debug("Launching all process");
+	launchProcesses(log);
 
 	cout << "Press key ENTER to quit simulation" << endl;
 	cin.ignore();
+
+	cout << "Enviando señales..." << endl;
 	for (unsigned int i=0; i < pids.size(); i++){
 		log.debug(string("sending SIGINT signal to: ").append(Helper::convertToString(pids[i])));
 		kill(pids[i], SIGINT);
 	}
 
+//	cout << "Borrando fifos..." << endl;
+//	for(auto fifo : fifos){
+//		cout << "cerrando fifo.." << endl;
+//		fifo.closeFifo();
+//		fifo.deleteFifo();
+//	}
+
+//	cin.ignore();
+//
+//	cout << "Borrando Sems..." << endl;
+//	for(auto sem : sems){
+//		sem.destroy();
+//	}
+//
+//	cin.ignore();
+//
+//	cout << "wait en pids..." << endl;
+//	for(auto child : pids){
+//		waitpid(child, NULL, 0);
+//	}
+//
+//	cout << "Borrando sharedMem..." << endl;
+//	sharedMemoryReadOnly.release();
+//	sharedMemoryReadOnly.remove();
+//
+//	cin.ignore();
+
+	cin.ignore();
 	return 1;
 
 }
@@ -116,90 +119,94 @@ utils::sharedDataConfig getSharedDataConfig(char** argv) {
 /**
  * Building semaphore for availability resources
  */
-void createSemForResources(Logger& log, utils::readOnlysharedData& readOnlysharedData) {
+void createSemForResources(Logger &log){
 
 	log.debug("Creating semaphore for available docks");
 	Semaphore avDocksSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_DOCKS_PORT, readOnlysharedData.config.dockConfig);
 	readOnlysharedData.idSemAvailableDocks = avDocksSem.getId();
+	sems.push_back(avDocksSem);
 
 	log.debug("Creating semaphore for available cranes");
 	Semaphore avCranesSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_CRANE, readOnlysharedData.config.craneConfig);
 	readOnlysharedData.idSemAvailableCranes = avCranesSem.getId();
+	sems.push_back(avCranesSem);
 
 	log.debug("Creating semaphore for available ships");
 	Semaphore avShipsSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_SHIPS, readOnlysharedData.config.shipConfig);
 	readOnlysharedData.idSemAvailableShips = avShipsSem.getId();
+	sems.push_back(avShipsSem);
 
 	log.debug("Creating semaphore for available trucks");
 	Semaphore avTrucksSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_TRUCKS, readOnlysharedData.config.truckConfig);
 	readOnlysharedData.idSemAvailableTrucks = avTrucksSem.getId();
+	sems.push_back(avTrucksSem);
 
 	log.debug("Creating semaphore for farebox");
-	Semaphore fareboxSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_FAREBOX, 1);
+	Semaphore fareboxSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_FAREBOX);
 	readOnlysharedData.idSemFarebox = fareboxSem.getId();
+	sems.push_back(fareboxSem);
 }
 
 /**
  * FIFOS
  */
-void creatingFifos(Logger& log) {
+void createFifos(Logger &log){
 
 	log.debug("creating fifo for ExitControllerQueue");
-	Fifo exitControllerQFifo(utils::EXIT_CONTROLLER_QUEUE_FIFO);
+	Fifo exitControllerQ(utils::EXIT_CONTROLLER_QUEUE_FIFO);
 
 	log.debug("creating fifo for ControllerQueue");
-	Fifo controllerQFifo(utils::CONTROLLER_QUEUE_FIFO);
+	Fifo controllerQ(utils::CONTROLLER_QUEUE_FIFO);
 
 	log.debug("creating fifo for Controller");
-	Fifo controllerFifo(utils::CONTROLLER_FIFO);
+	Fifo Controller(utils::CONTROLLER_FIFO);
 
 	log.debug("creating fifo for Crane");
-	Fifo craneFifo(utils::CRANE_FIFO);
+	Fifo Crane(utils::CRANE_FIFO);
 
 	log.debug("creating fifo for Truck");
-	Fifo truckFifo(utils::TRUCK_FIFO);
+	Fifo truck(utils::TRUCK_FIFO);
 
-	log.debug("creating fifo for Truck");
-	Fifo shipFifo(utils::SHIP_FIFO);
+	log.debug("creating fifo for Ship");
+	Fifo Ship(utils::SHIP_FIFO);
 
-	log.debug("creating fifo for Collection");
-	Fifo paymentRequests(utils::FAREBOX_FIFO);
+	log.debug("creating fifo for farebox");
+	Fifo Farebox(utils::FAREBOX_FIFO);
 
 }
 
-void launchFareboxProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids) {
+void launchFareboxProcess(){
 	ArgsResolver fareboxArgs("../farebox/Debug/Farebox", "-m", sharedMemoryReadOnly.getShmId());
 	utils::Process farebox("../farebox/Debug/Farebox", fareboxArgs);
 	pids.push_back(farebox.getPid());
 }
 
-void launchPortAdministratorProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids) {
+void launchPortAdministratorProcess(){
 	ArgsResolver portAdminArgs("../portAdministrator/Debug/PortAdministrator", "-m", sharedMemoryReadOnly.getShmId());
 	utils::Process portAdministrator("../portAdministrator/Debug/PortAdministrator", portAdminArgs);
 	pids.push_back(portAdministrator.getPid());
 }
 
 
-void launchExitControllerQueueProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids) {
+void launchExitControllerQueueProcess(){
 	ArgsResolver exitControllerQArgs("../exitControllerQueue/Debug/ExitControllerQueue", "-m", sharedMemoryReadOnly.getShmId());
 	utils::Process exitControllerQ("../exitControllerQueue/Debug/ExitControllerQueue",exitControllerQArgs);
 	pids.push_back(exitControllerQ.getPid());
 }
 
-void launchControllerQueueProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,vector<pid_t>& pids) {
+void launchControllerQueueProcess(){
 	ArgsResolver controllerQArgs("../controllerQueue/Debug/ControllerQueue","-m", sharedMemoryReadOnly.getShmId());
 	utils::Process controllerQ("../controllerQueue/Debug/ControllerQueue",controllerQArgs);
 	pids.push_back(controllerQ.getPid());
 }
 
-void launchControllerProcess(SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,vector<pid_t>& pids) {
+void launchControllerProcess(){
 	ArgsResolver controllerArgs("../controller/Debug/Controller", "-m",sharedMemoryReadOnly.getShmId());
 	utils::Process controller("../controller/Debug/Controller", controllerArgs);
 	pids.push_back(controller.getPid());
 }
 
-void launchCranesProcesses(const utils::readOnlysharedData& readOnlysharedData,Logger& log,
-		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly,vector<pid_t>& pids) {
+void launchCranesProcesses(Logger &log){
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.craneConfig; i++) {
 		log.debug("Launching Crane process...");
@@ -209,13 +216,13 @@ void launchCranesProcesses(const utils::readOnlysharedData& readOnlysharedData,L
 	}
 }
 
-void launchShipsProcesses(const utils::readOnlysharedData& readOnlysharedData, Logger& log,
-		SharedMemory<utils::readOnlysharedData>& sharedMemoryReadOnly, vector<pid_t>& pids) {
+void launchShipsProcesses(Logger &log){
 
 	vector<int> shipsSemaphoresIds;
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
 		Semaphore shipSem(utils::FILE_FTOK, i, 0);
 		shipsSemaphoresIds.push_back(shipSem.getId());
+		sems.push_back(shipSem);
 	}
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
@@ -226,14 +233,14 @@ void launchShipsProcesses(const utils::readOnlysharedData& readOnlysharedData, L
 	}
 }
 
-void launchTrucksProcesses(const utils::readOnlysharedData& readOnlysharedData,
-		SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly, Logger& log, vector<pid_t>& pids) {
+void launchTrucksProcesses(Logger &log){
 
 	vector<int> trucksSemaphoresIds;
 	int offset = readOnlysharedData.config.shipConfig;
 	for (unsigned int i = offset; i < (readOnlysharedData.config.truckConfig + offset); i++) {
 		Semaphore truckSem(utils::FILE_FTOK, i, 0);
 		trucksSemaphoresIds.push_back(truckSem.getId());
+		sems.push_back(truckSem);
 	}
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.truckConfig; i++) {
@@ -247,31 +254,30 @@ void launchTrucksProcesses(const utils::readOnlysharedData& readOnlysharedData,
 /**
  * Launching processes
  */
-void launchProcesses(SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly,
-		const utils::readOnlysharedData& readOnlysharedData, Logger& log,vector<pid_t>& pids) {
+void launchProcesses(Logger &log){
 
 	log.debug("Launching Farebox process...");
-	launchFareboxProcess(sharedMemoryReadOnly, pids);
+	launchFareboxProcess();
 
 	log.debug("Launching Port Administrator process...");
-	launchPortAdministratorProcess(sharedMemoryReadOnly, pids);
+	launchPortAdministratorProcess();
 
 	log.debug("Launching ExitControllerQueue process...");
-	launchExitControllerQueueProcess(sharedMemoryReadOnly, pids);
+	launchExitControllerQueueProcess();
 
 	log.debug("Launching ControllerQueue process...");
-	launchControllerQueueProcess(sharedMemoryReadOnly, pids);
+	launchControllerQueueProcess();
 
 	log.debug("Launching Controller process...");
-	launchControllerProcess(sharedMemoryReadOnly, pids);
+	launchControllerProcess();
 
 	log.debug("Launching {} cranes:", readOnlysharedData.config.craneConfig);
-	launchCranesProcesses(readOnlysharedData, log, sharedMemoryReadOnly, pids);
+	launchCranesProcesses(log);
 
 	log.debug("Launching {} ships:", readOnlysharedData.config.shipConfig);
-	launchShipsProcesses(readOnlysharedData, log, sharedMemoryReadOnly, pids);
+	launchShipsProcesses(log);
 
 	log.debug("Launching {} trucks:", readOnlysharedData.config.truckConfig);
-	launchTrucksProcesses(readOnlysharedData, sharedMemoryReadOnly, log, pids);
+	launchTrucksProcesses(log);
 }
 

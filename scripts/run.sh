@@ -5,7 +5,7 @@ if [ "$#" -eq 1 ]; then
     if [ "$command" == "run" ]; then
 	cd ../src/process/initializer
 	./Debug/Initializer
-
+    
     elif [ "$command" == "clean" ]; then
 	##clean
     fi

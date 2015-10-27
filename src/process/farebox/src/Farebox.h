@@ -7,14 +7,24 @@
 #include <SharedData.h>
 #include <SharedMemory/SharedMemory.h>
 #include <Semaphore/Semaphore.h>
+#include <Signals/EventHandler.h>
+#include <signal.h>
 
-class Farebox {
+class Farebox : public EventHandler {
 public:
 	Farebox(int shmid);
 	virtual ~Farebox();
 
 	void attendPaymentRequest();
 
+	virtual int handleSignal ( int signum ) {
+		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
+		shm.release();
+		ownFifo.closeFifo();
+		ownFifo.deleteFifo();
+		log.debug("All resources released");
+		raise(signum);
+	}
 
 private:
 
@@ -24,7 +34,7 @@ private:
 	void unlockFarebox();
 
 	SharedMemory<utils::readOnlysharedData> shm;
-	FifoReader fareboxFifo;
+	FifoReader ownFifo;
 
 	Logger log;
 

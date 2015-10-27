@@ -6,14 +6,14 @@
 
 #include "EventHandler.h"
 
-class SIGINT_Handler : public EventHandler {
+sig_atomic_t running;
 
-	private:
-		sig_atomic_t gracefulQuit;
+class SIGINT_Handler : public EventHandler {
 
 	public:
 
-		SIGINT_Handler () : gracefulQuit(0) {
+		SIGINT_Handler () {
+			running = 1;
 		}
 
 		~SIGINT_Handler () {
@@ -21,12 +21,8 @@ class SIGINT_Handler : public EventHandler {
 
 		virtual int handleSignal ( int signum ) {
 			assert ( signum == SIGINT );
-			this->gracefulQuit = 1;
+			running = 0;
 			return 0;
-		}
-
-		sig_atomic_t getGracefulQuit () const {
-			return this->gracefulQuit;
 		}
 
 };

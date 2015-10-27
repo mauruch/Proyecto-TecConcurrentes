@@ -13,7 +13,6 @@ Crane::Crane(int shmid, int craneNumber) :
 }
 
 Crane::~Crane() {
-	log.debug("On destructor of {}", name);
 }
 
 

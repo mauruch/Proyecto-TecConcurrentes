@@ -6,19 +6,18 @@
 #include <signal.h>
 #include <ArgumentHandler/ArgHandler.h>
 #include <Signals/SignalHandler.h>
-#include <Signals/SIGINT_Handler.h>
 
 using namespace std;
 
 int main(int argc, char** argv) {
 
-	SIGINT_Handler sigint_handler;
-	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
+	bool running = true;
 
 	EntityArgs args(argc, argv);
 	Truck truck(args.getSemId(), args.getShmId(), args.getId());
+	SignalHandler::getInstance()->registrarHandler(SIGINT, &truck);
 
-	while (sigint_handler.getGracefulQuit() == 0) {
+	while(running){
 
 		utils::deliveryRequest request = truck.attendRequest();
 		bool returnEmpty = truck.deliverToDestination(request);

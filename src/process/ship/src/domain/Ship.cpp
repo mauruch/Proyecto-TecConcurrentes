@@ -24,8 +24,6 @@ Ship::Ship(int semId, int shmid, int numberShip) :
 }
 
 Ship::~Ship() {
-	log.debug("On destructor of {}", name);
-	controllerQueueFifo.deleteFifo();
 }
 
 void Ship::setLoad(const unsigned int load){

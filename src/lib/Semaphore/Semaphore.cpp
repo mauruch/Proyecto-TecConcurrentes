@@ -3,18 +3,12 @@
 
 Semaphore::Semaphore(const std::string & name, int id, const int initValue ): initValue(initValue) {
 	key_t key = syscalls::ftok ( name.c_str(), id );
-	log.logErrOn(key < 0);
-
 	this->id = syscalls::semget ( key,1,0666 | IPC_CREAT );
-	log.logErrOn(this->id < 0);
-
-	log.logErrOn(this->init() < 0);
+	this->init();
 }
 
 Semaphore::Semaphore(const std::string & name, int id) : initValue(0){
 	key_t key = syscalls::ftok(name.c_str(), id);
-	log.logErrOn(key < 0);
-
 	this->id = syscalls::semget(key, 1, 0666 | IPC_CREAT);
 }
 
@@ -46,9 +40,7 @@ int Semaphore :: wait () const {
 	operaation.sem_op  = -1;	// restar 1 al semaforo
 	operaation.sem_flg = SEM_UNDO;
 
-	int result = syscalls::semop ( this->id,&operaation,1 );
-
-	return result;
+	return syscalls::semop ( this->id,&operaation,1 );
 }
 
 int Semaphore :: signal () const {
@@ -59,8 +51,7 @@ int Semaphore :: signal () const {
 	operation.sem_op  = 1;	// sumar 1 al semaforo
 	operation.sem_flg = SEM_UNDO;
 
-	int result = syscalls::semop ( this->id,&operation,1 );
-	return result;
+	return syscalls::semop ( this->id,&operation,1 );
 }
 
 void Semaphore :: destroy () const {

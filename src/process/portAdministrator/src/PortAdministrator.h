@@ -4,14 +4,23 @@
 #include <SharedMemory/SharedMemory.h>
 #include <Semaphore/Semaphore.h>
 #include <SharedData.h>
+#include <Signals/EventHandler.h>
+#include <signal.h>
 
-class PortAdministrator {
+class PortAdministrator : public EventHandler {
 public:
 	PortAdministrator(int shmid);
 	virtual ~PortAdministrator();
 
 	void getFareboxAccumulatedTotal();
 	void goAway();
+
+	virtual int handleSignal ( int signum ) {
+		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
+		shm.release();
+		log.debug("All resources released");
+		raise(signum);
+	}
 
 private:
 

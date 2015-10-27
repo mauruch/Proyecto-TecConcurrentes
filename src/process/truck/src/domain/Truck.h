@@ -8,11 +8,13 @@
 #include <SharedMemory/SharedMemory.h>
 #include <utils/utils.h>
 #include <string>
+#include <Signals/EventHandler.h>
+#include <signal.h>
 
 #include "../../../../utils/SharedData.h"
 
 
-class Truck {
+class Truck : public EventHandler {
 public:
 	Truck(int semId, int shmId, int truckNumber);
 	virtual ~Truck();
@@ -25,6 +27,13 @@ public:
 	void setAsAvailable();
 
 	bool deliverToDestination(utils::deliveryRequest);
+
+	virtual int handleSignal(int signum) {
+		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
+		shm.release();
+		log.debug("All resources released");
+		raise(signum);
+	}
 
 
 private:

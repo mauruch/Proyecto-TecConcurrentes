@@ -8,8 +8,6 @@ ExitControllerQueue::ExitControllerQueue(int shmid) :
 }
 
 ExitControllerQueue::~ExitControllerQueue() {
-	log.debug("Deleting ExitControllerQueue");
-	ownFifo.deleteFifo();
 }
 
 void ExitControllerQueue::attendRequest() {

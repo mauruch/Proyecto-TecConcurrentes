@@ -6,8 +6,6 @@ log(Logger::LogLevel::DEBUG, "PortAdministrator"){
 }
 
 PortAdministrator::~PortAdministrator() {
-	log.debug("On destructor");
-	shm.release();
 }
 
 void PortAdministrator::getFareboxAccumulatedTotal(){

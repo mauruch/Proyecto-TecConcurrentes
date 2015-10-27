@@ -13,12 +13,12 @@ static const std::string LOG_DELIMITER = " - ";
 static const std::string LOG_FILE = "/tmp/TPConcurrentes.log";
 static const std::string FILE_FTOK = "src/main.cpp";
 
-static const char ID_FTOK_SHM_READ_ONLY = '6';
 static const char ID_FTOK_SEM_DOCKS_PORT = '1';
 static const char ID_FTOK_SEM_CRANE = '2';
 static const char ID_FTOK_SEM_SHIPS = '3';
 static const char ID_FTOK_SEM_TRUCKS = '4';
 static const char ID_FTOK_SEM_FAREBOX = '5';
+static const char ID_FTOK_SHM_READ_ONLY = '6';
 
 const std::string EXIT_CONTROLLER_QUEUE_FIFO = "/tmp/ExitControllerQueue.fifo";
 const std::string CONTROLLER_QUEUE_FIFO = "/tmp/ControllerQueue.fifo";

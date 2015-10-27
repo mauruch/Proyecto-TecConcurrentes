@@ -8,20 +8,19 @@
 #include "domain/Controller.h"
 #include <ArgumentHandler/ArgHandler.h>
 #include <Signals/SignalHandler.h>
-#include <Signals/SIGINT_Handler.h>
 
 using namespace std;
 
 
 int main(int argc, char** argv) {
 
-	SIGINT_Handler sigint_handler;
-	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
+	bool running = true;
 
 	DefaultArgs args(argc, argv);
 	Controller controller(args.getShmId());
+	SignalHandler::getInstance()->registrarHandler(SIGINT, &controller);
 
-	while (sigint_handler.getGracefulQuit() == 0) {
+	while (running) {
 		controller.attendRequest();
 	}
 

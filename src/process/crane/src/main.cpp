@@ -6,14 +6,12 @@
 #include "domain/Crane.h"
 #include <ArgumentHandler/ArgHandler.h>
 #include <Signals/SignalHandler.h>
-#include <Signals/SIGINT_Handler.h>
 
 using namespace std;
 
 int main(int argc, char** argv) {
 
-	SIGINT_Handler sigint_handler;
-	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
+	bool running = true;
 
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
 	TCLAP::ValueArg<int> shmId("m", "mem", "smId to get shared memory", true, 6, "int");
@@ -23,8 +21,9 @@ int main(int argc, char** argv) {
 	cmd.parse(argc, argv);
 
 	Crane crane(shmId.getValue(), craneNumberArg.getValue());
+	SignalHandler::getInstance()->registrarHandler(SIGINT, &crane);
 
-	while (sigint_handler.getGracefulQuit() == 0) {
+	while (running) {
 		crane.readUnloadRequest();
 		crane.setAsAvailable();
 	}

@@ -6,7 +6,6 @@
 #include <signal.h>
 #include <ArgumentHandler/ArgHandler.h>
 #include <Signals/SignalHandler.h>
-#include <Signals/SIGINT_Handler.h>
 
 #include "domain/Ship.h"
 
@@ -16,13 +15,14 @@ unsigned int generateLoad();
 
 int main(int argc, char** argv) {
 
-	SIGINT_Handler sigint_handler;
-	SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
+	bool running = true;
+
 
 	EntityArgs args(argc, argv);
 	Ship ship(args.getSemId(), args.getShmId(), args.getId());
+	SignalHandler::getInstance()->registrarHandler(SIGINT, &ship);
 
-	while (sigint_handler.getGracefulQuit() == 0) {
+	while(running){
 		ship.setLoad(generateLoad());
 		ship.enterPort();
 		ship.dock();

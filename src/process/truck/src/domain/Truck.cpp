@@ -20,6 +20,7 @@ Truck::Truck(int semId, int shmid, int truckNumber) :
 
 Truck::~Truck() {
 	log.debug("On destructor of {}", name);
+	shm.release();
 }
 
 bool Truck::deliverToDestination(utils::deliveryRequest deliveryRequest){

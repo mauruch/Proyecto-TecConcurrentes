@@ -8,6 +8,9 @@ Controller::Controller(int shmid) :
 	log.info("Reading on fifo " + utils::CONTROLLER_FIFO);
 }
 
+Controller::~Controller(){
+}
+
 void Controller::attendRequest() {
 	utils::askForCraneRequest request = getRequest();
 	this->checkCraneAvailability();
@@ -43,8 +46,3 @@ utils::askForCraneRequest Controller::getRequest() {
 	log.info("New request asking for a crane from {}{}", petitioner, request.entityId);
 	return request;
 }
-
-Controller::~Controller() {
-	// TODO Auto-generated destructor stub
-}
-

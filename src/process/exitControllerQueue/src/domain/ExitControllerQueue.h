@@ -10,17 +10,27 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <../utils/SharedData.h>
-
+#include <Signals/EventHandler.h>
 #include <utils/Helper.h>
 #include <utils/utils.h>
+#include <signal.h>
 
 
-class ExitControllerQueue {
+class ExitControllerQueue : public EventHandler {
 public:
 	ExitControllerQueue(int shmId);
 	virtual ~ExitControllerQueue();
 
 	void attendRequest();
+
+	virtual int handleSignal ( int signum ) {
+		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
+		shm.release();
+		ownFifo.closeFifo();
+		ownFifo.deleteFifo();
+		log.debug("All resources released");
+		raise(signum);
+	}
 
 private:
 

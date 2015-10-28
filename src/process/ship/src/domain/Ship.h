@@ -36,8 +36,6 @@ public:
 	void setAsAvailable();
 	void readLeavingRequest();
 
-	void payRate();
-
 	virtual int handleSignal(int signum) {
 		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
 		shm.release();

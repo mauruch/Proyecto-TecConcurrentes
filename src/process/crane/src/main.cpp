@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 
 
 	CraneArgs args(argc, argv);
-	Crane crane(args.getShmId(), args.getId());
+	Crane crane(args.getShmId(), args.getId(), static_cast<Logger::LogLevel>(args.getLogLevel()));
 
 	while (running) {
 		crane.readUnloadRequest();

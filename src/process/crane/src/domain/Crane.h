@@ -14,7 +14,7 @@
 
 class Crane : public EventHandler {
 public:
-	Crane(int shmId, int craneNumber);
+	Crane(int shmId, int craneNumber, Logger::LogLevel logLevel);
 	virtual ~Crane();
 
 	void readUnloadRequest();

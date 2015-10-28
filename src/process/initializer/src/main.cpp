@@ -14,6 +14,7 @@
 #include <string>
 #include <sys/wait.h>
 #include <list>
+#include <ArgumentHandler/ArgHandler.h>
 
 #include "../../../utils/SharedData.h"
 
@@ -38,10 +39,14 @@ SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly(utils::FILE_FTOK, u
 utils::readOnlysharedData readOnlysharedData;
 vector<pid_t> pids;
 list<int> sems;
+int logLevel;
 
 int main(int argc, char** argv) {
 
-	Logger log(Logger::LogLevel::DEBUG, "Initializer");
+	LogLevelArgs logArg(argc, argv);
+	logLevel = logArg.getLogLevel();
+	Logger::LogLevel logLevel = static_cast<Logger::LogLevel>(logLevel);
+	Logger log(logLevel);
 
 	log.info("Initializing simulation...");
 
@@ -146,32 +151,32 @@ void createFifos(Logger &log){
 }
 
 void launchFareboxProcess(){
-	ArgsResolver fareboxArgs("../farebox/Debug/Farebox", "-m", sharedMemoryReadOnly.getShmId());
+	ArgsResolver fareboxArgs("../farebox/Debug/Farebox", "-m", sharedMemoryReadOnly.getShmId(), "-l", logLevel);
 	utils::Process farebox("../farebox/Debug/Farebox", fareboxArgs);
 	pids.push_back(farebox.getPid());
 }
 
 void launchPortAdministratorProcess(){
-	ArgsResolver portAdminArgs("../portAdministrator/Debug/PortAdministrator", "-m", sharedMemoryReadOnly.getShmId());
+	ArgsResolver portAdminArgs("../portAdministrator/Debug/PortAdministrator", "-m", sharedMemoryReadOnly.getShmId(), "-l", logLevel);
 	utils::Process portAdministrator("../portAdministrator/Debug/PortAdministrator", portAdminArgs);
 	pids.push_back(portAdministrator.getPid());
 }
 
 
 void launchExitControllerQueueProcess(){
-	ArgsResolver exitControllerQArgs("../exitControllerQueue/Debug/ExitControllerQueue", "-m", sharedMemoryReadOnly.getShmId());
+	ArgsResolver exitControllerQArgs("../exitControllerQueue/Debug/ExitControllerQueue", "-m", sharedMemoryReadOnly.getShmId(), "-l", logLevel);
 	utils::Process exitControllerQ("../exitControllerQueue/Debug/ExitControllerQueue",exitControllerQArgs);
 	pids.push_back(exitControllerQ.getPid());
 }
 
 void launchControllerQueueProcess(){
-	ArgsResolver controllerQArgs("../controllerQueue/Debug/ControllerQueue","-m", sharedMemoryReadOnly.getShmId());
+	ArgsResolver controllerQArgs("../controllerQueue/Debug/ControllerQueue","-m", sharedMemoryReadOnly.getShmId(), "-l", logLevel);
 	utils::Process controllerQ("../controllerQueue/Debug/ControllerQueue",controllerQArgs);
 	pids.push_back(controllerQ.getPid());
 }
 
 void launchControllerProcess(){
-	ArgsResolver controllerArgs("../controller/Debug/Controller", "-m",sharedMemoryReadOnly.getShmId());
+	ArgsResolver controllerArgs("../controller/Debug/Controller", "-m",sharedMemoryReadOnly.getShmId(), "-l", logLevel);
 	utils::Process controller("../controller/Debug/Controller", controllerArgs);
 	pids.push_back(controller.getPid());
 }

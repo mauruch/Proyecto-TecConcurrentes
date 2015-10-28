@@ -1,13 +1,13 @@
 #include "Crane.h"
 
-Crane::Crane(int shmid, int craneNumber) :
+Crane::Crane(int shmid, int craneNumber, Logger::LogLevel logLevel) :
 		name(std::string("Crane").append(Helper::convertToString(craneNumber))),
 		shmId(shmid),
 		shm(shmId),
 		craneFifo(utils::CRANE_FIFO),
 		shipFifo(utils::SHIP_FIFO),
 		truckFifo(utils::TRUCK_FIFO),
-		log(Logger::LogLevel::DEBUG, name)
+		log(logLevel, name)
 		{
 	log.debug("On constructor of {}", name);
 	SignalHandler::getInstance()->registrarHandler(SIGINT, this);

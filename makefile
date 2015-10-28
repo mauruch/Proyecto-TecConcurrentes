@@ -12,7 +12,7 @@ all:
 	@cd src/process/initializer/Debug/ && $(MAKE) all
 
 run:
-	@cd src/process/initializer/ && ./Debug/Initializer
+	@cd src/process/initializer/ && ./Debug/Initializer -l 1
 	
 
 clean:

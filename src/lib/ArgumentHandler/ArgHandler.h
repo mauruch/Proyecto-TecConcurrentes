@@ -109,9 +109,11 @@ public:
 	CraneArgs(int argc, char** argv) :
 			cmd("Command description message", ' ', "0.9"),
 			shmId("m", "mem", "smId to get shared memory", true, 6, "int"),
-			id("i", "number", "number of truck", true, 7, "int"){
+			logLevel("l", "log", "log level", true, 7, "int"),
+			id("i", "number", "number of truck", true, 8, "int"){
 		cmd.add(shmId);
 		cmd.add(id);
+		cmd.add(logLevel);
 		cmd.parse(argc, argv);
 	}
 
@@ -126,10 +128,15 @@ public:
 		return shmId.getValue();
 	}
 
+	int getLogLevel(){
+		return logLevel.getValue();
+	}
+
 private:
 	TCLAP::CmdLine cmd;
 	TCLAP::ValueArg<int> shmId;
 	TCLAP::ValueArg<int> id;
+	TCLAP::ValueArg<int> logLevel;
 
 };
 

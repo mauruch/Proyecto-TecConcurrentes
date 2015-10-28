@@ -1,18 +1,16 @@
-
 #include "Farebox.h"
 
 using namespace std;
 
 Farebox::Farebox(int shmid, Logger::LogLevel logLevel):
 		shm(shmid),
-		fareboxFifo(utils::FAREBOX_FIFO),
+		ownFifo(utils::FAREBOX_FIFO),
 		log(logLevel, "Farebox"){
 	log.debug("On constructor");
+	SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 Farebox::~Farebox(){
-	log.debug("On constructor");
-	shm.release();
 }
 
 void Farebox::attendPaymentRequest(){
@@ -22,7 +20,7 @@ void Farebox::attendPaymentRequest(){
 utils::fareboxRequest Farebox::getPaymentRequest(){
 	log.info("Waiting for next tax payment");
 	utils::fareboxRequest request;
-	fareboxFifo.read(&request, sizeof(utils::fareboxRequest));
+	ownFifo.read(&request, sizeof(utils::fareboxRequest));
 	log.info("New payment from ship{} for a total of ${}", request.id, request.tax);
 	return request;
 }

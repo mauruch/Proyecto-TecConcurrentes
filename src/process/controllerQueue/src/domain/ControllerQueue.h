@@ -10,17 +10,25 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <../utils/SharedData.h>
-
 #include <utils/Helper.h>
 #include <utils/utils.h>
+#include <signal.h>
+#include <Signals/SignalHandler.h>
+#include <Signals/EventHandler.h>
 
-
-class ControllerQueue {
+class ControllerQueue : public EventHandler {
 public:
 	ControllerQueue(int shmId, Logger::LogLevel logLevel);
 	virtual ~ControllerQueue();
 
 	void attendRequest();
+
+	virtual int handleSignal ( int signum ) {
+		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
+		shm.release();
+		log.debug("All resources released");
+		exit(signum);
+	}
 
 private:
 

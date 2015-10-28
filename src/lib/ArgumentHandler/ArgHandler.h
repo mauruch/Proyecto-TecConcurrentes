@@ -103,4 +103,34 @@ private:
 
 };
 
+class CraneArgs {
+public:
+
+	CraneArgs(int argc, char** argv) :
+			cmd("Command description message", ' ', "0.9"),
+			shmId("m", "mem", "smId to get shared memory", true, 6, "int"),
+			id("i", "number", "number of truck", true, 7, "int"){
+		cmd.add(shmId);
+		cmd.add(id);
+		cmd.parse(argc, argv);
+	}
+
+	~CraneArgs(){
+	}
+
+	int getId(){
+		return id.getValue();
+	}
+
+	int getShmId(){
+		return shmId.getValue();
+	}
+
+private:
+	TCLAP::CmdLine cmd;
+	TCLAP::ValueArg<int> shmId;
+	TCLAP::ValueArg<int> id;
+
+};
+
 #endif /* ARGHANDLER_H_ */

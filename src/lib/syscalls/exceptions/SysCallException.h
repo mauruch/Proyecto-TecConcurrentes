@@ -16,7 +16,7 @@ public:
 	}
 
 	SysCallException(const std::string& msgError) :
-			runtime_error(msgError + ": " + Helper::convertToString(strerror(errno))) {
+			runtime_error(msgError + ": " + Helper::convertToString(strerror(errno)) + " from pid: " + Helper::convertToString(getpid())) {
 	}
 };
 

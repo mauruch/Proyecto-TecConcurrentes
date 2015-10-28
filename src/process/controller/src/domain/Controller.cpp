@@ -6,6 +6,10 @@ Controller::Controller(int shmid, Logger::LogLevel logLevel) :
 		log(logLevel, string("Controller")) {
 	log.info("Creating new Controller");
 	log.info("Reading on fifo " + utils::CONTROLLER_FIFO);
+	SignalHandler::getInstance()->registrarHandler(SIGINT, this);
+}
+
+Controller::~Controller(){
 }
 
 void Controller::attendRequest() {
@@ -43,8 +47,3 @@ utils::askForCraneRequest Controller::getRequest() {
 	log.info("New request asking for a crane from {}{}", petitioner, request.entityId);
 	return request;
 }
-
-Controller::~Controller() {
-	// TODO Auto-generated destructor stub
-}
-

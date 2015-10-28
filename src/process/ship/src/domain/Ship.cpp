@@ -2,6 +2,7 @@
 
 #include <unistd.h>
 #include <utils/Helper.h>
+#include <Signals/SignalHandler.h>
 
 using namespace std;
 
@@ -21,11 +22,10 @@ Ship::Ship(int semId, int shmid, int numberShip, Logger::LogLevel logLevel) :
 		log(logLevel, name)
 		 {
 	log.info("On constructor of {}", name);
+	SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 Ship::~Ship() {
-	log.debug("On destructor of {}", name);
-	controllerQueueFifo.deleteFifo();
 }
 
 void Ship::setLoad(const unsigned int load){

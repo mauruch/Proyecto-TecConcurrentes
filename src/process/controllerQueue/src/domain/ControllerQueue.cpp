@@ -5,11 +5,10 @@ ControllerQueue::ControllerQueue(int shmid, Logger::LogLevel logLevel) :
 		ownFifo(utils::CONTROLLER_QUEUE_FIFO), log(logLevel, string("ControllerQueue")) {
 	log.info("On constructor of ControllerQueue");
 	log.info("Reading on fifo {}", utils::CONTROLLER_QUEUE_FIFO);
+	SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 ControllerQueue::~ControllerQueue() {
-	log.debug("On destructor of ControllerQueue");
-	ownFifo.deleteFifo();
 }
 
 void ControllerQueue::attendRequest() {

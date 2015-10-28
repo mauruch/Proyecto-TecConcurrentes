@@ -16,10 +16,12 @@ Truck::Truck(int semId, int shmid, int truckNumber, Logger::LogLevel logLevel) :
 		log(logLevel, name){
 
 		log.debug("On constructor of {}", name);
+		SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 Truck::~Truck() {
 	log.debug("On destructor of {}", name);
+	shm.release();
 }
 
 bool Truck::deliverToDestination(utils::deliveryRequest deliveryRequest){

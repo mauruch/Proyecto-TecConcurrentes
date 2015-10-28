@@ -6,16 +6,26 @@
 #include <Semaphore/Semaphore.h>
 #include <Logger/Logger.h>
 #include <SharedMemory/SharedMemory.h>
+#include <signal.h>
+#include <Signals/EventHandler.h>
+#include <Signals/SignalHandler.h>
 
 #include "../../../../utils/SharedData.h"
 
-class Crane {
+class Crane : public EventHandler {
 public:
 	Crane(int shmId, int craneNumber);
 	virtual ~Crane();
 
 	void readUnloadRequest();
 	void setAsAvailable();
+
+	virtual int handleSignal ( int signum ) {
+		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
+		shm.release();
+		log.debug("All resources released");
+		exit(signum);
+	}
 
 private:
 

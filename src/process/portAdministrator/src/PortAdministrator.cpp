@@ -3,11 +3,10 @@
 PortAdministrator::PortAdministrator(int shmid, Logger::LogLevel logLevel) : shm(shmid),
 log(logLevel, "PortAdministrator"){
 	log.debug("On constructor");
+	SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 PortAdministrator::~PortAdministrator() {
-	log.debug("On destructor");
-	shm.release();
 }
 
 void PortAdministrator::getFareboxAccumulatedTotal(){

@@ -13,13 +13,15 @@
 #include <Semaphore/Semaphore.h>
 #include <SharedMemory/SharedMemory.h>
 #include <string>
+#include <Signals/EventHandler.h>
+#include <signal.h>
 
 #include "../../../../utils/SharedData.h"
 
 using namespace std;
 
 
-class Ship {
+class Ship : public EventHandler {
 public:
 	Ship(int semId, int shmId, int numberShip, Logger::LogLevel logLevel);
 
@@ -35,6 +37,13 @@ public:
 	void readLeavingRequest();
 
 	void payRate();
+
+	virtual int handleSignal(int signum) {
+		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
+		shm.release();
+		log.debug("All resources released");
+		exit(signum);
+	}
 
 private:
 

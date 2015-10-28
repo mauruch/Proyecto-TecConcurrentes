@@ -5,11 +5,10 @@ ExitControllerQueue::ExitControllerQueue(int shmid, Logger::LogLevel logLevel) :
 		ownFifo(utils::EXIT_CONTROLLER_QUEUE_FIFO), log(logLevel, string("ExitControllerQueue")) {
 	log.info("Creating new ExitControllerQueue");
 	log.info("Reading on fifo {}", utils::CONTROLLER_QUEUE_FIFO);
+	SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 ExitControllerQueue::~ExitControllerQueue() {
-	log.debug("Deleting ExitControllerQueue");
-	ownFifo.deleteFifo();
 }
 
 void ExitControllerQueue::attendRequest() {

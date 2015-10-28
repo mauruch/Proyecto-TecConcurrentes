@@ -117,7 +117,7 @@ void createSemForResources(Logger &log){
 	sems.push_back(avTrucksSem.getId());
 
 	log.debug("Creating semaphore for farebox");
-	Semaphore fareboxSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_FAREBOX);
+	Semaphore fareboxSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_FAREBOX, 1);
 	readOnlysharedData.idSemFarebox = fareboxSem.getId();
 	sems.push_back(fareboxSem.getId());
 }

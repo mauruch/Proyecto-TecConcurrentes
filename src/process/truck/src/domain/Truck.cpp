@@ -28,7 +28,7 @@ bool Truck::deliverToDestination(utils::deliveryRequest deliveryRequest){
 
 	//delivery simulation
 	srand(time(NULL));
-	int deliveryTime = rand()%(5 - 1);
+	int deliveryTime = rand()%(9 + 1); // number between [1, 10]
 	bool returnEmpty = (rand() % 100) < 80;
 	int requestWeight = deliveryRequest.weight;
 

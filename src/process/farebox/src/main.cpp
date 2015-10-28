@@ -15,10 +15,13 @@ int main(int argc, char** argv)  {
 	bool running = true;
 
 	DefaultArgs args(argc, argv);
+
 	Farebox farebox(args.getShmId(), static_cast<Logger::LogLevel>(args.getLogLevel()));
 
 	while(running){
+		cout << "running" << endl;
 		farebox.attendPaymentRequest();
+		cout << "running2" << endl;
 	}
 
 	return 0;

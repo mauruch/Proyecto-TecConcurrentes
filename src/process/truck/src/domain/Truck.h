@@ -32,7 +32,7 @@ public:
 		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
 		shm.release();
 		log.debug("All resources released");
-		raise(signum);
+		exit(signum);
 	}
 
 

@@ -1,6 +1,7 @@
 #ifndef DOMAIN_CONTROLLER_H_
 #define DOMAIN_CONTROLLER_H_
 
+#include <Signals/SignalHandler.h>
 #include <Logger/Logger.h>
 #include <Fifos/FifoReader.h>
 #include <sched.h>
@@ -22,10 +23,8 @@ public:
 	virtual int handleSignal ( int signum ) {
 		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
 		shm.release();
-		ownFifo.closeFifo();
-		ownFifo.deleteFifo();
 		log.debug("All resources released");
-		raise(signum);
+		exit(signum);
 	}
 
 private:

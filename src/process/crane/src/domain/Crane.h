@@ -8,6 +8,7 @@
 #include <SharedMemory/SharedMemory.h>
 #include <signal.h>
 #include <Signals/EventHandler.h>
+#include <Signals/SignalHandler.h>
 
 #include "../../../../utils/SharedData.h"
 
@@ -23,7 +24,7 @@ public:
 		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
 		shm.release();
 		log.debug("All resources released");
-		raise(signum);
+		exit(signum);
 	}
 
 private:

@@ -13,7 +13,7 @@
 #include <utils/Helper.h>
 #include <utils/utils.h>
 #include <signal.h>
-
+#include <Signals/SignalHandler.h>
 #include <Signals/EventHandler.h>
 
 class ControllerQueue : public EventHandler {
@@ -26,10 +26,8 @@ public:
 	virtual int handleSignal ( int signum ) {
 		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
 		shm.release();
-		ownFifo.closeFifo();
-		ownFifo.deleteFifo();
 		log.debug("All resources released");
-		raise(signum);
+		exit(signum);
 	}
 
 private:

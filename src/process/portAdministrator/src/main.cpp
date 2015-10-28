@@ -2,7 +2,7 @@
 #include <Logger/Logger.h>
 
 #include <tclap/CmdLine.h>
-#include <Signals/SignalHandler.h>
+
 #include <Signals/SIGINT_Handler.h>
 #include <ArgumentHandler/ArgHandler.h>
 

@@ -1,7 +1,7 @@
 #include <ArgsResolver.h>
 #include <ConfigurationReader/Configuration.h>
 #include <Fifos/Fifo.h>
-#include <Fifos/FifoReader.h>
+#include <Fifos/FifoWriter.h>
 #include <Logger/Logger.h>
 #include <Process.h>
 #include <signal.h>
@@ -31,11 +31,12 @@ void launchCranesProcesses(Logger &log);
 void launchShipsProcesses(Logger &log);
 void launchTrucksProcesses(Logger &log);
 void launchProcesses(Logger &log);
+void releaseResources(Logger &log);
 
 SharedMemory<utils::readOnlysharedData> sharedMemoryReadOnly(utils::FILE_FTOK, utils::ID_FTOK_SHM_READ_ONLY);
 utils::readOnlysharedData readOnlysharedData;
 vector<pid_t> pids;
-list<Semaphore> sems;
+list<int> sems;
 
 int main(int argc, char** argv) {
 
@@ -61,40 +62,8 @@ int main(int argc, char** argv) {
 	cout << "Press key ENTER to quit simulation" << endl;
 	cin.ignore();
 
-	cout << "Enviando señales..." << endl;
-	for (unsigned int i=0; i < pids.size(); i++){
-		log.debug(string("sending SIGINT signal to: ").append(Helper::convertToString(pids[i])));
-		kill(pids[i], SIGINT);
-	}
+	releaseResources(log);
 
-//	cout << "Borrando fifos..." << endl;
-//	for(auto fifo : fifos){
-//		cout << "cerrando fifo.." << endl;
-//		fifo.closeFifo();
-//		fifo.deleteFifo();
-//	}
-
-//	cin.ignore();
-//
-//	cout << "Borrando Sems..." << endl;
-//	for(auto sem : sems){
-//		sem.destroy();
-//	}
-//
-//	cin.ignore();
-//
-//	cout << "wait en pids..." << endl;
-//	for(auto child : pids){
-//		waitpid(child, NULL, 0);
-//	}
-//
-//	cout << "Borrando sharedMem..." << endl;
-//	sharedMemoryReadOnly.release();
-//	sharedMemoryReadOnly.remove();
-//
-//	cin.ignore();
-
-	cin.ignore();
 	return 1;
 
 }
@@ -124,27 +93,27 @@ void createSemForResources(Logger &log){
 	log.debug("Creating semaphore for available docks");
 	Semaphore avDocksSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_DOCKS_PORT, readOnlysharedData.config.dockConfig);
 	readOnlysharedData.idSemAvailableDocks = avDocksSem.getId();
-	sems.push_back(avDocksSem);
+	sems.push_back(avDocksSem.getId());
 
 	log.debug("Creating semaphore for available cranes");
 	Semaphore avCranesSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_CRANE, readOnlysharedData.config.craneConfig);
 	readOnlysharedData.idSemAvailableCranes = avCranesSem.getId();
-	sems.push_back(avCranesSem);
+	sems.push_back(avCranesSem.getId());
 
 	log.debug("Creating semaphore for available ships");
 	Semaphore avShipsSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_SHIPS, readOnlysharedData.config.shipConfig);
 	readOnlysharedData.idSemAvailableShips = avShipsSem.getId();
-	sems.push_back(avShipsSem);
+	sems.push_back(avShipsSem.getId());
 
 	log.debug("Creating semaphore for available trucks");
 	Semaphore avTrucksSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_TRUCKS, readOnlysharedData.config.truckConfig);
 	readOnlysharedData.idSemAvailableTrucks = avTrucksSem.getId();
-	sems.push_back(avTrucksSem);
+	sems.push_back(avTrucksSem.getId());
 
 	log.debug("Creating semaphore for farebox");
 	Semaphore fareboxSem(utils::FILE_FTOK, utils::ID_FTOK_SEM_FAREBOX);
 	readOnlysharedData.idSemFarebox = fareboxSem.getId();
-	sems.push_back(fareboxSem);
+	sems.push_back(fareboxSem.getId());
 }
 
 /**
@@ -222,7 +191,7 @@ void launchShipsProcesses(Logger &log){
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
 		Semaphore shipSem(utils::FILE_FTOK, i, 0);
 		shipsSemaphoresIds.push_back(shipSem.getId());
-		sems.push_back(shipSem);
+		sems.push_back(shipSem.getId());
 	}
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.shipConfig; i++) {
@@ -240,7 +209,7 @@ void launchTrucksProcesses(Logger &log){
 	for (unsigned int i = offset; i < (readOnlysharedData.config.truckConfig + offset); i++) {
 		Semaphore truckSem(utils::FILE_FTOK, i, 0);
 		trucksSemaphoresIds.push_back(truckSem.getId());
-		sems.push_back(truckSem);
+		sems.push_back(truckSem.getId());
 	}
 
 	for (unsigned int i = 0; i < readOnlysharedData.config.truckConfig; i++) {
@@ -281,3 +250,36 @@ void launchProcesses(Logger &log){
 	launchTrucksProcesses(log);
 }
 
+void releaseResources(Logger &log){
+
+	log.info("Releasing all resources");
+
+	for (unsigned int i=0; i < pids.size(); i++){
+		log.debug(string("Sending SIGINT signal to: ").append(Helper::convertToString(pids[i])));
+		kill(pids[i], SIGINT);
+	}
+
+	for(auto child : pids){
+		log.debug("Waiting on pid {}", child);
+		waitpid(child, NULL, 0);
+	}
+
+	log.debug("Deleting semaphores");
+	for(auto semId : sems){
+		Semaphore test(semId);
+		test.destroy();
+	}
+
+	log.debug("Deleting fifos");
+	syscalls::unlink(utils::EXIT_CONTROLLER_QUEUE_FIFO.c_str());
+	syscalls::unlink(utils::CONTROLLER_QUEUE_FIFO.c_str());
+	syscalls::unlink(utils::CONTROLLER_FIFO.c_str());
+	syscalls::unlink(utils::CRANE_FIFO.c_str());
+	syscalls::unlink(utils::TRUCK_FIFO.c_str());
+	syscalls::unlink(utils::SHIP_FIFO.c_str());
+	syscalls::unlink(utils::FAREBOX_FIFO.c_str());
+
+	log.debug("Deleting shared memory");
+	sharedMemoryReadOnly.release();
+	sharedMemoryReadOnly.remove();
+}

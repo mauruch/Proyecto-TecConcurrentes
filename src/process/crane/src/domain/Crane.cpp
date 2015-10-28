@@ -10,6 +10,7 @@ Crane::Crane(int shmid, int craneNumber) :
 		log(Logger::LogLevel::DEBUG, name)
 		{
 	log.debug("On constructor of {}", name);
+	SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 Crane::~Crane() {

@@ -5,7 +5,7 @@ ControllerQueue::ControllerQueue(int shmid) :
 		ownFifo(utils::CONTROLLER_QUEUE_FIFO), log(Logger::LogLevel::DEBUG, string("ControllerQueue")) {
 	log.info("On constructor of ControllerQueue");
 	log.info("Reading on fifo {}", utils::CONTROLLER_QUEUE_FIFO);
-
+	SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 ControllerQueue::~ControllerQueue() {

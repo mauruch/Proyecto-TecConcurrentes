@@ -20,10 +20,8 @@ public:
 	virtual int handleSignal ( int signum ) {
 		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
 		shm.release();
-		ownFifo.closeFifo();
-		ownFifo.deleteFifo();
 		log.debug("All resources released");
-		raise(signum);
+		exit(signum);
 	}
 
 private:

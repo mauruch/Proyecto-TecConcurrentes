@@ -3,6 +3,7 @@
 PortAdministrator::PortAdministrator(int shmid) : shm(shmid),
 log(Logger::LogLevel::DEBUG, "PortAdministrator"){
 	log.debug("On constructor");
+	SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 PortAdministrator::~PortAdministrator() {

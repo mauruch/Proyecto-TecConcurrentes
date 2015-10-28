@@ -16,6 +16,7 @@ Truck::Truck(int semId, int shmid, int truckNumber) :
 		log(Logger::LogLevel::DEBUG, name){
 
 		log.debug("On constructor of {}", name);
+		SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 Truck::~Truck() {

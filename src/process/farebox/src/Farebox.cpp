@@ -1,4 +1,3 @@
-
 #include "Farebox.h"
 
 using namespace std;
@@ -8,6 +7,7 @@ Farebox::Farebox(int shmid):
 		ownFifo(utils::FAREBOX_FIFO),
 		log(Logger::LogLevel::DEBUG, "Farebox"){
 	log.debug("On constructor");
+	SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 Farebox::~Farebox(){

@@ -8,6 +8,7 @@
 #include <SharedMemory/SharedMemory.h>
 #include <utils/utils.h>
 #include <string>
+#include <Signals/SignalHandler.h>
 #include <Signals/EventHandler.h>
 #include <signal.h>
 

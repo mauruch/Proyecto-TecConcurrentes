@@ -1,9 +1,3 @@
-#include <iostream>
-#include <Logger/Logger.h>
-
-#include <tclap/CmdLine.h>
-
-#include <Signals/SIGINT_Handler.h>
 #include <ArgumentHandler/ArgHandler.h>
 
 #include "PortAdministrator.h"
@@ -16,7 +10,6 @@ int main(int argc, char** argv) {
 
 	DefaultArgs args(argc, argv);
 	PortAdministrator administrator(args.getShmId());
-	SignalHandler::getInstance()->registrarHandler(SIGINT, &administrator);
 
 	while(running){
 		administrator.getFareboxAccumulatedTotal();

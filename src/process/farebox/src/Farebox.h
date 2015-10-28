@@ -7,6 +7,7 @@
 #include <SharedData.h>
 #include <SharedMemory/SharedMemory.h>
 #include <Semaphore/Semaphore.h>
+#include <Signals/SignalHandler.h>
 #include <Signals/EventHandler.h>
 #include <signal.h>
 

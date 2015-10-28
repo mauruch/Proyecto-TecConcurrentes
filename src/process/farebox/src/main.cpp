@@ -16,7 +16,6 @@ int main(int argc, char** argv)  {
 
 	DefaultArgs args(argc, argv);
 	Farebox farebox(args.getShmId());
-	SignalHandler::getInstance()->registrarHandler(SIGINT, &farebox);
 
 	while(running){
 		farebox.attendPaymentRequest();

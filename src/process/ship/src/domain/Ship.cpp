@@ -2,6 +2,7 @@
 
 #include <unistd.h>
 #include <utils/Helper.h>
+#include <Signals/SignalHandler.h>
 
 using namespace std;
 
@@ -21,6 +22,7 @@ Ship::Ship(int semId, int shmid, int numberShip) :
 		log(Logger::LogLevel::DEBUG, name)
 		 {
 	log.info("On constructor of {}", name);
+	SignalHandler::getInstance()->registrarHandler(SIGINT, this);
 }
 
 Ship::~Ship() {

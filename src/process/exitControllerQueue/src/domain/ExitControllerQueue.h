@@ -11,6 +11,7 @@
 #include <sys/shm.h>
 #include <../utils/SharedData.h>
 #include <Signals/EventHandler.h>
+#include <Signals/SignalHandler.h>
 #include <utils/Helper.h>
 #include <utils/utils.h>
 #include <signal.h>

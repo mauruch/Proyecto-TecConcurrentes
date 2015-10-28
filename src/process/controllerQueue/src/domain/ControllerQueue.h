@@ -15,20 +15,15 @@
 #include <signal.h>
 #include <Signals/SignalHandler.h>
 #include <Signals/EventHandler.h>
+#include "../../../BaseController.h"
 
-class ControllerQueue : public EventHandler {
+
+class ControllerQueue : protected BaseController {
 public:
 	ControllerQueue(int shmId, Logger::LogLevel logLevel);
 	virtual ~ControllerQueue();
 
 	void attendRequest();
-
-	virtual int handleSignal ( int signum ) {
-		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
-		shm.release();
-		log.debug("All resources released");
-		exit(signum);
-	}
 
 private:
 
@@ -39,10 +34,6 @@ private:
 	int getDockSemIdFromMemory();
 	void signalShipToEnter(utils::portRequest request);
 
-	int shmId;
-	SharedMemory<utils::readOnlysharedData> shm;
-	FifoReader ownFifo;
-	Logger log;
 };
 
 #endif /* DOMAIN_CONTROLLERQUEUE_H_ */

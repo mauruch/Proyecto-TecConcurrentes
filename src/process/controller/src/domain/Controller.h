@@ -12,27 +12,16 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <../utils/SharedData.h>
+#include "../../../BaseController.h"
 #include <Signals/EventHandler.h>
 
-class Controller : public EventHandler {
+class Controller : protected BaseController {
 public:
 	Controller(int shmId, Logger::LogLevel logLevel);
 	virtual ~Controller();
 	void attendRequest();
 
-	virtual int handleSignal ( int signum ) {
-		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
-		shm.release();
-		log.debug("All resources released");
-		exit(signum);
-	}
-
 private:
-	int shmId;
-	SharedMemory<utils::readOnlysharedData> shm;
-	FifoReader ownFifo;
-	Logger log;
-
 	utils::askForCraneRequest getRequest();
 	void checkCraneAvailability();
 	int getCraneSemIdFromMemory();

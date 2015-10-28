@@ -1,8 +1,7 @@
 #include "ControllerQueue.h"
 
 ControllerQueue::ControllerQueue(int shmid, Logger::LogLevel logLevel) :
-		shmId(shmid), shm(shmId),
-		ownFifo(utils::CONTROLLER_QUEUE_FIFO), log(logLevel, string("ControllerQueue")) {
+BaseController(shmid, utils::CONTROLLER_QUEUE_FIFO, logLevel, "ControllerQueue") {
 	log.info("On constructor of ControllerQueue");
 	log.info("Reading on fifo {}", utils::CONTROLLER_QUEUE_FIFO);
 	SignalHandler::getInstance()->registrarHandler(SIGINT, this);

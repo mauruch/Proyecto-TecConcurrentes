@@ -15,21 +15,15 @@
 #include <utils/Helper.h>
 #include <utils/utils.h>
 #include <signal.h>
+#include "../../../BaseController.h"
 
 
-class ExitControllerQueue : public EventHandler {
+class ExitControllerQueue : protected BaseController {
 public:
 	ExitControllerQueue(int shmId, Logger::LogLevel logLevel);
 	virtual ~ExitControllerQueue();
 
 	void attendRequest();
-
-	virtual int handleSignal ( int signum ) {
-		log.debug("SIGINT SIGNAL ARRIVED! Releasing resources");
-		shm.release();
-		log.debug("All resources released");
-		exit(signum);
-	}
 
 private:
 
@@ -41,10 +35,6 @@ private:
 	int getDockSemIdFromMemory();
 	void signalShipToLeave(utils::portRequest request);
 
-	int shmId;
-	SharedMemory<utils::readOnlysharedData> shm;
-	FifoReader ownFifo;
-	Logger log;
 };
 
 #endif /* DOMAIN_EXITCONTROLLERQUEUE_H_ */

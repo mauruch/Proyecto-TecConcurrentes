@@ -1,9 +1,7 @@
 #include "Controller.h"
 
 Controller::Controller(int shmid, Logger::LogLevel logLevel) :
-		shmId(shmid), shm(shmId),
-		ownFifo(utils::CONTROLLER_FIFO),
-		log(logLevel, string("Controller")) {
+	BaseController(shmid, utils::CONTROLLER_FIFO, logLevel, "Controller") {
 	log.info("Creating new Controller");
 	log.info("Reading on fifo " + utils::CONTROLLER_FIFO);
 	SignalHandler::getInstance()->registrarHandler(SIGINT, this);

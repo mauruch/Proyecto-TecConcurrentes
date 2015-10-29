@@ -19,9 +19,7 @@ int main(int argc, char** argv)  {
 	Farebox farebox(args.getShmId(), static_cast<Logger::LogLevel>(args.getLogLevel()));
 
 	while(running){
-		cout << "running" << endl;
 		farebox.attendPaymentRequest();
-		cout << "running2" << endl;
 	}
 
 	return 0;
